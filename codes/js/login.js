@@ -35,101 +35,106 @@ async function loadSchools() {
 function buildSearchableDropdown(selectId, schools) {
   const select = document.getElementById(selectId);
   if (!select) return;
-  const wrap = select.closest('.input-icon-wrap') || select.parentElement;
 
-  // Build custom dropdown HTML
-  const dropId = selectId + '_drop';
-  const inputId = selectId + '_search';
+  // Prevent duplicate initialization
+  if (document.getElementById(selectId + '_search')) return;
 
-  // Remove old custom dropdown if exists
-  const old = document.getElementById(dropId);
-  if (old) old.remove();
+  const formGroup = select.closest('.form-group');
+  const iconWrap  = select.closest('.input-icon-wrap');
 
-  // Hide the original select
+  // Hide the native select — it stays as the value source
   select.style.display = 'none';
+  // Also hide the school icon inside the wrap (we'll add our own)
+  if (iconWrap) {
+    const existingIcon = iconWrap.querySelector('i:first-child');
+    if (existingIcon) existingIcon.style.display = 'none';
+  }
 
-  // Create wrapper
-  const container = document.createElement('div');
-  container.className = 'school-search-wrap';
-  container.id = dropId;
-  container.innerHTML = `
-    <div class="school-search-input-wrap">
-      <i class="fas fa-search school-search-icon"></i>
-      <input type="text" id="${inputId}" class="school-search-input" placeholder="Search school..." autocomplete="off" />
-      <span class="school-search-clear" id="${selectId}_clear" hidden>&#x2715;</span>
-    </div>
-    <div class="school-search-list" id="${selectId}_list" hidden></div>
-    <div class="school-search-selected" id="${selectId}_selected">
-      <span id="${selectId}_label" style="color:var(--text-muted)">-- Select your school --</span>
-    </div>
-  `;
-  wrap.appendChild(container);
+  // Build the entire custom dropdown as a sibling of input-icon-wrap
+  const wrapper = document.createElement('div');
+  wrapper.className = 'school-dropdown-wrap';
+  wrapper.id = selectId + '_drop';
+  wrapper.innerHTML =
+    '<div class="school-dropdown-field" id="' + selectId + '_field">' +
+      '<i class="fas fa-school school-dropdown-icon"></i>' +
+      '<input type="text" id="' + selectId + '_search" class="school-dropdown-input"' +
+        ' placeholder="Search school..." autocomplete="off" />' +
+      '<button type="button" class="school-dropdown-clear" id="' + selectId + '_clear"' +
+        ' hidden aria-label="Clear selection">&#x2715;</button>' +
+    '</div>' +
+    '<div class="school-dropdown-list" id="' + selectId + '_list" hidden></div>';
 
-  const searchInput = document.getElementById(inputId);
-  const listEl      = document.getElementById(selectId + '_list');
-  const selectedEl  = document.getElementById(selectId + '_selected');
-  const labelEl     = document.getElementById(selectId + '_label');
-  const clearEl     = document.getElementById(selectId + '_clear');
+  // Insert right after the input-icon-wrap (or after the select if no wrap)
+  const anchor = iconWrap || select;
+  anchor.insertAdjacentElement('afterend', wrapper);
+
+  const field     = document.getElementById(selectId + '_field');
+  const searchEl  = document.getElementById(selectId + '_search');
+  const listEl    = document.getElementById(selectId + '_list');
+  const clearEl   = document.getElementById(selectId + '_clear');
+  const errEl     = document.getElementById(selectId + 'Err');
 
   function renderList(filter) {
-    const q = (filter || '').toLowerCase();
+    const q = (filter || '').toLowerCase().trim();
     const filtered = schools.filter(s => s.name.toLowerCase().includes(q));
     listEl.innerHTML = filtered.length
       ? filtered.map(s =>
           '<div class="school-option" data-id="' + s.id + '" data-name="' + API.escapeHtml(s.name) + '">' +
-          '<span class="school-option-name">' + API.escapeHtml(s.name) + '</span>' +
-          '<span class="school-option-level">' + API.levelLabel(s.level) + '</span>' +
+            '<span class="school-option-name">' + API.escapeHtml(s.name) + '</span>' +
+            '<span class="school-option-level">' + API.levelLabel(s.level) + '</span>' +
           '</div>'
         ).join('')
-      : '<div class="school-option-empty">No schools found</div>';
+      : '<div class="school-option-empty"><i class="fas fa-search"></i> No schools found</div>';
 
     listEl.querySelectorAll('.school-option').forEach(opt => {
       opt.addEventListener('mousedown', e => {
         e.preventDefault();
-        const id   = opt.dataset.id;
-        const name = opt.dataset.name;
-        select.value = id;
-        labelEl.textContent = name;
-        labelEl.style.color = 'var(--text)';
-        clearEl.removeAttribute('hidden');
-        listEl.setAttribute('hidden', '');
-        searchInput.value = '';
-        // Trigger change event
+        select.value      = opt.dataset.id;
+        searchEl.value    = opt.dataset.name;
+        clearEl.hidden    = false;
+        listEl.hidden     = true;
+        field.classList.remove('focused', 'invalid');
+        if (errEl) errEl.textContent = '';
         select.dispatchEvent(new Event('change'));
       });
     });
   }
 
-  // Show list on focus
-  searchInput.addEventListener('focus', () => {
-    renderList('');
-    listEl.removeAttribute('hidden');
+  searchEl.addEventListener('focus', () => {
+    field.classList.add('focused');
+    renderList(searchEl.value);
+    listEl.hidden = false;
   });
 
-  searchInput.addEventListener('input', () => {
-    renderList(searchInput.value);
-    listEl.removeAttribute('hidden');
+  searchEl.addEventListener('input', () => {
+    select.value   = '';
+    clearEl.hidden = searchEl.value.length === 0;
+    renderList(searchEl.value);
+    listEl.hidden  = false;
   });
 
-  searchInput.addEventListener('blur', () => {
-    setTimeout(() => listEl.setAttribute('hidden', ''), 150);
+  searchEl.addEventListener('blur', () => {
+    setTimeout(() => {
+      field.classList.remove('focused');
+      listEl.hidden = true;
+      // If user typed but didn't pick, revert display to last valid selection
+      if (!select.value) {
+        searchEl.value = '';
+        clearEl.hidden = true;
+      } else {
+        const matched = schools.find(s => String(s.id) === String(select.value));
+        if (matched) searchEl.value = matched.name;
+      }
+    }, 180);
   });
 
-  // Click selected area to re-open
-  selectedEl.addEventListener('click', () => {
-    renderList('');
-    listEl.removeAttribute('hidden');
-    searchInput.focus();
-  });
-
-  // Clear selection
   clearEl.addEventListener('click', e => {
     e.stopPropagation();
-    select.value = '';
-    labelEl.textContent = '-- Select your school --';
-    labelEl.style.color = 'var(--text-muted)';
-    clearEl.setAttribute('hidden', '');
-    searchInput.value = '';
+    select.value   = '';
+    searchEl.value = '';
+    clearEl.hidden = true;
+    searchEl.focus();
+    select.dispatchEvent(new Event('change'));
   });
 }
 
@@ -184,13 +189,20 @@ document.querySelectorAll('.toggle-pw').forEach(btn => {
 
 /* ===== HELPERS ===== */
 function setError(inputId, errId, msg) {
-  const el = document.getElementById(inputId), err = document.getElementById(errId);
-  if (el)  el.classList.add('invalid');
+  // For school dropdowns, mark the custom field wrapper
+  const field = document.getElementById(inputId + '_field');
+  const el    = document.getElementById(inputId);
+  const err   = document.getElementById(errId);
+  if (field) field.classList.add('invalid');
+  else if (el) el.classList.add('invalid');
   if (err) err.textContent = msg;
 }
 function clearError(inputId, errId) {
-  const el = document.getElementById(inputId), err = document.getElementById(errId);
-  if (el)  el.classList.remove('invalid');
+  const field = document.getElementById(inputId + '_field');
+  const el    = document.getElementById(inputId);
+  const err   = document.getElementById(errId);
+  if (field) field.classList.remove('invalid');
+  else if (el) el.classList.remove('invalid');
   if (err) err.textContent = '';
 }
 function showLoginError(formId, message) {
