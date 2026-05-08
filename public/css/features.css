@@ -385,3 +385,69 @@ tr.my-row td { background: #f0f7ff; }
   .deadline-card { flex-direction: column; align-items: flex-start; }
   .submitter-banner { flex-direction: column; align-items: flex-start; }
 }
+
+/* ===== COMPLIANCE CARD IMPROVEMENTS ===== */
+.compliance-card {
+  transition: var(--transition);
+}
+.compliance-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== DEADLINE CARD IMPROVEMENTS ===== */
+.deadline-card {
+  transition: var(--transition);
+}
+.deadline-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== NOTICE ITEM DELETE BUTTON ===== */
+.notice-delete-btn {
+  background: none;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.notice-delete-btn:hover {
+  background: var(--danger-light);
+}
+
+/* ===== AUDIT BADGE IMPROVEMENTS ===== */
+.audit-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.audit-badge.submit  { background: #DBEAFE; color: #1D4ED8; }
+.audit-badge.approve { background: #D1FAE5; color: #065F46; }
+.audit-badge.return  { background: #FEE2E2; color: #991B1B; }
+.audit-badge.resub   { background: #EDE9FE; color: #5B21B6; }
+.audit-badge.login   { background: #F1F5F9; color: #64748B; }
+
+/* ===== BULK BAR ===== */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--primary);
+  flex-wrap: wrap;
+}
+.bulk-bar[hidden] { display: none; }
+.bulk-bar span { flex: 1; }

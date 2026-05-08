@@ -1623,3 +1623,90 @@ tr:last-child td {
     font-size: 0.75rem;
   }
 }
+
+/* ===== FILE UPLOAD ITEM (used in JS) ===== */
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.file-icon { font-size: 1rem; }
+.file-icon.pdf   { color: #DC2626; }
+.file-icon.word  { color: #1D4ED8; }
+.file-icon.excel { color: #065F46; }
+.file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-size { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+.file-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transition: var(--transition);
+}
+.file-remove:hover { color: var(--danger); background: var(--danger-light); }
+
+/* ===== DRAG OVER STATE ===== */
+.upload-area.drag-over {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: scale(1.01);
+}
+
+/* ===== ACTIVITY DOT (admin dashboard) ===== */
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.activity-dot.blue   { background: #3B82F6; }
+.activity-dot.green  { background: #10B981; }
+.activity-dot.red    { background: #EF4444; }
+.activity-dot.yellow { background: #F59E0B; }
+.activity-text { flex: 1; font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+.activity-time { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+
+/* ===== SCHOOL META TAGS ===== */
+.school-meta-tag.tag-kinder  { background: #FEF3C7; color: #92400E; }
+.school-meta-tag.tag-elem    { background: #D1FAE5; color: #065F46; }
+.school-meta-tag.tag-junior  { background: #DBEAFE; color: #1E40AF; }
+.school-meta-tag.tag-senior  { background: #EDE9FE; color: #4C1D95; }
+
+/* ===== STAFF APPROVAL CARD ===== */
+.staff-approval-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  transition: var(--transition);
+}
+.staff-approval-card:hover { box-shadow: var(--shadow-md); }
+.staff-approval-avatar {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: #DBEAFE; color: #1D4ED8;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.staff-approval-info { flex: 1; }
+.staff-approval-info strong { display: block; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.staff-approval-info span   { font-size: 0.78rem; color: var(--text-muted); }
+.staff-approval-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ===== OPEN SIDEBAR STATE ===== */
+.sidebar.open { left: 0 !important; }
