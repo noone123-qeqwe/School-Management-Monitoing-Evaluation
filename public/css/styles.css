@@ -187,7 +187,8 @@ button {
 .intro-logo-img {
   height: 60px;
   width: auto;
-  filter: brightness(0) invert(1);
+  mix-blend-mode: screen;
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .intro-title {
@@ -641,6 +642,7 @@ button {
   height: 40px;
   width: auto;
   object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .logo-text {
@@ -1366,8 +1368,9 @@ button {
 
 .footer-logo-img {
   height: 40px;
-  filter: brightness(0) invert(1);
-  opacity: 0.8;
+  mix-blend-mode: screen;
+  filter: brightness(1.1) contrast(1.1);
+  opacity: 0.9;
 }
 
 .footer-brand strong {
