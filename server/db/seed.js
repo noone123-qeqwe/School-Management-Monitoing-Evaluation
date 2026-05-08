@@ -9,14 +9,34 @@ async function seed() {
 
     // ── Schools ──────────────────────────────────────────────
     const schools = [
-      ["St. Mary's Academy",      'SCH-001', 'elementary',   'Division of Pasig',    'stmarys@school.edu.ph'],
-      ['Holy Cross Kindergarten', 'SCH-002', 'kindergarten', 'Division of Pasig',    'holycross@school.edu.ph'],
-      ['Lourdes Academy',         'SCH-003', 'junior',       'Division of Pasig',    'lourdes@school.edu.ph'],
-      ['Immaculate Conception',   'SCH-004', 'senior',       'Division of Pasig',    'ic@school.edu.ph'],
-      ['San Jose Academy',        'SCH-005', 'elementary',   'Division of Pasig',    'sanjose@school.edu.ph'],
-      ['Sacred Heart School',     'SCH-006', 'elementary',   'Division of Pasig',    'sacredheart@school.edu.ph'],
-      ['Little Flower Kinder',    'SCH-007', 'kindergarten', 'Division of Pasig',    'littleflower@school.edu.ph'],
-      ['St. Joseph High School',  'SCH-008', 'junior',       'Division of Pasig',    'stjoseph@school.edu.ph'],
+      ['Amazing Progress Learning Center',                    'SCH-001', 'elementary',   'Division of Masbate', 'amazingprogress@school.edu.ph'],
+      ['Andres Soriano Jr. Memorial School',                  'SCH-002', 'elementary',   'Division of Masbate', 'andressoriano@school.edu.ph'],
+      ['Blue Angels Learning Center',                         'SCH-003', 'kindergarten', 'Division of Masbate', 'blueangels@school.edu.ph'],
+      ['Christina Rose Elementary School',                    'SCH-004', 'elementary',   'Division of Masbate', 'christinarose@school.edu.ph'],
+      ['Daughters of St. Joseph Kindergarten School',         'SCH-005', 'kindergarten', 'Division of Masbate', 'dsjkinder@school.edu.ph'],
+      ["Eden's Christian Academy",                            'SCH-006', 'elementary',   'Division of Masbate', 'edenschristian@school.edu.ph'],
+      ["Eden's Christian Learning Center",                    'SCH-007', 'elementary',   'Division of Masbate', 'edenslearning@school.edu.ph'],
+      ['G & A Guitierrez Learning Center Inc.',               'SCH-008', 'elementary',   'Division of Masbate', 'gaguitierrez@school.edu.ph'],
+      ['Green Meadows Tiny Tots Inc.',                        'SCH-009', 'kindergarten', 'Division of Masbate', 'greenmeadows@school.edu.ph'],
+      ['Happy Victory School Inc.',                           'SCH-010', 'elementary',   'Division of Masbate', 'happyvictory@school.edu.ph'],
+      ['Holy Family Parish Learning Center',                  'SCH-011', 'elementary',   'Division of Masbate', 'holyfamily@school.edu.ph'],
+      ['Holy Name Academy',                                   'SCH-012', 'junior',       'Division of Masbate', 'holynameacademy@school.edu.ph'],
+      ['Immaculate Conception Parish Learning Center',        'SCH-013', 'elementary',   'Division of Masbate', 'icplc@school.edu.ph'],
+      ['Institute of the Orient',                             'SCH-014', 'senior',       'Division of Masbate', 'instituteorient@school.edu.ph'],
+      ['Liceo de Masbate Colleges Inc.',                      'SCH-015', 'senior',       'Division of Masbate', 'liceodemasbate@school.edu.ph'],
+      ['Liceo de San Jacinto Foundation, Inc.',               'SCH-016', 'junior',       'Division of Masbate', 'liceosanjacinto@school.edu.ph'],
+      ['Mandaon Christian Academy',                           'SCH-017', 'junior',       'Division of Masbate', 'mandaonchristian@school.edu.ph'],
+      ['Masbate Central Technical Institute',                 'SCH-018', 'senior',       'Division of Masbate', 'masbatecti@school.edu.ph'],
+      ['Masbate Colleges Inc.',                               'SCH-019', 'senior',       'Division of Masbate', 'masbatecolleges@school.edu.ph'],
+      ['Masbate Ikthus Christian School, Inc.',               'SCH-020', 'junior',       'Division of Masbate', 'masbateikthus@school.edu.ph'],
+      ['Masbate Institute of Science and Technology, Inc.',   'SCH-021', 'senior',       'Division of Masbate', 'masbateist@school.edu.ph'],
+      ["Masbate Learning is Fun Children's Center, Inc.",     'SCH-022', 'kindergarten', 'Division of Masbate', 'masbatelearning@school.edu.ph'],
+      ['Masbate Polytechnic and Development College',         'SCH-023', 'senior',       'Division of Masbate', 'masbatepoly@school.edu.ph'],
+      ['Masbate Southeastern Institute, Inc.',                'SCH-024', 'junior',       'Division of Masbate', 'masbatesoutheast@school.edu.ph'],
+      ['Osmeña Colleges',                                     'SCH-025', 'senior',       'Division of Masbate', 'osmenacolleges@school.edu.ph'],
+      ['St. Anthony High School Seminary',                    'SCH-026', 'junior',       'Division of Masbate', 'stanthonyseminary@school.edu.ph'],
+      ['St. Raphael the Archangel Diocesan School',           'SCH-027', 'junior',       'Division of Masbate', 'straphael@school.edu.ph'],
+      ['Yadah Christian School Inc.',                         'SCH-028', 'elementary',   'Division of Masbate', 'yadahchristian@school.edu.ph'],
     ];
 
     for (const [name, code, level, division, email] of schools) {
@@ -33,7 +53,7 @@ async function seed() {
     await client.query(
       `INSERT INTO admins (username, full_name, position, division, email, password)
        VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (username) DO NOTHING`,
-      ['admin', 'Division Administrator', 'Education Program Supervisor', 'Division of Pasig', 'admin@deped-pasig.gov.ph', adminPw]
+      ['admin', 'Division Administrator', 'Education Program Supervisor', 'Division of Masbate', 'admin@deped-masbate.gov.ph', adminPw]
     );
     console.log('✅ Default admin seeded. (username: admin / password: admin123)');
 
@@ -44,13 +64,13 @@ async function seed() {
       const staffPw = await bcrypt.hash('staff123', 10);
       await client.query(
         `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-         VALUES ($1,'Maria','Santos','School Registrar','maria.santos@stmarys.edu.ph',$2,'approved')
+         VALUES ($1,'Maria','Santos','School Registrar','maria.santos@amazingprogress.edu.ph',$2,'approved')
          ON CONFLICT (email, school_id) DO NOTHING`,
         [sid, staffPw]
       );
       await client.query(
         `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-         VALUES ($1,'Jose','Reyes','School Principal','jose.reyes@stmarys.edu.ph',$2,'approved')
+         VALUES ($1,'Jose','Reyes','School Principal','jose.reyes@amazingprogress.edu.ph',$2,'approved')
          ON CONFLICT (email, school_id) DO NOTHING`,
         [sid, staffPw]
       );
