@@ -69,11 +69,23 @@ app.listen(PORT, async () => {
     const pool = require('./db/pool');
     await pool.query('SELECT 1');
     console.log('✅ Database connection successful');
-    // Check if tables exist
     const tables = await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`);
-    console.log('Tables found:', tables.rows.map(r => r.table_name).join(', ') || 'NONE - run migrations!');
+    const tableNames = tables.rows.map(r => r.table_name);
+    if (tableNames.length === 0) {
+      console.log('⚠️  Tables found: NONE - running migrations now...');
+      // Auto-run migrations if tables don't exist
+      const { execSync } = require('child_process');
+      try {
+        execSync('node server/db/migrate.js', { stdio: 'inherit', cwd: require('path').join(__dirname, '..') });
+        execSync('node server/db/seed.js',    { stdio: 'inherit', cwd: require('path').join(__dirname, '..') });
+        console.log('✅ Auto-migration complete');
+      } catch (migErr) {
+        console.error('❌ Auto-migration failed:', migErr.message);
+      }
+    } else {
+      console.log('Tables found:', tableNames.join(', '));
+    }
   } catch (err) {
     console.error('❌ Database connection FAILED:', err.message);
-    console.error('Check DATABASE_URL environment variable');
   }
 });
