@@ -74,7 +74,21 @@ const API = (() => {
 
     getUser,
 
-    isLoggedIn() { return !!getToken(); },
+    isLoggedIn() {
+      const token = getToken();
+      if (!token) return false;
+      
+      // Decode token payload (without verification - client-side check only)
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return false;
+        const payload = JSON.parse(atob(parts[1]));
+        // Check if token is expired
+        return payload.exp > Date.now() / 1000;
+      } catch {
+        return false;
+      }
+    },
   };
 
   /* ══════════════════════════════════════════
