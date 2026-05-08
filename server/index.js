@@ -127,6 +127,13 @@ app.use((req, res, next) => {
   next();
 });
 
+/* ══════════════════════════════════════════════════════
+   LEGACY /pages/* REDIRECT — for old bookmarks/cache
+══════════════════════════════════════════════════════ */
+app.get('/pages/:page', (req, res) => {
+  res.redirect(301, '/html/' + req.params.page);
+});
+
 const STATIC_ROOT = path.join(__dirname, '../codes');
 
 app.use(express.static(STATIC_ROOT, {
