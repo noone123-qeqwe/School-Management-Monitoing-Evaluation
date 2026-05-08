@@ -32,6 +32,11 @@ router.post('/staff/login', async (req, res) => {
     const staff = result.rows[0];
     if (!staff) return res.status(401).json({ error: 'Invalid credentials.' });
 
+    if (!staff.password) {
+      console.error('Staff record found but password field is missing:', staff.id);
+      return res.status(500).json({ error: 'Account data is corrupted. Please contact the Division Office.' });
+    }
+
     const match = await bcrypt.compare(password, staff.password);
     if (!match) return res.status(401).json({ error: 'Invalid credentials.' });
 
@@ -123,6 +128,11 @@ router.post('/admin/login', async (req, res) => {
     );
     const admin = result.rows[0];
     if (!admin) return res.status(401).json({ error: 'Invalid credentials.' });
+
+    if (!admin.password) {
+      console.error('Admin record found but password field is missing:', admin.id);
+      return res.status(500).json({ error: 'Account data is corrupted. Please contact support.' });
+    }
 
     const match = await bcrypt.compare(password, admin.password);
     if (!match) return res.status(401).json({ error: 'Invalid credentials.' });

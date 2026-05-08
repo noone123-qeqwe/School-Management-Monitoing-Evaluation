@@ -59,7 +59,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal server error.' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`SMME Portal running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
+  console.log(`JWT_SECRET set: ${!!process.env.JWT_SECRET}`);
+  // Test DB connection on startup
+  try {
+    const pool = require('./db/pool');
+    await pool.query('SELECT 1');
+    console.log('✅ Database connection successful');
+    // Check if tables exist
+    const tables = await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema='public'`);
+    console.log('Tables found:', tables.rows.map(r => r.table_name).join(', ') || 'NONE - run migrations!');
+  } catch (err) {
+    console.error('❌ Database connection FAILED:', err.message);
+    console.error('Check DATABASE_URL environment variable');
+  }
 });
