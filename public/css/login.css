@@ -860,30 +860,31 @@
 .intro-logo-wrap {
   width: 96px;
   height: 96px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.05), 0 0 40px rgba(21, 112, 239, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.08), 0 0 40px rgba(21, 112, 239, 0.5);
   animation: logoBreathe 2.4s ease-in-out infinite;
   position: relative;
   z-index: 1;
 }
 
 @keyframes logoBreathe {
-  0%, 100% { box-shadow: 0 0 0 8px rgba(255,255,255,0.04), 0 0 28px rgba(21, 112, 239, 0.35); }
-  50%       { box-shadow: 0 0 0 12px rgba(255,255,255,0.07), 0 0 56px rgba(21, 112, 239, 0.65); }
+  0%, 100% { box-shadow: 0 0 0 8px rgba(255,255,255,0.06), 0 0 28px rgba(21, 112, 239, 0.35); }
+  50%       { box-shadow: 0 0 0 14px rgba(255,255,255,0.1), 0 0 56px rgba(21, 112, 239, 0.65); }
 }
 
 .intro-logo-img {
-  height: 56px;
-  width: auto;
-  filter: brightness(0) invert(1);
+  height: 68px;
+  width: 68px;
+  object-fit: contain;
   display: block;
+  border-radius: 50%;
 }
 
 /* ── Text ── */
