@@ -828,7 +828,7 @@
 .intro-ring {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   animation: introRingPulse 2.4s ease-in-out infinite;
 }
 
@@ -841,14 +841,14 @@
 .intro-ring-2 {
   width: 162px;
   height: 162px;
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.1);
   animation-delay: 0.3s;
 }
 
 .intro-ring-3 {
   width: 124px;
   height: 124px;
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.07);
   animation-delay: 0.6s;
 }
 
@@ -858,33 +858,31 @@
 }
 
 .intro-logo-wrap {
-  width: 96px;
-  height: 96px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  width: 120px;
+  height: 120px;
+  background: transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.08), 0 0 40px rgba(21, 112, 239, 0.5);
+  border: none;
+  box-shadow: none;
   animation: logoBreathe 2.4s ease-in-out infinite;
   position: relative;
   z-index: 1;
 }
 
 @keyframes logoBreathe {
-  0%, 100% { box-shadow: 0 0 0 8px rgba(255,255,255,0.06), 0 0 28px rgba(21, 112, 239, 0.35); }
-  50%       { box-shadow: 0 0 0 14px rgba(255,255,255,0.1), 0 0 56px rgba(21, 112, 239, 0.65); }
+  0%, 100% { filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.35)); }
+  50%       { filter: drop-shadow(0 0 32px rgba(255, 255, 255, 0.75)); }
 }
 
 .intro-logo-img {
-  height: 68px;
-  width: 68px;
+  height: 110px;
+  width: 110px;
   object-fit: contain;
   display: block;
-  border-radius: 50%;
+  mix-blend-mode: screen;
 }
 
 /* ── Text ── */
