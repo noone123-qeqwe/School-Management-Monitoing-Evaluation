@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Management Monitoring & Evaluation</title>
+  <link rel="stylesheet" href="/css/styles.css?v=1.0.1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ANIMATED INTRO SCREEN -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-content">
+      <div class="intro-logo">
+        <img src="/assets/logo.png" alt="SMME" class="intro-logo-img" />
+      </div>
+      <h1 class="intro-title">SMME</h1>
+      <p class="intro-subtitle">School Management Monitoring & Evaluation</p>
+      <div class="intro-loader">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / NAV -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="/assets/logo.png" alt="SMME Logo" class="logo-img" />
+        <div>
+          <span class="logo-title">SMME</span>
+          <span class="logo-sub">School Management Monitoring &amp; Evaluation</span>
+        </div>
+      </div>
+      <nav class="nav" id="mainNav">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/pages/login.html" class="btn btn-primary btn-sm" id="loginHeaderBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>School Management<br /><span>Monitoring &amp; Evaluation</span></h1>
+      <p>A secure digital portal for private schools to submit documents, files, and applications directly to the Division Office.</p>
+      <div class="hero-btns">
+        <a href="/pages/login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In to Portal</a>
+        <a href="#about" class="btn btn-outline">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-badges">
+      <div class="badge"><i class="fas fa-child"></i><span>Kindergarten</span></div>
+      <div class="badge"><i class="fas fa-book-open"></i><span>Elementary</span></div>
+      <div class="badge"><i class="fas fa-graduation-cap"></i><span>Junior High</span></div>
+      <div class="badge"><i class="fas fa-university"></i><span>Senior High</span></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>About the Portal</h2>
+        <p>Streamlining document submission between private schools and the Division Office</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Secure Submission</h3>
+          <p>All documents are encrypted and transmitted securely to the Division Office. Only authorized personnel can access submitted files.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-clock"></i></div>
+          <h3>Real-Time Tracking</h3>
+          <p>Track the status of your submitted documents in real time — from submission to acknowledgment and processing.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-file-alt"></i></div>
+          <h3>Multiple File Types</h3>
+          <p>Submit Excel spreadsheets, Word documents, and PDF files. All standard school document formats are supported.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-history"></i></div>
+          <h3>Submission History</h3>
+          <p>Access a complete history of all your past submissions with timestamps, document types, and current status.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHOOL LEVELS -->
+  <section class="section section-alt" id="levels">
+    <div class="container">
+      <div class="section-header">
+        <h2>School Levels Covered</h2>
+        <p>This portal serves all private school levels under the Division Office</p>
+      </div>
+      <div class="levels-grid">
+        <div class="level-card kinder">
+          <i class="fas fa-child"></i>
+          <h3>Kindergarten</h3>
+          <p>Private kindergarten schools can submit enrollment reports, curriculum documents, and compliance requirements.</p>
+        </div>
+        <div class="level-card elementary">
+          <i class="fas fa-book-open"></i>
+          <h3>Elementary</h3>
+          <p>Elementary schools can submit academic reports, faculty credentials, and accreditation documents.</p>
+        </div>
+        <div class="level-card junior">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Junior High School</h3>
+          <p>Junior high schools can submit SHS readiness reports, learner profiles, and assessment data.</p>
+        </div>
+        <div class="level-card senior">
+          <i class="fas fa-university"></i>
+          <h3>Senior High School</h3>
+          <p>Senior high schools can submit strand offerings, TVL documents, and graduation requirements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMIT DOCUMENTS -->
+  <section class="section" id="submit">
+    <div class="container">
+      <div class="section-header">
+        <h2>Submit Documents</h2>
+        <p>Fill in the form below and attach your files to send them to the Division Office</p>
+      </div>
+      <div class="form-wrapper">
+        <form id="submissionForm" novalidate>
+
+          <!-- School Information -->
+          <div class="form-group-title"><i class="fas fa-school"></i> School Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="schoolName">School Name <span class="required">*</span></label>
+              <input type="text" id="schoolName" name="schoolName" placeholder="Enter full school name" required />
+              <span class="error-msg" id="schoolNameErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="schoolId">School ID / DECS No. <span class="required">*</span></label>
+              <input type="text" id="schoolId" name="schoolId" placeholder="e.g. 123456" required />
+              <span class="error-msg" id="schoolIdErr"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="schoolLevel">School Level <span class="required">*</span></label>
+              <select id="schoolLevel" name="schoolLevel" required>
+                <option value="">-- Select Level --</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="elementary">Elementary</option>
+                <option value="junior">Junior High School</option>
+                <option value="senior">Senior High School</option>
+              </select>
+              <span class="error-msg" id="schoolLevelErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="division">Division Office <span class="required">*</span></label>
+              <select id="division" name="division" required>
+                <option value="">-- Select Division --</option>
+                <option value="div1">Division of Manila</option>
+                <option value="div2">Division of Quezon City</option>
+                <option value="div3">Division of Makati</option>
+                <option value="div4">Division of Pasig</option>
+                <option value="div5">Division of Taguig</option>
+                <option value="div6">Division of Caloocan</option>
+                <option value="div7">Division of Marikina</option>
+                <option value="div8">Division of Pasay</option>
+                <option value="other">Other Division</option>
+              </select>
+              <span class="error-msg" id="divisionErr"></span>
+            </div>
+          </div>
+
+          <!-- Contact Person -->
+          <div class="form-group-title"><i class="fas fa-user"></i> Contact Person</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Full Name <span class="required">*</span></label>
+              <input type="text" id="contactName" name="contactName" placeholder="Principal / Authorized Representative" required />
+              <span class="error-msg" id="contactNameErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="position">Position / Designation <span class="required">*</span></label>
+              <input type="text" id="position" name="position" placeholder="e.g. School Principal" required />
+              <span class="error-msg" id="positionErr"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email Address <span class="required">*</span></label>
+              <input type="email" id="email" name="email" placeholder="school@example.com" required />
+              <span class="error-msg" id="emailErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="phone">Contact Number <span class="required">*</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="09XX-XXX-XXXX" required />
+              <span class="error-msg" id="phoneErr"></span>
+            </div>
+          </div>
+
+          <!-- Document Details -->
+          <div class="form-group-title"><i class="fas fa-file-alt"></i> Document Details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="docType">Document Type <span class="required">*</span></label>
+              <select id="docType" name="docType" required>
+                <option value="">-- Select Document Type --</option>
+                <option value="enrollment">Enrollment Report</option>
+                <option value="curriculum">Curriculum Documents</option>
+                <option value="faculty">Faculty Credentials</option>
+                <option value="accreditation">Accreditation Documents</option>
+                <option value="financial">Financial Reports</option>
+                <option value="compliance">Compliance Requirements</option>
+                <option value="application">School Application / Permit</option>
+                <option value="assessment">Assessment Data</option>
+                <option value="graduation">Graduation Requirements</option>
+                <option value="other">Other</option>
+              </select>
+              <span class="error-msg" id="docTypeErr"></span>
+            </div>
+            <div class="form-group">
+              <label for="schoolYear">School Year <span class="required">*</span></label>
+              <select id="schoolYear" name="schoolYear" required>
+                <option value="">-- Select School Year --</option>
+                <option value="2026-2027">2026–2027</option>
+                <option value="2025-2026">2025–2026</option>
+                <option value="2024-2025">2024–2025</option>
+                <option value="2023-2024">2023–2024</option>
+              </select>
+              <span class="error-msg" id="schoolYearErr"></span>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="subject">Subject / Purpose <span class="required">*</span></label>
+            <input type="text" id="subject" name="subject" placeholder="Brief description of the submission purpose" required />
+            <span class="error-msg" id="subjectErr"></span>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="remarks">Remarks / Notes</label>
+            <textarea id="remarks" name="remarks" rows="4" placeholder="Additional information or instructions for the Division Office..."></textarea>
+          </div>
+
+          <!-- File Upload -->
+          <div class="form-group-title"><i class="fas fa-paperclip"></i> Attach Files</div>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="fileInput" name="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
+            <div class="upload-placeholder" id="uploadPlaceholder">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Drag &amp; drop files here or <button type="button" class="upload-btn" id="browseBtn">Browse Files</button></p>
+              <small>Accepted formats: PDF, Word (.doc, .docx), Excel (.xls, .xlsx) &nbsp;|&nbsp; Max 20MB per file</small>
+            </div>
+            <ul class="file-list" id="fileList"></ul>
+          </div>
+          <span class="error-msg" id="fileErr"></span>
+
+          <!-- Submit -->
+          <div class="form-actions">
+            <button type="reset" class="btn btn-outline" id="resetBtn"><i class="fas fa-undo"></i> Clear Form</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit to Division Office</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACK SUBMISSION -->
+  <section class="section section-alt" id="track">
+    <div class="container">
+      <div class="section-header">
+        <h2>Track Your Submission</h2>
+        <p>Enter your reference number to check the status of your submitted documents</p>
+      </div>
+      <div class="track-wrapper">
+        <div class="track-form">
+          <div class="track-input-group">
+            <input type="text" id="trackInput" placeholder="Enter Reference Number (e.g. SMME-2026-00123)" />
+            <button class="btn btn-primary" id="trackBtn"><i class="fas fa-search"></i> Track</button>
+          </div>
+          <div class="track-result" id="trackResult" hidden>
+            <div class="track-card">
+              <div class="track-header">
+                <span class="track-ref" id="trackRef"></span>
+                <span class="track-status" id="trackStatus"></span>
+              </div>
+              <div class="track-details" id="trackDetails"></div>
+              <div class="track-timeline" id="trackTimeline"></div>
+            </div>
+          </div>
+        </div>
+        <div class="track-info">
+          <h3><i class="fas fa-info-circle"></i> Status Guide</h3>
+          <ul class="status-guide">
+            <li><span class="status-dot received"></span><strong>Received</strong> – Your submission has been received by the system.</li>
+            <li><span class="status-dot review"></span><strong>Under Review</strong> – Division Office is reviewing your documents.</li>
+            <li><span class="status-dot approved"></span><strong>Approved</strong> – Documents have been approved and processed.</li>
+            <li><span class="status-dot returned"></span><strong>Returned</strong> – Documents need revision. Check your email for details.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contact the Division Office</h2>
+        <p>Reach out to us for assistance with your submissions</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Address</strong>
+              <p>Division Office Building, DepEd Complex<br />Meralco Avenue, Pasig City</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <strong>Phone</strong>
+              <p>(02) 8XXX-XXXX<br />0917-XXX-XXXX</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong>
+              <p>smme@deped-division.gov.ph<br />privateschools@deped-division.gov.ph</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <strong>Office Hours</strong>
+              <p>Monday – Friday<br />8:00 AM – 5:00 PM</p>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="cName">Your Name <span class="required">*</span></label>
+            <input type="text" id="cName" placeholder="Full Name" required />
+          </div>
+          <div class="form-group">
+            <label for="cEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="cEmail" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="cMessage">Message <span class="required">*</span></label>
+            <textarea id="cMessage" rows="5" placeholder="How can we help you?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="/assets/logo.png" alt="SMME Logo" class="footer-logo-img" />
+        <div>
+          <strong>SMME Portal</strong>
+          <span>School Management Monitoring &amp; Evaluation</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#submit">Submit</a>
+        <a href="#track">Track</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Division Office – School Management Monitoring &amp; Evaluation Portal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal">
+      <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
+      <h2>Submission Successful!</h2>
+      <p>Your documents have been submitted to the Division Office.</p>
+      <div class="modal-ref">
+        Reference No: <strong id="refNumber"></strong>
+      </div>
+      <p class="modal-note">Please save your reference number to track your submission. A confirmation email will be sent to your registered email address.</p>
+      <button class="btn btn-primary" id="modalClose">Done</button>
+    </div>
+  </div>
+
+  <script>
+    // Handle intro screen animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const introScreen = document.getElementById('introScreen');
+      
+      // Hide intro screen after animation completes (2.2s animation + 0.8s fadeOut)
+      setTimeout(() => {
+        if (introScreen) {
+          introScreen.setAttribute('hidden', '');
+        }
+      }, 3000);
+    });
+  </script>
+
+  <script src="/js/app.js?v=1.0.1"></script>
+</body>
+</html>
