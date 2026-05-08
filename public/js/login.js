@@ -7,23 +7,126 @@ window.addEventListener('load', async () => {
       ? '/pages/admin-dashboard.html'
       : '/pages/school-dashboard.html';
   }
-
-  // Populate school dropdown from API
-  try {
-    const schools = await API.auth.getSchools();
-    const selectors = ['staffSchool', 'regSchool'];
-    selectors.forEach(id => {
-      const sel = document.getElementById(id);
-      if (!sel) return;
-      sel.innerHTML = '<option value="">-- Select your school --</option>' +
-        schools.map(s =>
-          '<option value="' + s.id + '">' +
-          API.escapeHtml(s.name) + ' (' + API.levelLabel(s.level) + ')' +
-          '</option>'
-        ).join('');
-    });
-  } catch (e) { /* schools dropdown stays empty if API unreachable */ }
 });
+
+/* ===== SEARCHABLE SCHOOL DROPDOWN ===== */
+let _allSchools = [];
+
+async function loadSchools() {
+  if (_allSchools.length) return _allSchools;
+  try {
+    _allSchools = await API.auth.getSchools();
+  } catch (e) {}
+  return _allSchools;
+}
+
+function buildSearchableDropdown(selectId, schools) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  const wrap = select.closest('.input-icon-wrap') || select.parentElement;
+
+  // Build custom dropdown HTML
+  const dropId = selectId + '_drop';
+  const inputId = selectId + '_search';
+
+  // Remove old custom dropdown if exists
+  const old = document.getElementById(dropId);
+  if (old) old.remove();
+
+  // Hide the original select
+  select.style.display = 'none';
+
+  // Create wrapper
+  const container = document.createElement('div');
+  container.className = 'school-search-wrap';
+  container.id = dropId;
+  container.innerHTML = `
+    <div class="school-search-input-wrap">
+      <i class="fas fa-search school-search-icon"></i>
+      <input type="text" id="${inputId}" class="school-search-input" placeholder="Search school..." autocomplete="off" />
+      <span class="school-search-clear" id="${selectId}_clear" hidden>&#x2715;</span>
+    </div>
+    <div class="school-search-list" id="${selectId}_list" hidden></div>
+    <div class="school-search-selected" id="${selectId}_selected">
+      <span id="${selectId}_label" style="color:var(--text-muted)">-- Select your school --</span>
+    </div>
+  `;
+  wrap.appendChild(container);
+
+  const searchInput = document.getElementById(inputId);
+  const listEl      = document.getElementById(selectId + '_list');
+  const selectedEl  = document.getElementById(selectId + '_selected');
+  const labelEl     = document.getElementById(selectId + '_label');
+  const clearEl     = document.getElementById(selectId + '_clear');
+
+  function renderList(filter) {
+    const q = (filter || '').toLowerCase();
+    const filtered = schools.filter(s => s.name.toLowerCase().includes(q));
+    listEl.innerHTML = filtered.length
+      ? filtered.map(s =>
+          '<div class="school-option" data-id="' + s.id + '" data-name="' + API.escapeHtml(s.name) + '">' +
+          '<span class="school-option-name">' + API.escapeHtml(s.name) + '</span>' +
+          '<span class="school-option-level">' + API.levelLabel(s.level) + '</span>' +
+          '</div>'
+        ).join('')
+      : '<div class="school-option-empty">No schools found</div>';
+
+    listEl.querySelectorAll('.school-option').forEach(opt => {
+      opt.addEventListener('mousedown', e => {
+        e.preventDefault();
+        const id   = opt.dataset.id;
+        const name = opt.dataset.name;
+        select.value = id;
+        labelEl.textContent = name;
+        labelEl.style.color = 'var(--text)';
+        clearEl.removeAttribute('hidden');
+        listEl.setAttribute('hidden', '');
+        searchInput.value = '';
+        // Trigger change event
+        select.dispatchEvent(new Event('change'));
+      });
+    });
+  }
+
+  // Show list on focus
+  searchInput.addEventListener('focus', () => {
+    renderList('');
+    listEl.removeAttribute('hidden');
+  });
+
+  searchInput.addEventListener('input', () => {
+    renderList(searchInput.value);
+    listEl.removeAttribute('hidden');
+  });
+
+  searchInput.addEventListener('blur', () => {
+    setTimeout(() => listEl.setAttribute('hidden', ''), 150);
+  });
+
+  // Click selected area to re-open
+  selectedEl.addEventListener('click', () => {
+    renderList('');
+    listEl.removeAttribute('hidden');
+    searchInput.focus();
+  });
+
+  // Clear selection
+  clearEl.addEventListener('click', e => {
+    e.stopPropagation();
+    select.value = '';
+    labelEl.textContent = '-- Select your school --';
+    labelEl.style.color = 'var(--text-muted)';
+    clearEl.setAttribute('hidden', '');
+    searchInput.value = '';
+  });
+}
+
+async function initSchoolDropdowns() {
+  const schools = await loadSchools();
+  ['staffSchool', 'regSchool'].forEach(id => {
+    buildSearchableDropdown(id, schools);
+  });
+}
 
 /* ===== PANEL SWITCHING ===== */
 const roleSelector     = document.getElementById('roleSelector');
@@ -39,24 +142,15 @@ function showPanel(panel) {
 
 document.getElementById('roleSchool').addEventListener('click', async () => {
   showPanel(schoolLoginPanel);
-  // Load schools when panel opens
-  try {
-    const schools = await API.auth.getSchools();
-    ['staffSchool', 'regSchool'].forEach(id => {
-      const sel = document.getElementById(id);
-      if (!sel) return;
-      sel.innerHTML = '<option value="">-- Select your school --</option>' +
-        schools.map(s =>
-          '<option value="' + s.id + '">' +
-          API.escapeHtml(s.name) + ' (' + API.levelLabel(s.level) + ')' +
-          '</option>'
-        ).join('');
-    });
-  } catch {}
+  await initSchoolDropdowns();
 });
 
 document.getElementById('roleAdmin').addEventListener('click',  () => showPanel(adminLoginPanel));
-document.getElementById('registerLink').addEventListener('click', e => { e.preventDefault(); showPanel(registerPanel); });
+document.getElementById('registerLink').addEventListener('click', async e => {
+  e.preventDefault();
+  showPanel(registerPanel);
+  await initSchoolDropdowns();
+});
 document.getElementById('backFromSchool').addEventListener('click',   () => showPanel(roleSelector));
 document.getElementById('backFromAdmin').addEventListener('click',    () => showPanel(roleSelector));
 document.getElementById('backFromRegister').addEventListener('click', () => showPanel(schoolLoginPanel));

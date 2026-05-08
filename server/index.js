@@ -87,7 +87,7 @@ app.listen(PORT, async () => {
       // Re-seed schools if count doesn't match (schools were updated)
       try {
         const schoolCount = await pool.query('SELECT COUNT(*) FROM schools');
-        if (parseInt(schoolCount.rows[0].count) < 28) {
+        if (parseInt(schoolCount.rows[0].count) < 38) {
           console.log('⚠️  School list outdated - re-seeding schools...');
           const { execSync } = require('child_process');
           execSync('node server/db/seed.js', { stdio: 'inherit', cwd: require('path').join(__dirname, '..') });
