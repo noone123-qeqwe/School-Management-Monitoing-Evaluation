@@ -2713,3 +2713,199 @@ tr:last-child td {
   .admin-sidebar ~ .dash-main { margin-left: 0; }
   .admin-topbar { padding: 0 16px; }
 }
+
+/* =====================================================
+   CRITICAL LAYOUT FIXES v1.5.1
+   ===================================================== */
+
+/* ── Fix dash-body for 260px admin sidebar ── */
+.admin-sidebar ~ .dash-main {
+  margin-left: 260px;
+}
+
+/* ── Fix stats-grid — force 4 columns on desktop ── */
+.stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+@media (max-width: 1100px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── Fix stat card — horizontal layout ── */
+.stat-card {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 18px 20px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #EEF2F7 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 4px rgba(15,23,42,0.05) !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(15,23,42,0.1) !important;
+}
+
+.stat-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.25rem !important;
+  flex-shrink: 0 !important;
+}
+
+.stat-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.stat-num {
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1 !important;
+}
+
+.stat-label {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #94A3B8 !important;
+}
+
+/* ── Fix admin stat card top border ── */
+.admin-stat-card { border-top: 3px solid transparent !important; }
+.admin-stat-card.blue   { border-top-color: #3B82F6 !important; }
+.admin-stat-card.yellow { border-top-color: #F59E0B !important; }
+.admin-stat-card.green  { border-top-color: #10B981 !important; }
+.admin-stat-card.purple { border-top-color: #8B5CF6 !important; }
+
+/* ── Fix topbar layout ── */
+.dash-topbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 60px !important;
+  padding: 0 24px !important;
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #EEF2F7 !important;
+  box-shadow: 0 1px 8px rgba(15,23,42,0.06) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 750 !important;
+}
+
+.topbar-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.topbar-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.2px !important;
+}
+
+/* ── Fix topbar date chip ── */
+.topbar-date {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.78rem !important;
+  color: #64748B !important;
+  font-weight: 500 !important;
+  background: #F8FAFC !important;
+  border: 1px solid #EEF2F7 !important;
+  border-radius: 8px !important;
+  padding: 5px 12px !important;
+  white-space: nowrap !important;
+}
+
+/* ── Fix topbar user chip ── */
+.topbar-user {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #F8FAFC !important;
+  border: 1px solid #EEF2F7 !important;
+  border-radius: 10px !important;
+  padding: 5px 12px 5px 6px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.topbar-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.85rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* ── Fix page header welcome text ── */
+.page-header h1,
+.admin-page-header h1 {
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.3px !important;
+  margin-bottom: 3px !important;
+  line-height: 1.2 !important;
+}
+
+.page-header .page-subtitle,
+.admin-page-header .page-subtitle {
+  font-size: 0.82rem !important;
+  color: #94A3B8 !important;
+  font-weight: 400 !important;
+}
+
+/* ── Fix dash content padding ── */
+.dash-content {
+  padding: 24px !important;
+  flex: 1 !important;
+}
+
+/* ── Fix two-col layout ── */
+.dash-two-col {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+@media (max-width: 1024px) {
+  .dash-two-col { grid-template-columns: 1fr !important; }
+}
+
+/* ── Mobile fixes ── */
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .dash-content { padding: 16px !important; }
+  .topbar-date { display: none !important; }
+}
