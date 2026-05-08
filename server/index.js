@@ -127,17 +127,24 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, '../public'), {
+const STATIC_ROOT = path.join(__dirname, '../codes');
+
+app.use(express.static(STATIC_ROOT, {
   // Cache static assets (CSS/JS/images) for 1 day
   maxAge: '1d',
   etag: true,
 }));
 
 /* ══════════════════════════════════════════════════════
-   SPA FALLBACK
+   SPA FALLBACK — serve index.html for unknown routes
 ══════════════════════════════════════════════════════ */
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/') || /\.(js|css|png|jpg|jpeg|ico|svg|woff2?)$/.test(req.path)) {
+    return next();
+  }
+  res.sendFile(path.join(STATIC_ROOT, 'index.html'), err => {
+    if (err) next(err);
+  });
 });
 
 /* ══════════════════════════════════════════════════════
