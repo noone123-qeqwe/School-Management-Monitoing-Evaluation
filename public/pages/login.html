@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – SMME Portal</title>
-  <link rel="stylesheet" href="../css/styles.css?v=1.5.0" />
-  <link rel="stylesheet" href="../css/login.css?v=1.5.0" />
+  <link rel="stylesheet" href="../css/styles.css?v=1.5.1" />
+  <link rel="stylesheet" href="../css/login.css?v=1.5.1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="login-body">
@@ -279,8 +279,8 @@
     </div>
   </div>
 
-  <script src="../js/api.js?v=1.5.0"></script>
-  <script src="../js/login.js?v=1.5.0"></script>
+  <script src="../js/api.js?v=1.5.1"></script>
+  <script src="../js/login.js?v=1.5.1"></script>
   <script>
     (function () {
       const intro = document.getElementById('loginIntro');
@@ -291,7 +291,7 @@
       for (let i = 0; i < 18; i++) {
         const p = document.createElement('span');
         p.className = 'intro-particle';
-        p.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;width:' + (4+Math.random()*6) + 'px;height:' + (4+Math.random()*6) + 'px;animation-delay:' + (Math.random()*3) + 's;animation-duration:' + (3+Math.random()*4) + 's;';
+        p.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;width:' + (4+Math.random()*6) + 'px;height:' + (4+Math.random()*6) + 'px;animation-delay:' + (Math.random()*2) + 's';
         particles.appendChild(p);
       }
       const steps = [{pct:20,text:'Loading resources…'},{pct:45,text:'Connecting to server…'},{pct:70,text:'Verifying security…'},{pct:90,text:'Almost ready…'},{pct:100,text:'Welcome!'}];
