@@ -173,22 +173,24 @@ button {
 }
 
 .intro-logo {
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.15);
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.15), 0 0 32px rgba(255, 255, 255, 0.2);
   animation: pulse 2s ease infinite 0.4s;
 }
 
 .intro-logo-img {
-  height: 60px;
-  width: auto;
-  mix-blend-mode: screen;
-  filter: brightness(1.1) contrast(1.1);
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .intro-title {
@@ -639,10 +641,13 @@ button {
 }
 
 .logo-img {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
 }
 
 .logo-text {
@@ -1367,10 +1372,12 @@ button {
 }
 
 .footer-logo-img {
-  height: 40px;
-  mix-blend-mode: screen;
-  filter: brightness(1.1) contrast(1.1);
-  opacity: 0.9;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  opacity: 0.95;
 }
 
 .footer-brand strong {

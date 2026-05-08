@@ -86,12 +86,13 @@
 }
 
 .login-brand-img {
+  width: 72px;
   height: 72px;
-  width: auto;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 50%;
   flex-shrink: 0;
-  mix-blend-mode: screen;
-  filter: brightness(1.1) contrast(1.1);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
 }
 
 .brand-title {
@@ -819,8 +820,8 @@
 /* ── Logo ring ── */
 .intro-logo-ring {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -834,21 +835,21 @@
 }
 
 .intro-ring-1 {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   animation-delay: 0s;
 }
 
 .intro-ring-2 {
-  width: 162px;
-  height: 162px;
+  width: 178px;
+  height: 178px;
   border-color: rgba(255, 255, 255, 0.1);
   animation-delay: 0.3s;
 }
 
 .intro-ring-3 {
-  width: 124px;
-  height: 124px;
+  width: 136px;
+  height: 136px;
   border-color: rgba(255, 255, 255, 0.07);
   animation-delay: 0.6s;
 }
@@ -861,30 +862,30 @@
 .intro-logo-wrap {
   width: 120px;
   height: 120px;
-  background: transparent;
   border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  box-shadow: none;
+  background: var(--white);
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.12), 0 0 40px rgba(21, 112, 239, 0.5);
   animation: logoBreathe 2.4s ease-in-out infinite;
   position: relative;
   z-index: 1;
 }
 
 @keyframes logoBreathe {
-  0%, 100% { filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.35)); }
-  50%       { filter: drop-shadow(0 0 32px rgba(255, 255, 255, 0.75)); }
+  0%, 100% { box-shadow: 0 0 0 6px rgba(255,255,255,0.1), 0 0 28px rgba(21, 112, 239, 0.4); }
+  50%       { box-shadow: 0 0 0 10px rgba(255,255,255,0.18), 0 0 52px rgba(21, 112, 239, 0.7); }
 }
 
 .intro-logo-img {
-  height: 110px;
-  width: 110px;
-  object-fit: contain;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
   display: block;
-  mix-blend-mode: screen;
-  filter: brightness(1.1) contrast(1.1);
+  border-radius: 50%;
 }
 
 /* ── Text ── */
