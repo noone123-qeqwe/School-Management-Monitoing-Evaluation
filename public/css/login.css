@@ -86,7 +86,7 @@
 }
 
 .login-brand-img {
-  height: 48px;
+  height: 72px;
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
@@ -818,8 +818,8 @@
 /* ── Logo ring ── */
 .intro-logo-ring {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -833,21 +833,21 @@
 }
 
 .intro-ring-1 {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   animation-delay: 0s;
 }
 
 .intro-ring-2 {
-  width: 128px;
-  height: 128px;
+  width: 162px;
+  height: 162px;
   border-color: rgba(255, 255, 255, 0.18);
   animation-delay: 0.3s;
 }
 
 .intro-ring-3 {
-  width: 96px;
-  height: 96px;
+  width: 124px;
+  height: 124px;
   border-color: rgba(255, 255, 255, 0.25);
   animation-delay: 0.6s;
 }
@@ -858,8 +858,8 @@
 }
 
 .intro-logo-wrap {
-  width: 80px;
-  height: 80px;
+  width: 96px;
+  height: 96px;
   background: rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -880,7 +880,7 @@
 }
 
 .intro-logo-img {
-  height: 44px;
+  height: 56px;
   width: auto;
   filter: brightness(0) invert(1);
   display: block;
