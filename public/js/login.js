@@ -3,7 +3,9 @@ window.addEventListener('load', async () => {
   if (!API.auth.isLoggedIn()) return;
   const user = API.auth.getUser();
   if (user) {
-    window.location.href = user.role === 'admin' ? '/admin-dashboard.html' : '/school-dashboard.html';
+    window.location.href = user.role === 'admin'
+      ? '/pages/admin-dashboard.html'
+      : '/pages/school-dashboard.html';
   }
 
   // Populate school dropdown from API
@@ -131,7 +133,7 @@ document.getElementById('schoolLoginForm').addEventListener('submit', async e =>
 
   try {
     await API.auth.loginStaff(schoolId, email, password);
-    window.location.href = '/school-dashboard.html';
+    window.location.href = '/pages/school-dashboard.html';
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
@@ -165,7 +167,7 @@ document.getElementById('adminLoginForm').addEventListener('submit', async e => 
 
   try {
     await API.auth.loginAdmin(username, password);
-    window.location.href = '/admin-dashboard.html';
+    window.location.href = '/pages/admin-dashboard.html';
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In as Admin';

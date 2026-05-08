@@ -69,7 +69,7 @@ const API = (() => {
 
     logout() {
       clearToken();
-      window.location.href = '/login.html';
+      window.location.href = '/pages/login.html';
     },
 
     getUser,
