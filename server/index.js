@@ -137,11 +137,18 @@ app.use(express.static(STATIC_ROOT, {
 
 /* ══════════════════════════════════════════════════════
    SPA FALLBACK — serve index.html for unknown routes
+   NOTE: .html requests are NOT caught here — they are
+   served directly by express.static above, or 404.
 ══════════════════════════════════════════════════════ */
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api/') || /\.(js|css|png|jpg|jpeg|ico|svg|woff2?)$/.test(req.path)) {
+  // Let static assets and HTML files pass through (404 if missing)
+  if (
+    req.path.startsWith('/api/') ||
+    /\.(html|js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|map)$/.test(req.path)
+  ) {
     return next();
   }
+  // Only serve SPA fallback for clean URL routes (no extension)
   res.sendFile(path.join(STATIC_ROOT, 'index.html'), err => {
     if (err) next(err);
   });
