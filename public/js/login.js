@@ -1,11 +1,33 @@
 /* ===== REDIRECT IF ALREADY LOGGED IN ===== */
 window.addEventListener('load', async () => {
-  if (!API.auth.isLoggedIn()) return;
-  const user = API.auth.getUser();
-  if (user) {
-    window.location.href = user.role === 'admin'
-      ? '/pages/admin-dashboard.html'
-      : '/pages/school-dashboard.html';
+  const token = localStorage.getItem('smme_token');
+  
+  if (!token) return; // No token, show login form
+  
+  try {
+    // Verify token is still valid by calling /api/auth/me
+    const response = await fetch('/api/auth/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    
+    if (!response.ok) {
+      // Token expired or invalid - clear it and show login
+      localStorage.removeItem('smme_token');
+      localStorage.removeItem('smme_user');
+      return;
+    }
+    
+    // Token is valid - redirect to appropriate dashboard
+    const user = JSON.parse(localStorage.getItem('smme_user') || 'null');
+    if (user) {
+      window.location.href = user.role === 'admin'
+        ? '/pages/admin-dashboard.html'
+        : '/pages/school-dashboard.html';
+    }
+  } catch (err) {
+    // Network error or server issue - clear token and show login
+    localStorage.removeItem('smme_token');
+    localStorage.removeItem('smme_user');
   }
 });
 
@@ -199,7 +221,7 @@ function clearLoginError(formId) {
 
 // Inject alert style
 const alertStyle = document.createElement('style');
-alertStyle.textContent = `.login-alert{display:flex;align-items:center;gap:8px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:8px;padding:10px 14px;font-size:.85rem;font-weight:500;margin-bottom:16px}`;
+alertStyle.textContent = `.login-alert{display:flex;align-items:center;gap:8px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:8px;padding:10px 14px;font-size:.85rem;font-weight:500;margin-bottom:12px}`;
 document.head.appendChild(alertStyle);
 
 /* ===== SCHOOL STAFF LOGIN ===== */
