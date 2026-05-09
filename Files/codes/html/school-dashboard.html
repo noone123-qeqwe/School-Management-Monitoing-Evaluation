@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Dashboard – SMME Portal</title>
+  <link rel="stylesheet" href="../css/styles.css?v=1.5.1" />
+  <link rel="stylesheet" href="../css/dashboard.css?v=1.5.1" />
+  <link rel="stylesheet" href="../css/school.css?v=1.5.1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="dash-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../assets/smmelogo.jpg" alt="SMME Logo" class="sidebar-logo-img" />
+      <div><span class="sidebar-title">SMME</span><span class="sidebar-sub">School Portal</span></div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar school-avatar"><i class="fas fa-user-tie"></i></div>
+      <div class="sidebar-user-info">
+        <strong id="sidebarStaffName">Staff Name</strong>
+        <span id="sidebarStaffPosition">Position</span>
+      </div>
+    </div>
+    <div class="sidebar-school-ctx">
+      <i class="fas fa-school"></i><span id="sidebarSchoolCtxName">School Name</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+      <a href="#" class="sidebar-link" data-page="submit"><i class="fas fa-upload"></i> Submit Documents</a>
+      <a href="#" class="sidebar-link" data-page="submissions"><i class="fas fa-folder-open"></i> School Submissions</a>
+      <a href="#" class="sidebar-link" data-page="mine"><i class="fas fa-user-clock"></i> My Submissions</a>
+      <a href="#" class="sidebar-link" data-page="compliance"><i class="fas fa-clipboard-check"></i> Compliance</a>
+      <a href="#" class="sidebar-link" data-page="deadlines"><i class="fas fa-calendar-alt"></i> Deadlines</a>
+      <a href="#" class="sidebar-link" data-page="track"><i class="fas fa-search"></i> Track Status</a>
+      <a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user-cog"></i> My Profile</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <button class="topbar-menu" id="topbarMenu"><i class="fas fa-bars"></i></button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-right">
+        <div class="topbar-notif" id="notifBell" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notif-dot" id="notifDot" hidden></span>
+          <span class="notif-count" id="notifCount" hidden></span>
+        </div>
+        <div class="topbar-user">
+          <div class="topbar-avatar school-avatar-sm"><i class="fas fa-user-tie"></i></div>
+          <div style="display:flex;flex-direction:column;line-height:1.2">
+            <span id="topbarUserName" style="font-weight:700;font-size:0.88rem">Staff</span>
+            <span id="topbarUserPos" style="font-size:0.72rem;color:var(--text-muted)">Position</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NOTIFICATION PANEL -->
+    <div class="notif-panel" id="notifPanel" hidden>
+      <div class="notif-panel-header">
+        <strong>Notifications</strong>
+        <button class="link-btn" id="markAllReadBtn">Mark all read</button>
+      </div>
+      <div class="notif-list" id="notifList"></div>
+    </div>
+
+    <!-- PAGE: DASHBOARD -->
+    <div class="dash-page active" id="page-dashboard">
+      <div class="dash-content">
+        <div class="page-header">
+          <div>
+            <h1 id="welcomeMsg">Welcome back!</h1>
+            <p class="page-subtitle" id="welcomeSub">School Name</p>
+          </div>
+          <button class="btn btn-primary" onclick="switchPage('submit')"><i class="fas fa-upload"></i> New Submission</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-paper-plane"></i></div><div class="stat-info"><span class="stat-num" id="statTotal">0</span><span class="stat-label">School Submissions</span></div></div>
+          <div class="stat-card"><div class="stat-icon yellow"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><span class="stat-num" id="statReview">0</span><span class="stat-label">Under Review</span></div></div>
+          <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><span class="stat-num" id="statApproved">0</span><span class="stat-label">Approved</span></div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-user-clock"></i></div><div class="stat-info"><span class="stat-num" id="statMine">0</span><span class="stat-label">Submitted by Me</span></div></div>
+        </div>
+        <div id="deadlineAlerts"></div>
+        <div class="dash-two-col">
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-list-check"></i> My Tasks & Deadlines</h3>
+            </div>
+            <div id="tasksList"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-chart-line"></i> Personal Progress</h3>
+            </div>
+            <div id="progressSummary"></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-clock"></i> Recent School Submissions</h3>
+            <button class="link-btn" onclick="switchPage('submissions')">View All</button>
+          </div>
+          <div class="table-wrap">
+            <table class="dash-table">
+              <thead><tr><th>Reference No.</th><th>Document Type</th><th>School Year</th><th>Submitted By</th><th>Date</th><th>Status</th><th>Feedback</th><th></th></tr></thead>
+              <tbody id="recentSubmissionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><h3><i class="fas fa-bell"></i> Division Office Notices</h3></div>
+          <div class="notices-list" id="schoolNoticesList">
+            <div class="notice-item notice-info"><i class="fas fa-info-circle"></i><div><strong>Deadline Reminder</strong><p>Enrollment reports for SY 2026–2027 must be submitted by June 15, 2026.</p><span class="notice-date">May 7, 2026</span></div></div>
+            <div class="notice-item notice-warning"><i class="fas fa-exclamation-triangle"></i><div><strong>System Maintenance</strong><p>The portal will be unavailable on May 10, 2026 from 12:00 AM – 4:00 AM.</p><span class="notice-date">May 6, 2026</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: SUBMIT -->
+    <div class="dash-page" id="page-submit">
+      <div class="dash-content">
+        <div class="page-header">
+          <div><h1>Submit Documents</h1><p class="page-subtitle" id="submitSubtitle">Submitting on behalf of your school</p></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline" id="loadTemplateBtn"><i class="fas fa-bookmark"></i> Load Template</button>
+            <button class="btn btn-outline" id="saveDraftBtn"><i class="fas fa-save"></i> Save Draft</button>
+          </div>
+        </div>
+        <div class="draft-banner" id="draftBanner" hidden>
+          <i class="fas fa-file-alt"></i>
+          <span>You have a saved draft from <strong id="draftDate"></strong>.</span>
+          <button class="btn btn-sm btn-primary" id="loadDraftBtn">Load Draft</button>
+          <button class="btn btn-sm btn-outline" id="discardDraftBtn">Discard</button>
+        </div>
+        <div class="submitter-banner">
+          <div class="submitter-info"><i class="fas fa-user-tie"></i><div><strong id="bannerStaffName">Staff Name</strong><span id="bannerStaffPos">Position</span></div></div>
+          <div class="submitter-divider"></div>
+          <div class="submitter-info"><i class="fas fa-school"></i><div><strong id="bannerSchoolName">School Name</strong><span id="bannerSchoolLevel">Level</span></div></div>
+        </div>
+        <div class="form-wrapper" style="max-width:860px">
+          <form id="dashSubmitForm" novalidate>
+            <div class="form-group-title"><i class="fas fa-file-alt"></i> Document Details</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dDocType">Document Type <span class="required">*</span></label>
+                <select id="dDocType" required>
+                  <option value="">-- Select Document Type --</option>
+                  <option>Enrollment Report</option><option>Curriculum Documents</option>
+                  <option>Faculty Credentials</option><option>Accreditation Documents</option>
+                  <option>Financial Reports</option><option>Compliance Requirements</option>
+                  <option>School Application / Permit</option><option>Assessment Data</option>
+                  <option>Graduation Requirements</option><option>Other</option>
+                </select>
+                <span class="error-msg" id="dDocTypeErr"></span>
+              </div>
+              <div class="form-group">
+                <label for="dSchoolYear">School Year <span class="required">*</span></label>
+                <select id="dSchoolYear" required>
+                  <option value="">-- Select School Year --</option>
+                  <option>2026-2027</option><option>2025-2026</option><option>2024-2025</option><option>2023-2024</option>
+                </select>
+                <span class="error-msg" id="dSchoolYearErr"></span>
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label for="dSubject">Subject / Purpose <span class="required">*</span></label>
+              <input type="text" id="dSubject" placeholder="Brief description of the submission purpose" required />
+              <span class="error-msg" id="dSubjectErr"></span>
+            </div>
+            <div id="smartFormHints" style="margin:-4px 0 10px;color:var(--text-muted);font-size:.82rem"></div>
+            <div class="form-group full-width">
+              <label for="dRemarks">Remarks / Notes</label>
+              <textarea id="dRemarks" rows="3" placeholder="Additional information for the Division Office..."></textarea>
+            </div>
+            <div class="form-group-title"><i class="fas fa-paperclip"></i> Attach Files</div>
+            <div class="upload-area" id="dUploadArea">
+              <input type="file" id="dFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
+              <div class="upload-placeholder">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag &amp; drop files here or <button type="button" class="upload-btn" id="dBrowseBtn">Browse Files</button></p>
+                <small>PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file</small>
+              </div>
+              <ul class="file-list" id="dFileList"></ul>
+            </div>
+            <span class="error-msg" id="dFileErr"></span>
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline" id="saveTemplateBtn"><i class="fas fa-bookmark"></i> Save as Template</button>
+              <button type="reset" class="btn btn-outline"><i class="fas fa-undo"></i> Clear</button>
+              <button type="submit" class="btn btn-primary" id="dSubmitBtn"><i class="fas fa-paper-plane"></i> Submit to Division Office</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ALL SCHOOL SUBMISSIONS -->
+    <div class="dash-page" id="page-submissions">
+      <div class="dash-content">
+        <div class="page-header">
+          <div><h1>School Submissions</h1><p class="page-subtitle">All documents submitted by all staff of your school</p></div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-outline" id="exportSubsBtn"><i class="fas fa-download"></i> Export CSV</button>
+            <button class="btn btn-primary" onclick="switchPage('submit')"><i class="fas fa-plus"></i> New Submission</button>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="table-filters">
+              <input type="text" id="submissionSearch" placeholder="Search by reference, document, staff..." class="filter-input" />
+              <select id="submissionFilter" class="filter-select">
+                <option value="">All Status</option>
+                <option value="review">Under Review</option><option value="approved">Approved</option>
+                <option value="returned">Returned</option><option value="received">Received</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="dash-table">
+              <thead><tr><th>Reference No.</th><th>Document Type</th><th>School Year</th><th>Submitted By</th><th>Position</th><th>Date</th><th>Files</th><th>Status</th><th>Feedback</th><th></th></tr></thead>
+              <tbody id="allSubmissionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: MY SUBMISSIONS -->
+    <div class="dash-page" id="page-mine">
+      <div class="dash-content">
+        <div class="page-header">
+          <div><h1>My Submissions</h1><p class="page-subtitle" id="mySubsSubtitle">Documents you personally submitted</p></div>
+          <button class="btn btn-primary" onclick="switchPage('submit')"><i class="fas fa-plus"></i> New Submission</button>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="table-filters">
+              <input type="text" id="mineSearch" placeholder="Search submissions..." class="filter-input" />
+              <select id="mineFilter" class="filter-select">
+                <option value="">All Status</option>
+                <option value="review">Under Review</option><option value="approved">Approved</option>
+                <option value="returned">Returned</option><option value="received">Received</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="dash-table">
+              <thead><tr><th>Reference No.</th><th>Document Type</th><th>School Year</th><th>Date</th><th>Files</th><th>Status</th><th>Feedback</th><th></th></tr></thead>
+              <tbody id="mineSubmissionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: COMPLIANCE -->
+    <div class="dash-page" id="page-compliance">
+      <div class="dash-content">
+        <div class="page-header">
+          <div><h1>Compliance Checklist</h1><p class="page-subtitle">Required documents for the selected school year</p></div>
+          <select id="complianceYear" class="filter-select">
+            <option value="2026-2027">2026–2027</option><option value="2025-2026">2025–2026</option><option value="2024-2025">2024–2025</option>
+          </select>
+        </div>
+        <div class="compliance-grid" id="complianceGrid"></div>
+      </div>
+    </div>
+
+    <!-- PAGE: DEADLINES -->
+    <div class="dash-page" id="page-deadlines">
+      <div class="dash-content">
+        <div class="page-header"><div><h1>Submission Deadlines</h1><p class="page-subtitle">Upcoming deadlines set by the Division Office</p></div></div>
+        <div class="deadlines-list" id="deadlinesList"></div>
+      </div>
+    </div>
+
+    <!-- PAGE: TRACK -->
+    <div class="dash-page" id="page-track">
+      <div class="dash-content">
+        <div class="page-header"><div><h1>Track Submission</h1><p class="page-subtitle">Check the status of any submitted document</p></div></div>
+        <div class="track-wrapper">
+          <div class="track-form">
+            <div class="track-input-group">
+              <input type="text" id="dTrackInput" placeholder="Enter Reference Number (e.g. SMME-2026-12345)" />
+              <button class="btn btn-primary" id="dTrackBtn"><i class="fas fa-search"></i> Track</button>
+            </div>
+            <div class="track-result" id="dTrackResult" hidden>
+              <div class="track-card">
+                <div class="track-header"><span class="track-ref" id="dTrackRef"></span><span class="track-status" id="dTrackStatus"></span></div>
+                <div class="track-details" id="dTrackDetails"></div>
+                <div class="feedback-box" id="dTrackFeedback" hidden></div>
+                <div class="track-timeline" id="dTrackTimeline"></div>
+              </div>
+            </div>
+          </div>
+          <div class="track-info">
+            <h3><i class="fas fa-info-circle"></i> Status Guide</h3>
+            <ul class="status-guide">
+              <li><span class="status-dot received"></span><strong>Received</strong> – Submission received.</li>
+              <li><span class="status-dot review"></span><strong>Under Review</strong> – Division Office is reviewing.</li>
+              <li><span class="status-dot approved"></span><strong>Approved</strong> – Documents approved.</li>
+              <li><span class="status-dot returned"></span><strong>Returned</strong> – Needs revision.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: PROFILE -->
+    <div class="dash-page" id="page-profile">
+      <div class="dash-content">
+        <div class="page-header"><div><h1>My Profile</h1><p class="page-subtitle">Manage your personal staff account</p></div></div>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="profile-avatar school-avatar-lg"><i class="fas fa-user-tie"></i></div>
+            <h3 id="profileStaffName">Staff Name</h3>
+            <span class="profile-level-badge" id="profilePosition">Position</span>
+            <p class="profile-email" id="profileEmail">email@school.edu.ph</p>
+            <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:8px;text-align:left">
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px">School</p>
+              <p style="font-size:0.88rem;font-weight:600;color:var(--text)" id="profileSchoolName">School Name</p>
+              <p style="font-size:0.75rem;color:var(--text-muted)" id="profileSchoolLevel">Level</p>
+            </div>
+          </div>
+          <div class="profile-form-card">
+            <h3>Personal Information</h3>
+            <form id="profileForm">
+              <div class="form-row">
+                <div class="form-group"><label>First Name</label><input type="text" id="pfFirstName" /></div>
+                <div class="form-group"><label>Last Name</label><input type="text" id="pfLastName" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Position</label>
+                  <select id="pfPosition">
+                    <option>School Principal</option><option>Assistant Principal</option>
+                    <option>School Registrar</option><option>Administrative Officer</option>
+                    <option>Guidance Counselor</option><option>Department Head</option>
+                    <option>Teacher</option><option>Clerk / Secretary</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="pfEmail" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>School</label><input type="text" id="pfSchool" readonly style="background:var(--bg)" /></div>
+                <div class="form-group"><label>Contact Number</label><input type="tel" id="pfPhone" placeholder="09XX-XXX-XXXX" /></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button></div>
+            </form>
+            <div class="profile-divider"></div>
+            <h3>Change Password</h3>
+            <form id="changePasswordForm">
+              <div class="form-row">
+                <div class="form-group"><label>Current Password</label><input type="password" id="pfCurrentPw" /></div>
+                <div class="form-group"><label>New Password</label><input type="password" id="pfNewPw" placeholder="Min. 8 chars" /></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-outline"><i class="fas fa-key"></i> Update Password</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end dash-main -->
+
+  <!-- SUBMISSION SUCCESS MODAL -->
+  <div class="modal-overlay" id="dashModalOverlay" hidden>
+    <div class="modal">
+      <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
+      <h2>Submission Successful!</h2>
+      <p>Your documents have been submitted to the Division Office.</p>
+      <div class="modal-ref">Reference No: <strong id="dashRefNumber"></strong></div>
+      <p class="modal-note">Save your reference number to track your submission status.</p>
+      <button class="btn btn-primary" id="dashModalClose">Done</button>
+    </div>
+  </div>
+
+  <!-- TEMPLATE MODAL -->
+  <div class="modal-overlay" id="templateModal" hidden>
+    <div class="modal" style="max-width:500px;text-align:left">
+      <div class="modal-close-btn" id="templateModalClose"><i class="fas fa-times"></i></div>
+      <h2 style="font-size:1.2rem;margin-bottom:20px"><i class="fas fa-bookmark" style="color:var(--primary)"></i> Submission Templates</h2>
+      <div id="templateList"></div>
+      <p id="templateEmpty" style="color:var(--text-muted);font-size:0.88rem;text-align:center;padding:20px 0">No templates saved yet.</p>
+    </div>
+  </div>
+
+  <!-- RESUBMIT MODAL -->
+  <div class="modal-overlay" id="resubmitModal" hidden>
+    <div class="modal" style="max-width:520px;text-align:left">
+      <div class="modal-close-btn" id="resubmitModalClose"><i class="fas fa-times"></i></div>
+      <h2 style="font-size:1.2rem;margin-bottom:8px"><i class="fas fa-redo" style="color:var(--accent)"></i> Resubmit Document</h2>
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px">Original ref: <strong id="resubOrigRef"></strong></p>
+      <div class="feedback-box" id="resubFeedback" style="margin-bottom:20px"></div>
+      <div class="form-group full-width">
+        <label>Updated Remarks / Notes</label>
+        <textarea id="resubRemarks" rows="3" placeholder="Describe what was revised..."></textarea>
+      </div>
+      <div class="upload-area" id="resubUploadArea" style="margin-bottom:8px">
+        <input type="file" id="resubFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
+        <div class="upload-placeholder">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Attach revised files or <button type="button" class="upload-btn" id="resubBrowseBtn">Browse</button></p>
+          <small>PDF, Word, Excel | Max 100MB per file</small>
+        </div>
+        <ul class="file-list" id="resubFileList"></ul>
+      </div>
+      <span class="error-msg" id="resubFileErr"></span>
+      <div class="form-actions" style="margin-top:16px">
+        <button class="btn btn-outline" id="resubCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="resubSubmitBtn"><i class="fas fa-paper-plane"></i> Resubmit</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js?v=1.5.1"></script>
+  <script src="../js/school-dashboard.js?v=1.5.1"></script>
+</body>
+</html>
