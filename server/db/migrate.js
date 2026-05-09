@@ -193,3 +193,124 @@ async function migrate() {
 }
 
 migrate();
+
+// ============================================================
+// TEST ACCOUNT SEED
+// Run separately: node migrate.js --seed
+// ============================================================
+
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
+
+async function seedTestAccounts() {
+  const client = await pool.connect();
+  try {
+    console.log('\nSeeding test accounts...');
+
+    // ── 1. Test Admin ──────────────────────────────────────────────────────
+    const adminPassword = await bcrypt.hash('Admin@1234', SALT_ROUNDS);
+
+    const adminResult = await client.query(
+      `INSERT INTO admins (username, full_name, position, division, email, phone, password)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (username) DO NOTHING
+       RETURNING id, username`,
+      [
+        'admin_test',
+        'Test Administrator',
+        'Division Superintendent',
+        'Division of Manila',
+        'admin.test@deped.gov.ph',
+        '09171234567',
+        adminPassword,
+      ]
+    );
+
+    if (adminResult.rowCount > 0) {
+      console.log(`✅ Admin created  → id: ${adminResult.rows[0].id}  username: ${adminResult.rows[0].username}`);
+    } else {
+      console.log('⚠️  Admin already exists (skipped).');
+    }
+
+    // ── 2. Test School ─────────────────────────────────────────────────────
+    const schoolResult = await client.query(
+      `INSERT INTO schools (name, school_code, level, division, email, address)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (school_code) DO NOTHING
+       RETURNING id, name`,
+      [
+        'Test Elementary School',
+        'MNL-TEST-001',
+        'elementary',
+        'Division of Manila',
+        'test.school@deped.gov.ph',
+        '123 Test Street, Manila City',
+      ]
+    );
+
+    let schoolId;
+    if (schoolResult.rowCount > 0) {
+      schoolId = schoolResult.rows[0].id;
+      console.log(`✅ School created → id: ${schoolId}  name: ${schoolResult.rows[0].name}`);
+    } else {
+      const existing = await client.query(
+        `SELECT id FROM schools WHERE school_code = $1`,
+        ['MNL-TEST-001']
+      );
+      schoolId = existing.rows[0].id;
+      console.log(`⚠️  School already exists (id: ${schoolId}, skipped).`);
+    }
+
+    // ── 3. Test Staff (school user) ────────────────────────────────────────
+    const staffPassword = await bcrypt.hash('Staff@1234', SALT_ROUNDS);
+
+    const staffResult = await client.query(
+      `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status, phone)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       ON CONFLICT (email, school_id) DO NOTHING
+       RETURNING id, email`,
+      [
+        schoolId,
+        'Jane',
+        'Dela Cruz',
+        'Head Teacher',
+        'staff.test@testschool.edu.ph',
+        staffPassword,
+        'approved',
+        '09189876543',
+      ]
+    );
+
+    if (staffResult.rowCount > 0) {
+      console.log(`✅ Staff created  → id: ${staffResult.rows[0].id}  email: ${staffResult.rows[0].email}`);
+    } else {
+      console.log('⚠️  Staff already exists (skipped).');
+    }
+
+    // ── Summary ────────────────────────────────────────────────────────────
+    console.log('\n─────────────────────────────────────────');
+    console.log('TEST CREDENTIALS');
+    console.log('─────────────────────────────────────────');
+    console.log('Admin');
+    console.log('  Username : admin_test');
+    console.log('  Password : Admin@1234');
+    console.log('');
+    console.log('School Staff');
+    console.log('  Email    : staff.test@testschool.edu.ph');
+    console.log('  Password : Staff@1234');
+    console.log('  School   : Test Elementary School (MNL-TEST-001)');
+    console.log('─────────────────────────────────────────\n');
+
+    console.log('✅ Seeding complete.');
+  } catch (err) {
+    console.error('❌ Seeding failed:', err.message);
+    process.exit(1);
+  } finally {
+    client.release();
+    await pool.end();
+  }
+}
+
+if (process.argv.includes('--seed')) {
+  seedTestAccounts();
+}
