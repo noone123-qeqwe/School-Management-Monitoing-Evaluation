@@ -26,12 +26,18 @@ const ALLOWED_MIME = [
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 ];
+const ALLOWED_EXT = ['.pdf', '.doc', '.docx', '.xls', '.xlsx'];
+
+function hasAllowedExtension(name) {
+  const ext = path.extname(String(name || '')).toLowerCase();
+  return ALLOWED_EXT.includes(ext);
+}
 
 const upload = multer({
   storage,
   limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (ALLOWED_MIME.includes(file.mimetype)) cb(null, true);
+    if (ALLOWED_MIME.includes(file.mimetype) || hasAllowedExtension(file.originalname)) cb(null, true);
     else cb(new Error('Only PDF, Word, and Excel files are allowed.'));
   },
 });
@@ -85,8 +91,10 @@ async function notify(client, { schoolId, type, title, message, ref }) {
 ───────────────────────────────────────────── */
 router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
   const { docType, schoolYear, subject, remarks, originalRef } = req.body;
-  if (!docType || !schoolYear || !subject)
+  if (!docType || !schoolYear || !subject) {
+    cleanupUploadedFiles(req.files);
     return res.status(400).json({ error: 'Document type, school year, and subject are required.' });
+  }
   if (!req.files || req.files.length === 0)
     return res.status(400).json({ error: 'At least one file is required.' });
 

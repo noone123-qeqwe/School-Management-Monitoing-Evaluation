@@ -100,7 +100,10 @@ app.use((req, res, next) => {
 app.use('/api/auth/staff/login',    authLimiter);
 app.use('/api/auth/admin/login',    authLimiter);
 app.use('/api/auth/staff/register', authLimiter);
-app.use('/api/submissions',         uploadLimiter);
+app.use('/api/submissions', (req, res, next) => {
+  if (req.method === 'POST') return uploadLimiter(req, res, next);
+  return next();
+});
 
 app.use('/api/auth',          authRoutes);
 app.use('/api/submissions',   submissionRoutes);
@@ -135,7 +138,7 @@ app.get('/pages/:page', (req, res) => {
 });
 
 const STATIC_ROOT = path.join(__dirname, '../codes');
-const LANDING_PAGE = path.join(STATIC_ROOT, 'html', 'index.html');
+const LANDING_PAGE = path.join(STATIC_ROOT, 'index.html');
 
 app.use(express.static(STATIC_ROOT, {
   // Cache static assets (CSS/JS/images) for 1 day
