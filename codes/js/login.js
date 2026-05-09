@@ -403,7 +403,7 @@ document.getElementById('regConfirm').addEventListener('input',    () => fieldOk
 
   function score(pw) {
     let s = 0;
-    if (pw.length >= 8)                    s++;
+    if (pw.length >= 8 && pw.length <= 16) s++; // valid length range: 8-16
     if (/[A-Z]/.test(pw))                  s++;
     if (/[0-9]/.test(pw))                  s++;
     if (/[^A-Za-z0-9]/.test(pw))           s++;
