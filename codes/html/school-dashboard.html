@@ -90,6 +90,20 @@
           <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-user-clock"></i></div><div class="stat-info"><span class="stat-num" id="statMine">0</span><span class="stat-label">Submitted by Me</span></div></div>
         </div>
         <div id="deadlineAlerts"></div>
+        <div class="dash-two-col">
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-list-check"></i> My Tasks & Deadlines</h3>
+            </div>
+            <div id="tasksList"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-chart-line"></i> Personal Progress</h3>
+            </div>
+            <div id="progressSummary"></div>
+          </div>
+        </div>
         <div class="dash-card">
           <div class="dash-card-header">
             <h3><i class="fas fa-clock"></i> Recent School Submissions</h3>
@@ -163,6 +177,7 @@
               <input type="text" id="dSubject" placeholder="Brief description of the submission purpose" required />
               <span class="error-msg" id="dSubjectErr"></span>
             </div>
+            <div id="smartFormHints" style="margin:-4px 0 10px;color:var(--text-muted);font-size:.82rem"></div>
             <div class="form-group full-width">
               <label for="dRemarks">Remarks / Notes</label>
               <textarea id="dRemarks" rows="3" placeholder="Additional information for the Division Office..."></textarea>

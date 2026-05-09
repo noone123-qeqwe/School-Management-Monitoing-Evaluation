@@ -92,18 +92,50 @@ router.get('/audit', requireAdmin, async (req, res) => {
 ───────────────────────────────────────────── */
 router.get('/notices', requireAuth, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM notices ORDER BY created_at DESC');
+    if (req.user.role === 'admin') {
+      const result = await pool.query(
+        `SELECT n.*, sc.name AS target_school_name,
+                COALESCE(vs.view_count, 0) AS view_count
+         FROM notices n
+         LEFT JOIN schools sc ON sc.id = n.target_school_id
+         LEFT JOIN (
+           SELECT notice_id, COUNT(*)::int AS view_count
+           FROM notice_views
+           GROUP BY notice_id
+         ) vs ON vs.notice_id = n.id
+         ORDER BY n.created_at DESC`
+      );
+      return res.json(result.rows);
+    }
+
+    const result = await pool.query(
+      `SELECT n.*
+       FROM notices n
+       JOIN schools sc ON sc.id = $1
+       WHERE (
+         n.target_school_id IS NULL
+         OR n.target_school_id = $1
+       )
+       AND (
+         n.target_level = 'all'
+         OR n.target_level = sc.level
+       )
+       ORDER BY n.created_at DESC`,
+      [req.user.schoolId]
+    );
     res.json(result.rows);
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
 });
 
 router.post('/notices', requireAdmin, async (req, res) => {
-  const { type, title, message } = req.body;
+  const { type, title, message, targetLevel, targetSchoolId } = req.body;
   if (!title || !message) return res.status(400).json({ error: 'Title and message are required.' });
   try {
+    const normalizedLevel = targetLevel || 'all';
     const result = await pool.query(
-      'INSERT INTO notices (type, title, message, created_by) VALUES ($1,$2,$3,$4) RETURNING *',
-      [type || 'info', title, message, req.user.id]
+      `INSERT INTO notices (type, title, message, target_level, target_school_id, created_by)
+       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+      [type || 'info', title, message, normalizedLevel, targetSchoolId || null, req.user.id]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
@@ -114,6 +146,55 @@ router.delete('/notices/:id', requireAdmin, async (req, res) => {
     await pool.query('DELETE FROM notices WHERE id=$1', [req.params.id]);
     res.json({ message: 'Notice deleted.' });
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
+});
+
+router.get('/notices/:id/stats', requireAdmin, async (req, res) => {
+  try {
+    const noticeResult = await pool.query(
+      'SELECT * FROM notices WHERE id=$1',
+      [req.params.id]
+    );
+    if (!noticeResult.rows.length) return res.status(404).json({ error: 'Notice not found.' });
+    const notice = noticeResult.rows[0];
+
+    const audienceResult = await pool.query(
+      `SELECT COUNT(*)::int AS audience
+       FROM schools sc
+       WHERE ($1::int IS NULL OR sc.id = $1)
+         AND ($2 = 'all' OR sc.level = $2)`,
+      [notice.target_school_id, notice.target_level]
+    );
+
+    const viewResult = await pool.query(
+      `SELECT COUNT(DISTINCT school_id)::int AS viewed_schools
+       FROM notice_views
+       WHERE notice_id=$1`,
+      [notice.id]
+    );
+
+    const audience = audienceResult.rows[0].audience || 0;
+    const viewed = viewResult.rows[0].viewed_schools || 0;
+    const viewRate = audience > 0 ? Math.round((viewed / audience) * 100) : 0;
+
+    res.json({ audience, viewedSchools: viewed, viewRate });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+router.post('/notices/:id/view', requireAuth, async (req, res) => {
+  if (req.user.role !== 'staff') return res.status(403).json({ error: 'Staff access required.' });
+  try {
+    await pool.query(
+      `INSERT INTO notice_views (notice_id, school_id, viewed_by)
+       VALUES ($1,$2,$3)
+       ON CONFLICT (notice_id, school_id, viewed_by) DO NOTHING`,
+      [req.params.id, req.user.schoolId, req.user.id]
+    );
+    res.json({ message: 'Notice view tracked.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error.' });
+  }
 });
 
 /* ─────────────────────────────────────────────
@@ -143,6 +224,45 @@ router.delete('/deadlines/:id', requireAdmin, async (req, res) => {
     await pool.query('DELETE FROM deadlines WHERE id=$1', [req.params.id]);
     res.json({ message: 'Deadline deleted.' });
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
+});
+
+/* ─────────────────────────────────────────────
+   Validation Rules Engine
+───────────────────────────────────────────── */
+router.get('/validation-rules', requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM validation_rules
+       ORDER BY id ASC`
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+router.post('/validation-rules', requireAdmin, async (req, res) => {
+  const { code, label, severity = 'error', isEnabled = true, ruleConfig = {} } = req.body;
+  if (!code || !label) return res.status(400).json({ error: 'Code and label are required.' });
+  try {
+    const result = await pool.query(
+      `INSERT INTO validation_rules (code, label, severity, is_enabled, rule_config, updated_by)
+       VALUES ($1,$2,$3,$4,$5,$6)
+       ON CONFLICT (code)
+       DO UPDATE SET
+         label = EXCLUDED.label,
+         severity = EXCLUDED.severity,
+         is_enabled = EXCLUDED.is_enabled,
+         rule_config = EXCLUDED.rule_config,
+         updated_by = EXCLUDED.updated_by,
+         updated_at = NOW()
+       RETURNING *`,
+      [code, label, severity, !!isEnabled, ruleConfig, req.user.id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error.' });
+  }
 });
 
 /* ─────────────────────────────────────────────

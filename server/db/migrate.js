@@ -95,8 +95,20 @@ CREATE TABLE IF NOT EXISTS notices (
   type        VARCHAR(20) DEFAULT 'info' CHECK (type IN ('info','warning','success')),
   title       VARCHAR(200) NOT NULL,
   message     TEXT         NOT NULL,
+  target_level VARCHAR(20) DEFAULT 'all' CHECK (target_level IN ('all','kindergarten','elementary','junior','senior')),
+  target_school_id INTEGER REFERENCES schools(id) ON DELETE CASCADE,
   created_by  INTEGER REFERENCES admins(id) ON DELETE SET NULL,
   created_at  TIMESTAMPTZ  DEFAULT NOW()
+);
+
+-- Notice view tracking (for campaign read analytics)
+CREATE TABLE IF NOT EXISTS notice_views (
+  id          SERIAL PRIMARY KEY,
+  notice_id   INTEGER REFERENCES notices(id) ON DELETE CASCADE,
+  school_id   INTEGER REFERENCES schools(id) ON DELETE CASCADE,
+  viewed_by   INTEGER REFERENCES staff(id) ON DELETE SET NULL,
+  viewed_at   TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (notice_id, school_id, viewed_by)
 );
 
 -- Deadlines
@@ -134,6 +146,18 @@ CREATE TABLE IF NOT EXISTS templates (
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Admin-configurable data validation rules for submissions
+CREATE TABLE IF NOT EXISTS validation_rules (
+  id            SERIAL PRIMARY KEY,
+  code          VARCHAR(50) NOT NULL UNIQUE,
+  label         VARCHAR(200) NOT NULL,
+  is_enabled    BOOLEAN      NOT NULL DEFAULT TRUE,
+  severity      VARCHAR(20)  NOT NULL DEFAULT 'error' CHECK (severity IN ('error','warning')),
+  rule_config   JSONB        NOT NULL DEFAULT '{}'::jsonb,
+  updated_by    INTEGER REFERENCES admins(id) ON DELETE SET NULL,
+  updated_at    TIMESTAMPTZ  DEFAULT NOW()
+);
+
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_submissions_school    ON submissions(school_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_status    ON submissions(status);
@@ -145,6 +169,10 @@ CREATE INDEX IF NOT EXISTS idx_notifications_school_created_at ON notifications(
 CREATE INDEX IF NOT EXISTS idx_audit_log_action      ON audit_log(action);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created_at  ON audit_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_staff_school          ON staff(school_id);
+CREATE INDEX IF NOT EXISTS idx_notices_target_level  ON notices(target_level);
+CREATE INDEX IF NOT EXISTS idx_notices_target_school ON notices(target_school_id);
+CREATE INDEX IF NOT EXISTS idx_notice_views_notice   ON notice_views(notice_id, viewed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_validation_rules_code ON validation_rules(code);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_deadlines_unique
   ON deadlines(doc_type, school_year, deadline, level);
 `;

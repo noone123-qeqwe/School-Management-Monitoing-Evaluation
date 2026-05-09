@@ -130,6 +130,9 @@ const API = (() => {
     async submit(formData) {
       return upload('/submissions', formData);
     },
+    async validate(data) {
+      return post('/submissions/validate', data);
+    },
 
     async review(ref, action, feedback) {
       return patch('/submissions/' + ref + '/review', { action, feedback });
@@ -182,6 +185,7 @@ const API = (() => {
     async updateStatus(id, status) { return patch('/staff/' + id + '/status', { status }); },
     async updateProfile(data)      { return patch('/staff/me', data); },
     async changePassword(data)     { return patch('/staff/me/password', data); },
+    async tasksSummary()           { return get('/staff/tasks-summary'); },
   };
 
   /* ══════════════════════════════════════════
@@ -199,6 +203,8 @@ const API = (() => {
     async getNotices()             { return get('/admin/notices'); },
     async postNotice(data)         { return post('/admin/notices', data); },
     async deleteNotice(id)         { return del('/admin/notices/' + id); },
+    async getNoticeStats(id)       { return get('/admin/notices/' + id + '/stats'); },
+    async markNoticeViewed(id)     { return post('/admin/notices/' + id + '/view', {}); },
 
     // Deadlines
     async getDeadlines()           { return get('/admin/deadlines'); },
@@ -208,6 +214,8 @@ const API = (() => {
     // Profile
     async updateProfile(data)      { return patch('/admin/profile', data); },
     async changePassword(data)     { return patch('/admin/password', data); },
+    async getValidationRules()     { return get('/admin/validation-rules'); },
+    async saveValidationRule(data) { return post('/admin/validation-rules', data); },
   };
 
   /* ══════════════════════════════════════════

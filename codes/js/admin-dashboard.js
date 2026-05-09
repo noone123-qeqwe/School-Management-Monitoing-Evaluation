@@ -37,7 +37,7 @@ function switchPage(pageId) {
   const titles = { 
     dashboard:'Dashboard', submissions:'All Submissions', schools:'Registered Schools',
     staff:'Staff Accounts', deadlines:'Submission Deadlines', reports:'Reports & Analytics',
-    audit:'Audit Log', notices:'Division Notices', settings:'Settings' 
+    audit:'Audit Log', notices:'Division Notices', validation:'Validation Rules', settings:'Settings' 
   };
   
   document.getElementById('topbarTitle').textContent = titles[pageId] || pageId;
@@ -52,6 +52,7 @@ function switchPage(pageId) {
   if (pageId === 'audit')       loadAuditLog();
   if (pageId === 'deadlines')   loadDeadlineMgmt();
   if (pageId === 'notices')     loadNotices();
+  if (pageId === 'validation')  loadValidationRules();
 }
 
 document.querySelectorAll('.sidebar-link').forEach(link => {
@@ -619,7 +620,8 @@ async function loadNotices() {
           <div style="flex:1">
             <strong>${API.escapeHtml(n.title)}</strong>
             <p>${API.escapeHtml(n.message)}</p>
-            <span class="notice-date">${new Date(n.created_at).toLocaleDateString('en-PH')}</span>
+            <span class="notice-date">${new Date(n.created_at).toLocaleDateString('en-PH')} | Target: ${API.escapeHtml(n.target_school_name || (n.target_level === 'all' ? 'All Schools' : API.levelLabel(n.target_level)))}</span>
+            <span class="notice-date">Read by ${n.view_count || 0} school user(s)</span>
           </div>
           <button class="action-btn return" onclick="deleteNotice(${n.id})" style="flex-shrink:0"><i class="fas fa-trash"></i></button>
         </div>
@@ -647,16 +649,73 @@ document.getElementById('noticeForm').addEventListener('submit', async e => {
   const title = document.getElementById('noticeTitle').value.trim();
   const msg   = document.getElementById('noticeMessage').value.trim();
   const type  = document.getElementById('noticeType').value;
+  const targetLevel = document.getElementById('noticeTargetLevel').value;
+  const targetSchoolId = document.getElementById('noticeTargetSchool').value;
   
   if (!title || !msg) { API.showToast('Title and message are required.', 'error'); return; }
   try {
-    await API.admin.postNotice({ type, title, message: msg });
+    await API.admin.postNotice({ type, title, message: msg, targetLevel, targetSchoolId: targetSchoolId || null });
     document.getElementById('noticeForm').reset();
     document.getElementById('noticeFormCard').setAttribute('hidden', '');
     document.getElementById('addNoticeBtn').removeAttribute('hidden');
     loadNotices(); API.showToast('Notice posted.', 'success');
   } catch (err) { API.showToast(`Failed: ${err.message}`, 'error'); }
 });
+
+async function populateNoticeTargetSchools() {
+  try {
+    const schools = await API.admin.schools();
+    const target = document.getElementById('noticeTargetSchool');
+    if (!target) return;
+    target.innerHTML = '<option value="">All Schools (for selected level)</option>' +
+      schools.map(s => `<option value="${s.id}">${API.escapeHtml(s.name)} (${API.levelLabel(s.level)})</option>`).join('');
+  } catch {}
+}
+populateNoticeTargetSchools();
+
+async function loadValidationRules() {
+  const list = document.getElementById('validationRulesList');
+  if (!list) return;
+  try {
+    const defaults = [
+      { code: 'subject_min_length', label: 'Minimum Subject Length', severity: 'error', isEnabled: true, ruleConfig: { min: 8 } },
+      { code: 'duplicate_doc_year_recent', label: 'Duplicate Document-Year Check', severity: 'warning', isEnabled: true, ruleConfig: { days: 30 } },
+      { code: 'max_files_per_submission', label: 'Maximum Files Per Submission', severity: 'error', isEnabled: true, ruleConfig: { max: 10 } },
+    ];
+    for (const rule of defaults) {
+      await API.admin.saveValidationRule(rule);
+    }
+    const rules = await API.admin.getValidationRules();
+    list.innerHTML = rules.map((r) => `
+      <div class="audit-item">
+        <span class="audit-badge ${r.is_enabled ? 'approve' : 'return'}">${r.is_enabled ? 'Enabled' : 'Disabled'}</span>
+        <div class="audit-text">
+          <strong>${API.escapeHtml(r.label)}</strong>
+          <span style="font-size:.78rem;color:var(--text-muted);display:block">
+            Code: ${API.escapeHtml(r.code)} | Severity: ${API.escapeHtml(r.severity)} | Config: ${API.escapeHtml(JSON.stringify(r.rule_config || {}))}
+          </span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-sm ${r.is_enabled ? 'btn-ghost' : 'btn-success'}" onclick='toggleRule(${JSON.stringify(r.code)}, ${!r.is_enabled}, ${JSON.stringify(r.label)}, ${JSON.stringify(r.severity)}, ${JSON.stringify(r.rule_config || {})})'>
+            ${r.is_enabled ? 'Disable' : 'Enable'}
+          </button>
+        </div>
+      </div>
+    `).join('') || `<p style="color:var(--text-muted);text-align:center;padding:24px">No validation rules configured.</p>`;
+  } catch (err) {
+    list.innerHTML = `<p style="color:var(--danger);padding:12px">Failed to load validation rules: ${API.escapeHtml(err.message)}</p>`;
+  }
+}
+
+async function toggleRule(code, isEnabled, label, severity, ruleConfig) {
+  try {
+    await API.admin.saveValidationRule({ code, label, severity, isEnabled, ruleConfig });
+    API.showToast('Validation rule updated.', 'success');
+    loadValidationRules();
+  } catch (err) {
+    API.showToast(`Failed to update rule: ${err.message}`, 'error');
+  }
+}
 
 /* ===== SETTINGS ===== */
 document.getElementById('adminProfileForm').addEventListener('submit', async e => {

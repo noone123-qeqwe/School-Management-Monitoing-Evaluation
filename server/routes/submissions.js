@@ -86,6 +86,90 @@ async function notify(client, { schoolId, type, title, message, ref }) {
   );
 }
 
+async function getValidationRules(client) {
+  const result = await client.query(
+    `SELECT code, label, severity, rule_config
+     FROM validation_rules
+     WHERE is_enabled=TRUE`
+  );
+  const map = {};
+  for (const row of result.rows) map[row.code] = row;
+  return map;
+}
+
+async function runSubmissionValidation(client, payload) {
+  const issues = [];
+  const rules = await getValidationRules(client);
+
+  if (rules.subject_min_length) {
+    const min = parseInt(rules.subject_min_length.rule_config?.min || 8, 10);
+    if (String(payload.subject || '').trim().length < min) {
+      issues.push({
+        code: 'subject_min_length',
+        severity: rules.subject_min_length.severity,
+        message: `${rules.subject_min_length.label}: minimum ${min} characters.`,
+      });
+    }
+  }
+
+  if (rules.max_files_per_submission) {
+    const max = parseInt(rules.max_files_per_submission.rule_config?.max || 10, 10);
+    if ((payload.fileCount || 0) > max) {
+      issues.push({
+        code: 'max_files_per_submission',
+        severity: rules.max_files_per_submission.severity,
+        message: `${rules.max_files_per_submission.label}: maximum ${max} files allowed.`,
+      });
+    }
+  }
+
+  if (rules.duplicate_doc_year_recent) {
+    const days = parseInt(rules.duplicate_doc_year_recent.rule_config?.days || 30, 10);
+    const dup = await client.query(
+      `SELECT ref, submitted_at
+       FROM submissions
+       WHERE school_id=$1
+         AND doc_type=$2
+         AND school_year=$3
+         AND submitted_at >= NOW() - ($4::text || ' days')::interval
+       ORDER BY submitted_at DESC
+       LIMIT 1`,
+      [payload.schoolId, payload.docType, payload.schoolYear, days]
+    );
+    if (dup.rows.length) {
+      issues.push({
+        code: 'duplicate_doc_year_recent',
+        severity: rules.duplicate_doc_year_recent.severity,
+        message: `${rules.duplicate_doc_year_recent.label}: similar submission found (${dup.rows[0].ref}).`,
+      });
+    }
+  }
+
+  return issues;
+}
+
+router.post('/validate', requireStaff, async (req, res) => {
+  const { docType, schoolYear, subject, fileCount = 0 } = req.body;
+  if (!docType || !schoolYear || !subject) {
+    return res.status(400).json({ error: 'Document type, school year, and subject are required.' });
+  }
+  const client = await pool.connect();
+  try {
+    const issues = await runSubmissionValidation(client, {
+      schoolId: req.user.schoolId,
+      docType,
+      schoolYear,
+      subject,
+      fileCount: parseInt(fileCount, 10) || 0,
+    });
+    res.json({ issues });
+  } catch (err) {
+    res.status(500).json({ error: 'Validation check failed.' });
+  } finally {
+    client.release();
+  }
+});
+
 /* ─────────────────────────────────────────────
    POST /api/submissions  – submit documents
 ───────────────────────────────────────────── */
@@ -101,6 +185,20 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+
+    const issues = await runSubmissionValidation(client, {
+      schoolId: req.user.schoolId,
+      docType,
+      schoolYear,
+      subject,
+      fileCount: req.files.length,
+    });
+    const blocking = issues.filter(i => i.severity === 'error');
+    if (blocking.length) {
+      await client.query('ROLLBACK');
+      cleanupUploadedFiles(req.files);
+      return res.status(400).json({ error: blocking[0].message, issues });
+    }
 
     // Ensure unique ref
     let ref;

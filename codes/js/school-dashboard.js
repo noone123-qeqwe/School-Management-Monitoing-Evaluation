@@ -83,7 +83,78 @@ async function loadDashboard() {
     document.getElementById('statMine').textContent     = subs.filter(s => s.staff_id === user.id).length;
     renderRecentTable(subs.slice(0, 5));
     renderDeadlineAlerts();
+    loadTasksSummary();
+    loadDivisionNotices();
   } catch (err) { API.showToast('Failed to load dashboard: ' + err.message, 'error'); }
+}
+
+async function loadDivisionNotices() {
+  const list = document.getElementById('schoolNoticesList');
+  if (!list) return;
+  try {
+    const notices = await API.admin.getNotices();
+    if (!notices.length) {
+      list.innerHTML = '<p style="color:var(--text-muted);padding:12px">No division notices at the moment.</p>';
+      return;
+    }
+    list.innerHTML = notices.slice(0, 6).map((n) => {
+      const ic = n.type === 'info' ? 'fa-info-circle' : n.type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle';
+      return `<div class="notice-item notice-${n.type}" data-notice-id="${n.id}">
+        <i class="fas ${ic}"></i>
+        <div>
+          <strong>${API.escapeHtml(n.title)}</strong>
+          <p>${API.escapeHtml(n.message)}</p>
+          <span class="notice-date">${new Date(n.created_at).toLocaleDateString('en-PH')}</span>
+        </div>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('[data-notice-id]').forEach((el) => {
+      el.addEventListener('click', async () => {
+        try { await API.admin.markNoticeViewed(el.dataset.noticeId); } catch {}
+      });
+    });
+  } catch {
+    list.innerHTML = '<p style="color:var(--text-muted);padding:12px">Failed to load notices.</p>';
+  }
+}
+
+async function loadTasksSummary() {
+  const list = document.getElementById('tasksList');
+  const progressEl = document.getElementById('progressSummary');
+  if (!list || !progressEl) return;
+  try {
+    const { tasks, progress } = await API.staff.tasksSummary();
+    list.innerHTML = tasks.slice(0, 6).map((t) => {
+      const days = API.getDaysUntil(t.deadline);
+      const status = t.status === 'missing' ? 'Not Submitted' :
+        t.status === 'returned' ? 'Returned' :
+        t.status === 'approved' ? 'Approved' : 'In Progress';
+      return `<div class="audit-item">
+        <span class="audit-badge ${t.status === 'approved' ? 'approve' : t.status === 'returned' ? 'return' : 'submit'}">${API.escapeHtml(status)}</span>
+        <div class="audit-text">
+          <strong>${API.escapeHtml(t.docType)}</strong>
+          <span style="display:block;font-size:.78rem;color:var(--text-muted)">
+            SY ${API.escapeHtml(t.schoolYear)} | Due ${API.escapeHtml(t.deadline)} (${days < 0 ? 'Overdue' : days + ' day(s) left'})
+          </span>
+        </div>
+      </div>`;
+    }).join('') || '<p style="color:var(--text-muted);padding:12px">No tracked tasks.</p>';
+
+    progressEl.innerHTML = `
+      <div style="padding:8px 0 12px"><strong>${progress.progressPercent}% complete</strong></div>
+      <div style="height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden">
+        <div style="height:100%;width:${progress.progressPercent}%;background:var(--primary)"></div>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:12px;font-size:.82rem;color:var(--text-muted)">
+        <span>Done: ${progress.complete}</span>
+        <span>Pending: ${progress.pending}</span>
+        <span>Returned: ${progress.returned}</span>
+      </div>
+    `;
+  } catch {
+    list.innerHTML = '<p style="color:var(--text-muted);padding:12px">Unable to load tasks right now.</p>';
+    progressEl.innerHTML = '';
+  }
 }
 
 function renderRecentTable(subs) {
@@ -335,6 +406,7 @@ function addDFiles(files) {
     dFiles.push(f);
   });
   renderDFileList();
+  runSmartValidationHints();
 }
 
 function renderDFileList() {
@@ -515,6 +587,45 @@ document.getElementById('dashSubmitForm').addEventListener('submit', async e => 
     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
     API.showToast('Submission failed: ' + err.message, 'error');
   }
+});
+
+let validateTimer = null;
+async function runSmartValidationHints() {
+  const hint = document.getElementById('smartFormHints');
+  if (!hint) return;
+  const docType = document.getElementById('dDocType').value;
+  const schoolYear = document.getElementById('dSchoolYear').value;
+  const subject = document.getElementById('dSubject').value;
+  if (!docType || !schoolYear || !subject.trim()) {
+    hint.textContent = '';
+    return;
+  }
+  try {
+    const { issues } = await API.submissions.validate({ docType, schoolYear, subject, fileCount: dFiles.length });
+    if (!issues.length) {
+      hint.innerHTML = '<span style="color:var(--success)"><i class="fas fa-check-circle"></i> Looks good. No validation issues found.</span>';
+      return;
+    }
+    hint.innerHTML = issues.map((i) =>
+      `<div style="margin:2px 0;color:${i.severity === 'error' ? 'var(--danger)' : 'var(--warning)'}">
+        <i class="fas ${i.severity === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        ${API.escapeHtml(i.message)}
+      </div>`
+    ).join('');
+  } catch {}
+}
+
+['dDocType', 'dSchoolYear', 'dSubject'].forEach((id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    clearTimeout(validateTimer);
+    validateTimer = setTimeout(runSmartValidationHints, 350);
+  });
+  el.addEventListener('change', () => {
+    clearTimeout(validateTimer);
+    validateTimer = setTimeout(runSmartValidationHints, 350);
+  });
 });
 
 document.getElementById('dashModalClose').addEventListener('click', () => {

@@ -73,6 +73,10 @@
         <span class="sidebar-link-icon"><i class="fas fa-history"></i></span>
         <span class="sidebar-link-text">Audit Log</span>
       </a>
+      <a href="#" class="sidebar-link" data-page="validation">
+        <span class="sidebar-link-icon"><i class="fas fa-shield-check"></i></span>
+        <span class="sidebar-link-text">Validation Rules</span>
+      </a>
 
       <div class="sidebar-nav-section">Account</div>
       <a href="#" class="sidebar-link" data-page="settings">
@@ -554,6 +558,22 @@
                     <option value="success">Announcement</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label>Target Level</label>
+                  <select id="noticeTargetLevel">
+                    <option value="all">All Levels</option>
+                    <option value="kindergarten">Kindergarten</option>
+                    <option value="elementary">Elementary</option>
+                    <option value="junior">Junior High</option>
+                    <option value="senior">Senior High</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Target School (optional)</label>
+                <select id="noticeTargetSchool">
+                  <option value="">All Schools (for selected level)</option>
+                </select>
               </div>
               <div class="form-group full-width">
                 <label>Message <span class="required">*</span></label>
@@ -567,6 +587,21 @@
           </div>
         </div>
         <div class="notices-list" id="adminNoticesList"></div>
+      </div>
+    </div>
+
+    <!-- PAGE: VALIDATION RULES -->
+    <div class="dash-page" id="page-validation">
+      <div class="dash-content">
+        <div class="page-header">
+          <div class="page-header-text">
+            <h1>Validation Rules</h1>
+            <p class="page-subtitle">Control data quality checks for school submissions</p>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div id="validationRulesList" class="audit-log-wrap"></div>
+        </div>
       </div>
     </div>
 

@@ -99,4 +99,59 @@ router.patch('/me/password', requireStaff, async (req, res) => {
   }
 });
 
+/* ─────────────────────────────────────────────
+   GET /api/staff/tasks-summary
+───────────────────────────────────────────── */
+router.get('/tasks-summary', requireStaff, async (req, res) => {
+  try {
+    const [deadlinesRes, subsRes] = await Promise.all([
+      pool.query(
+        `SELECT d.*
+         FROM deadlines d
+         JOIN schools sc ON sc.id=$1
+         WHERE (d.level='all' OR d.level=sc.level)
+         ORDER BY d.deadline ASC`,
+        [req.user.schoolId]
+      ),
+      pool.query(
+        `SELECT ref, doc_type, school_year, status, submitted_at
+         FROM submissions
+         WHERE school_id=$1
+         ORDER BY submitted_at DESC`,
+        [req.user.schoolId]
+      ),
+    ]);
+
+    const submissions = subsRes.rows;
+    const submissionMap = new Map();
+    for (const s of submissions) {
+      const key = `${s.doc_type}__${s.school_year}`;
+      if (!submissionMap.has(key)) submissionMap.set(key, s);
+    }
+
+    const tasks = deadlinesRes.rows.slice(0, 20).map((d) => {
+      const key = `${d.doc_type}__${d.school_year}`;
+      const match = submissionMap.get(key);
+      return {
+        id: d.id,
+        docType: d.doc_type,
+        schoolYear: d.school_year,
+        deadline: d.deadline,
+        status: match ? match.status : 'missing',
+        ref: match ? match.ref : null,
+      };
+    });
+
+    const total = tasks.length;
+    const complete = tasks.filter((t) => ['approved', 'review', 'received'].includes(t.status)).length;
+    const returned = tasks.filter((t) => t.status === 'returned').length;
+    const pending = tasks.filter((t) => t.status === 'missing').length;
+    const progressPercent = total > 0 ? Math.round((complete / total) * 100) : 0;
+
+    res.json({ tasks, progress: { total, complete, returned, pending, progressPercent } });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 module.exports = router;
