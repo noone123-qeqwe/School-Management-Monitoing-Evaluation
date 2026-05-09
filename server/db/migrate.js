@@ -1,316 +1,415 @@
-require('dotenv').config();
-const pool = require('./pool');
+/* ============================================================
+   SMME PORTAL — LOGIN / AUTH  (v2.0)
+   ============================================================ */
 
-const schema = `
--- ============================================================
--- SMME Portal – PostgreSQL Schema
--- ============================================================
-
--- Schools
-CREATE TABLE IF NOT EXISTS schools (
-  id          SERIAL PRIMARY KEY,
-  name        VARCHAR(200) NOT NULL,
-  school_code VARCHAR(20)  NOT NULL UNIQUE,
-  level       VARCHAR(20)  NOT NULL CHECK (level IN ('kindergarten','elementary','junior','senior')),
-  division    VARCHAR(100) NOT NULL,
-  email       VARCHAR(150),
-  address     TEXT,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Staff accounts (school users)
-CREATE TABLE IF NOT EXISTS staff (
-  id          SERIAL PRIMARY KEY,
-  school_id   INTEGER REFERENCES schools(id) ON DELETE CASCADE,
-  first_name  VARCHAR(100) NOT NULL,
-  last_name   VARCHAR(100) NOT NULL,
-  position    VARCHAR(100) NOT NULL,
-  email       VARCHAR(150) NOT NULL,
-  password    VARCHAR(255) NOT NULL,
-  status      VARCHAR(20)  NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected')),
-  phone       VARCHAR(30),
-  created_at  TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE (email, school_id)
-);
-
--- Admin accounts (division office)
-CREATE TABLE IF NOT EXISTS admins (
-  id          SERIAL PRIMARY KEY,
-  username    VARCHAR(100) NOT NULL UNIQUE,
-  full_name   VARCHAR(200) NOT NULL,
-  position    VARCHAR(100),
-  division    VARCHAR(100) NOT NULL,
-  email       VARCHAR(150),
-  phone       VARCHAR(30),
-  password    VARCHAR(255) NOT NULL,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Submissions
-CREATE TABLE IF NOT EXISTS submissions (
-  id            SERIAL PRIMARY KEY,
-  ref           VARCHAR(30)  NOT NULL UNIQUE,
-  school_id     INTEGER REFERENCES schools(id) ON DELETE CASCADE,
-  staff_id      INTEGER REFERENCES staff(id)   ON DELETE SET NULL,
-  doc_type      VARCHAR(100) NOT NULL,
-  school_year   VARCHAR(20)  NOT NULL,
-  subject       TEXT         NOT NULL,
-  remarks       TEXT,
-  file_count    INTEGER      DEFAULT 0,
-  status        VARCHAR(20)  NOT NULL DEFAULT 'received' CHECK (status IN ('received','review','approved','returned')),
-  feedback      TEXT,
-  original_ref  VARCHAR(30),
-  is_revision   BOOLEAN      DEFAULT FALSE,
-  reviewed_by   INTEGER REFERENCES admins(id) ON DELETE SET NULL,
-  reviewed_at   TIMESTAMPTZ,
-  submitted_at  TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Uploaded files (metadata only – actual files stored on disk/cloud)
-CREATE TABLE IF NOT EXISTS submission_files (
-  id            SERIAL PRIMARY KEY,
-  submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
-  original_name VARCHAR(255) NOT NULL,
-  stored_name   VARCHAR(255) NOT NULL,
-  mime_type     VARCHAR(100),
-  file_size     BIGINT,
-  uploaded_at   TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Notifications
-CREATE TABLE IF NOT EXISTS notifications (
-  id          SERIAL PRIMARY KEY,
-  school_id   INTEGER REFERENCES schools(id) ON DELETE CASCADE,
-  type        VARCHAR(20) DEFAULT 'info' CHECK (type IN ('info','success','warning')),
-  title       VARCHAR(200) NOT NULL,
-  message     TEXT         NOT NULL,
-  ref         VARCHAR(30),
-  is_read     BOOLEAN      DEFAULT FALSE,
-  created_at  TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Division notices (broadcast to all schools)
-CREATE TABLE IF NOT EXISTS notices (
-  id          SERIAL PRIMARY KEY,
-  type        VARCHAR(20) DEFAULT 'info' CHECK (type IN ('info','warning','success')),
-  title       VARCHAR(200) NOT NULL,
-  message     TEXT         NOT NULL,
-  target_level VARCHAR(20) DEFAULT 'all' CHECK (target_level IN ('all','kindergarten','elementary','junior','senior')),
-  target_school_id INTEGER REFERENCES schools(id) ON DELETE CASCADE,
-  created_by  INTEGER REFERENCES admins(id) ON DELETE SET NULL,
-  created_at  TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Notice view tracking (for campaign read analytics)
-CREATE TABLE IF NOT EXISTS notice_views (
-  id          SERIAL PRIMARY KEY,
-  notice_id   INTEGER REFERENCES notices(id) ON DELETE CASCADE,
-  school_id   INTEGER REFERENCES schools(id) ON DELETE CASCADE,
-  viewed_by   INTEGER REFERENCES staff(id) ON DELETE SET NULL,
-  viewed_at   TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE (notice_id, school_id, viewed_by)
-);
-
--- Deadlines
-CREATE TABLE IF NOT EXISTS deadlines (
-  id          SERIAL PRIMARY KEY,
-  doc_type    VARCHAR(100) NOT NULL,
-  school_year VARCHAR(20)  NOT NULL,
-  deadline    DATE         NOT NULL,
-  level       VARCHAR(20)  DEFAULT 'all',
-  created_by  INTEGER REFERENCES admins(id) ON DELETE SET NULL,
-  created_at  TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Audit log
-CREATE TABLE IF NOT EXISTS audit_log (
-  id          SERIAL PRIMARY KEY,
-  action      VARCHAR(30)  NOT NULL,
-  ref         VARCHAR(30),
-  school_id   INTEGER REFERENCES schools(id) ON DELETE SET NULL,
-  staff_id    INTEGER REFERENCES staff(id)   ON DELETE SET NULL,
-  admin_id    INTEGER REFERENCES admins(id)  ON DELETE SET NULL,
-  doc_type    VARCHAR(100),
-  remarks     TEXT,
-  created_at  TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Submission templates (per staff)
-CREATE TABLE IF NOT EXISTS templates (
-  id          SERIAL PRIMARY KEY,
-  staff_id    INTEGER REFERENCES staff(id) ON DELETE CASCADE,
-  name        VARCHAR(200) NOT NULL,
-  doc_type    VARCHAR(100),
-  school_year VARCHAR(20),
-  subject     TEXT,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Admin-configurable data validation rules for submissions
-CREATE TABLE IF NOT EXISTS validation_rules (
-  id            SERIAL PRIMARY KEY,
-  code          VARCHAR(50) NOT NULL UNIQUE,
-  label         VARCHAR(200) NOT NULL,
-  is_enabled    BOOLEAN      NOT NULL DEFAULT TRUE,
-  severity      VARCHAR(20)  NOT NULL DEFAULT 'error' CHECK (severity IN ('error','warning')),
-  rule_config   JSONB        NOT NULL DEFAULT '{}'::jsonb,
-  updated_by    INTEGER REFERENCES admins(id) ON DELETE SET NULL,
-  updated_at    TIMESTAMPTZ  DEFAULT NOW()
-);
-
--- Indexes for performance
-CREATE INDEX IF NOT EXISTS idx_submissions_school    ON submissions(school_id);
-CREATE INDEX IF NOT EXISTS idx_submissions_status    ON submissions(status);
-CREATE INDEX IF NOT EXISTS idx_submissions_staff     ON submissions(staff_id);
-CREATE INDEX IF NOT EXISTS idx_submissions_school_submitted_at ON submissions(school_id, submitted_at DESC);
-CREATE INDEX IF NOT EXISTS idx_submissions_status_submitted_at ON submissions(status, submitted_at DESC);
-CREATE INDEX IF NOT EXISTS idx_notifications_school  ON notifications(school_id, is_read);
-CREATE INDEX IF NOT EXISTS idx_notifications_school_created_at ON notifications(school_id, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_audit_log_action      ON audit_log(action);
-CREATE INDEX IF NOT EXISTS idx_audit_log_created_at  ON audit_log(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_staff_school          ON staff(school_id);
-CREATE INDEX IF NOT EXISTS idx_notices_target_level  ON notices(target_level);
-CREATE INDEX IF NOT EXISTS idx_notices_target_school ON notices(target_school_id);
-CREATE INDEX IF NOT EXISTS idx_notice_views_notice   ON notice_views(notice_id, viewed_at DESC);
-CREATE INDEX IF NOT EXISTS idx_validation_rules_code ON validation_rules(code);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_deadlines_unique
-  ON deadlines(doc_type, school_year, deadline, level);
-`;
-
-async function migrate() {
-  const client = await pool.connect();
-  try {
-    console.log('Running database migrations...');
-    await client.query(schema);
-    console.log('✅ Migrations complete.');
-  } catch (err) {
-    console.error('❌ Migration failed:', err.message);
-    process.exit(1);
-  } finally {
-    client.release();
-    await pool.end();
+/* ── Auto-redirect if already logged in ── */
+window.addEventListener('load', async () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('logout') === '1') {
+    sessionStorage.removeItem('smme_token');
+    sessionStorage.removeItem('smme_user');
+    history.replaceState(null, '', window.location.pathname);
+    // Show layout immediately on logout
+    document.getElementById('authLayout').classList.add('layout-in');
+    return;
   }
-}
-
-migrate();
-
-// ============================================================
-// TEST ACCOUNT SEED
-// Run separately: node migrate.js --seed
-// ============================================================
-
-const bcrypt = require('bcrypt');
-const SALT_ROUNDS = 10;
-
-async function seedTestAccounts() {
-  const client = await pool.connect();
-  try {
-    console.log('\nSeeding test accounts...');
-
-    // ── 1. Test Admin ──────────────────────────────────────────────────────
-    const adminPassword = await bcrypt.hash('Admin@1234', SALT_ROUNDS);
-
-    const adminResult = await client.query(
-      `INSERT INTO admins (username, full_name, position, division, email, phone, password)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (username) DO NOTHING
-       RETURNING id, username`,
-      [
-        'admin_test',
-        'Test Administrator',
-        'Division Superintendent',
-        'Division of Manila',
-        'admin.test@deped.gov.ph',
-        '09171234567',
-        adminPassword,
-      ]
-    );
-
-    if (adminResult.rowCount > 0) {
-      console.log(`✅ Admin created  → id: ${adminResult.rows[0].id}  username: ${adminResult.rows[0].username}`);
-    } else {
-      console.log('⚠️  Admin already exists (skipped).');
-    }
-
-    // ── 2. Test School ─────────────────────────────────────────────────────
-    const schoolResult = await client.query(
-      `INSERT INTO schools (name, school_code, level, division, email, address)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       ON CONFLICT (school_code) DO NOTHING
-       RETURNING id, name`,
-      [
-        'Test Elementary School',
-        'MNL-TEST-001',
-        'elementary',
-        'Division of Manila',
-        'test.school@deped.gov.ph',
-        '123 Test Street, Manila City',
-      ]
-    );
-
-    let schoolId;
-    if (schoolResult.rowCount > 0) {
-      schoolId = schoolResult.rows[0].id;
-      console.log(`✅ School created → id: ${schoolId}  name: ${schoolResult.rows[0].name}`);
-    } else {
-      const existing = await client.query(
-        `SELECT id FROM schools WHERE school_code = $1`,
-        ['MNL-TEST-001']
-      );
-      schoolId = existing.rows[0].id;
-      console.log(`⚠️  School already exists (id: ${schoolId}, skipped).`);
-    }
-
-    // ── 3. Test Staff (school user) ────────────────────────────────────────
-    const staffPassword = await bcrypt.hash('Staff@1234', SALT_ROUNDS);
-
-    const staffResult = await client.query(
-      `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status, phone)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       ON CONFLICT (email, school_id) DO NOTHING
-       RETURNING id, email`,
-      [
-        schoolId,
-        'Jane',
-        'Dela Cruz',
-        'Head Teacher',
-        'staff.test@testschool.edu.ph',
-        staffPassword,
-        'approved',
-        '09189876543',
-      ]
-    );
-
-    if (staffResult.rowCount > 0) {
-      console.log(`✅ Staff created  → id: ${staffResult.rows[0].id}  email: ${staffResult.rows[0].email}`);
-    } else {
-      console.log('⚠️  Staff already exists (skipped).');
-    }
-
-    // ── Summary ────────────────────────────────────────────────────────────
-    console.log('\n─────────────────────────────────────────');
-    console.log('TEST CREDENTIALS');
-    console.log('─────────────────────────────────────────');
-    console.log('Admin');
-    console.log('  Username : admin_test');
-    console.log('  Password : Admin@1234');
-    console.log('');
-    console.log('School Staff');
-    console.log('  Email    : staff.test@testschool.edu.ph');
-    console.log('  Password : Staff@1234');
-    console.log('  School   : Test Elementary School (MNL-TEST-001)');
-    console.log('─────────────────────────────────────────\n');
-
-    console.log('✅ Seeding complete.');
-  } catch (err) {
-    console.error('❌ Seeding failed:', err.message);
-    process.exit(1);
-  } finally {
-    client.release();
-    await pool.end();
+  const user = await API.auth.verifySession();
+  if (user) {
+    window.location.href = user.role === 'admin'
+      ? '/html/admin-dashboard.html'
+      : '/html/school-dashboard.html';
+  } else {
+    // Trigger layout fade-in after splash hides
+    setTimeout(() => {
+      document.getElementById('authLayout').classList.add('layout-in');
+    }, 1900);
   }
+});
+
+/* ── School data cache ── */
+let _schools = [];
+async function loadSchools() {
+  if (_schools.length) return _schools;
+  try { _schools = await API.auth.getSchools(); } catch (e) {}
+  return _schools;
 }
 
-if (process.argv.includes('--seed')) {
-  seedTestAccounts();
+/* ── Build searchable school picker ──────────────────────────
+   Injects a custom picker into .field-group[id=groupId].
+   The hidden <select id=selectId> stays as the value source.
+   ─────────────────────────────────────────────────────────── */
+function buildPicker(selectId, groupId, schools) {
+  if (document.getElementById(selectId + '_picker')) return; // already built
+
+  const group  = document.getElementById(groupId);
+  const select = document.getElementById(selectId);
+  const errEl  = document.getElementById(selectId + 'Err');
+  if (!group || !select) return;
+
+  // Build markup
+  const wrap = document.createElement('div');
+  wrap.className = 'school-picker';
+  wrap.id = selectId + '_picker';
+  wrap.innerHTML =
+    '<div class="school-picker-field" id="' + selectId + '_pfield">' +
+      '<i class="fas fa-school school-picker-icon"></i>' +
+      '<input type="text" id="' + selectId + '_pinput"' +
+        ' class="school-picker-input" placeholder="Search for your school…"' +
+        ' autocomplete="off" />' +
+      '<button type="button" class="school-picker-clear" id="' + selectId + '_pclear"' +
+        ' hidden aria-label="Clear"><i class="fas fa-times"></i></button>' +
+    '</div>' +
+    '<ul class="school-picker-list" id="' + selectId + '_plist" role="listbox" hidden></ul>';
+
+  // Insert before the error span
+  if (errEl) group.insertBefore(wrap, errEl);
+  else group.appendChild(wrap);
+
+  const pfield  = document.getElementById(selectId + '_pfield');
+  const pinput  = document.getElementById(selectId + '_pinput');
+  const plist   = document.getElementById(selectId + '_plist');
+  const pclear  = document.getElementById(selectId + '_pclear');
+
+  function render(q) {
+    q = (q || '').trim().toLowerCase();
+    const hits = q ? schools.filter(s => s.name.toLowerCase().includes(q)) : schools;
+    if (!hits.length) {
+      plist.innerHTML =
+        '<li class="sp-empty"><i class="fas fa-search"></i>' +
+        '<span>No schools found' + (q ? ' for "' + API.escapeHtml(q) + '"' : '') + '</span></li>';
+      return;
+    }
+    plist.innerHTML = hits.map(s =>
+      '<li class="sp-option" role="option" data-id="' + s.id + '" data-name="' + API.escapeHtml(s.name) + '">' +
+        '<span class="sp-option-name">' + API.escapeHtml(s.name) + '</span>' +
+        '<span class="sp-option-level">' + API.escapeHtml(API.levelLabel ? API.levelLabel(s.level) : (s.level || '')) + '</span>' +
+      '</li>'
+    ).join('');
+    plist.querySelectorAll('.sp-option').forEach(opt => {
+      opt.addEventListener('mousedown', e => {
+        e.preventDefault();
+        select.value  = opt.dataset.id;
+        pinput.value  = opt.dataset.name;
+        pclear.hidden = false;
+        plist.hidden  = true;
+        pfield.classList.remove('focused', 'invalid');
+        if (errEl) errEl.textContent = '';
+        select.dispatchEvent(new Event('change'));
+      });
+    });
+  }
+
+  pinput.addEventListener('focus', () => {
+    pfield.classList.add('focused');
+    render(pinput.value);
+    plist.hidden = false;
+  });
+  pinput.addEventListener('input', () => {
+    select.value  = '';
+    pclear.hidden = !pinput.value;
+    render(pinput.value);
+    plist.hidden  = false;
+  });
+  pinput.addEventListener('blur', () => {
+    pfield.classList.remove('focused');
+    // Increase delay to 250ms to ensure the selection is captured 
+    setTimeout(() => {
+      plist.hidden = true;
+      if (!select.value) { 
+        pinput.value = ''; 
+        pclear.hidden = true; 
+      } else {
+        // Re-verify the selected school name persists in the input
+        const m = schools.find(s => String(s.id) === String(select.value));
+        if (m) pinput.value = m.name;
+      }
+    }, 250); 
+  });
+  pclear.addEventListener('click', e => {
+    e.stopPropagation();
+    select.value  = '';
+    pinput.value  = '';
+    pclear.hidden = true;
+    pfield.classList.remove('invalid');
+    if (errEl) errEl.textContent = '';
+    pinput.focus();
+    select.dispatchEvent(new Event('change'));
+  });
 }
+
+async function initPickers() {
+  const schools = await loadSchools();
+  buildPicker('staffSchool', 'staffSchoolGroup', schools);
+  buildPicker('regSchool',   'regSchoolGroup',   schools);
+}
+
+/* ── Panel navigation ── */
+const stepRole     = document.getElementById('stepRole');
+const stepStaff    = document.getElementById('stepStaff');
+const stepAdmin    = document.getElementById('stepAdmin');
+const stepRegister = document.getElementById('stepRegister');
+const allSteps     = [stepRole, stepStaff, stepAdmin, stepRegister];
+
+function showStep(step) {
+  allSteps.forEach(s => s.setAttribute('hidden', ''));
+  step.removeAttribute('hidden');
+}
+
+document.getElementById('roleSchool').addEventListener('click', async () => {
+  showStep(stepStaff);
+  await initPickers();
+});
+document.getElementById('roleAdmin').addEventListener('click', () => showStep(stepAdmin));
+document.getElementById('registerLink').addEventListener('click', async e => {
+  e.preventDefault();
+  showStep(stepRegister);
+  await initPickers();
+});
+document.getElementById('backFromStaff').addEventListener('click',    () => showStep(stepRole));
+document.getElementById('backFromAdmin').addEventListener('click',     () => showStep(stepRole));
+document.getElementById('backFromRegister').addEventListener('click',  () => showStep(stepStaff));
+
+/* ── Password toggle ── */
+document.querySelectorAll('.field-eye').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const inp  = document.getElementById(btn.dataset.target);
+    const icon = btn.querySelector('i');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      inp.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
+});
+
+/* ── Validation helpers ── */
+function fieldErr(id, errId, msg) {
+  const pfield = document.getElementById(id + '_pfield'); // picker
+  const el     = document.getElementById(id);
+  const err    = document.getElementById(errId);
+  if (pfield) pfield.classList.add('invalid');
+  else if (el) el.classList.add('invalid');
+  if (err) err.textContent = msg;
+}
+function fieldOk(id, errId) {
+  const pfield = document.getElementById(id + '_pfield');
+  const el     = document.getElementById(id);
+  const err    = document.getElementById(errId);
+  if (pfield) pfield.classList.remove('invalid');
+  else if (el) el.classList.remove('invalid');
+  if (err) err.textContent = '';
+}
+
+function showAlert(formId, msg) {
+  let el = document.getElementById(formId + '_alert');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = formId + '_alert';
+    el.className = 'auth-alert';
+    document.getElementById(formId).prepend(el);
+  }
+  el.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + API.escapeHtml(msg);
+  el.style.display = 'flex';
+}
+function hideAlert(formId) {
+  const el = document.getElementById(formId + '_alert');
+  if (el) el.style.display = 'none';
+}
+
+/* ── Staff login ── */
+document.getElementById('schoolLoginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideAlert('schoolLoginForm');
+
+  const schoolId = document.getElementById('staffSchool').value;
+  const email    = document.getElementById('schoolEmail').value.trim();
+  const password = document.getElementById('schoolPassword').value;
+  let ok = true;
+
+  fieldOk('staffSchool',    'staffSchoolErr');
+  fieldOk('schoolEmail',    'schoolEmailErr');
+  fieldOk('schoolPassword', 'schoolPasswordErr');
+
+  if (!schoolId) { fieldErr('staffSchool',    'staffSchoolErr',    'Please select your school.');  ok = false; }
+  if (!email)    { fieldErr('schoolEmail',    'schoolEmailErr',    'Email is required.');           ok = false; }
+  if (!password) { fieldErr('schoolPassword', 'schoolPasswordErr', 'Password is required.');        ok = false; }
+  if (!ok) return;
+
+  const btn = document.getElementById('schoolLoginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+  try {
+    await API.auth.loginStaff(schoolId, email, password);
+    window.location.href = '/html/school-dashboard.html';
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+    showAlert('schoolLoginForm', err.message);
+  }
+});
+
+document.getElementById('staffSchool').addEventListener('change',   () => fieldOk('staffSchool',    'staffSchoolErr'));
+document.getElementById('schoolEmail').addEventListener('input',    () => fieldOk('schoolEmail',    'schoolEmailErr'));
+document.getElementById('schoolPassword').addEventListener('input', () => fieldOk('schoolPassword', 'schoolPasswordErr'));
+
+/* ── Admin login ── */
+document.getElementById('adminLoginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideAlert('adminLoginForm');
+
+  const username = document.getElementById('adminUsername').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  let ok = true;
+
+  fieldOk('adminUsername', 'adminUsernameErr');
+  fieldOk('adminPassword', 'adminPasswordErr');
+
+  if (!username) { fieldErr('adminUsername', 'adminUsernameErr', 'Username is required.'); ok = false; }
+  if (!password) { fieldErr('adminPassword', 'adminPasswordErr', 'Password is required.'); ok = false; }
+  if (!ok) return;
+
+  const btn = document.getElementById('adminLoginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+  try {
+    await API.auth.loginAdmin(username, password);
+    window.location.href = '/html/admin-dashboard.html';
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In as Admin';
+    showAlert('adminLoginForm', err.message);
+  }
+});
+
+document.getElementById('adminUsername').addEventListener('input', () => fieldOk('adminUsername', 'adminUsernameErr'));
+document.getElementById('adminPassword').addEventListener('input', () => fieldOk('adminPassword', 'adminPasswordErr'));
+
+/* ── Staff registration ── */
+document.getElementById('registerForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideAlert('registerForm');
+
+  const firstName = document.getElementById('regFirstName').value.trim();
+  const lastName  = document.getElementById('regLastName').value.trim();
+  const position  = document.getElementById('regPosition').value;
+  const schoolId  = document.getElementById('regSchool').value;
+  const email     = document.getElementById('regEmail').value.trim();
+  const pw        = document.getElementById('regPassword').value;
+  const confirm   = document.getElementById('regConfirm').value;
+  const terms     = document.getElementById('regTerms').checked;
+  let ok = true;
+
+  const checks = [
+    ['regFirstName', 'regFirstNameErr', !firstName, 'First name is required.'],
+    ['regLastName',  'regLastNameErr',  !lastName,  'Last name is required.'],
+    ['regPosition',  'regPositionErr',  !position,  'Please select your position.'],
+    ['regSchool',    'regSchoolErr',    !schoolId,  'Please select your school.'],
+    ['regEmail',     'regEmailErr',     !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'A valid email is required.'],
+    // ENFORCED: 8 - 16 characters as per requirements
+    ['regPassword',  'regPasswordErr',  pw.length < 8 || pw.length > 16, 'Password must be 8 - 16 characters.'],
+    ['regConfirm',   'regConfirmErr',   pw !== confirm, 'Passwords do not match.'],
+  ];
+  checks.forEach(([id, errId, cond, msg]) => {
+    if (cond) { fieldErr(id, errId, msg); ok = false; }
+    else fieldOk(id, errId);
+  });
+
+  const termsErr = document.getElementById('regTermsErr');
+  if (!terms) { termsErr.textContent = 'You must agree to the terms.'; ok = false; }
+  else termsErr.textContent = '';
+
+  if (!ok) return;
+
+  const btn = document.querySelector('#registerForm button[type="submit"]');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account…';
+
+  try {
+    await API.auth.register({ firstName, lastName, position, schoolId, email, password: pw });
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+    document.getElementById('registerForm').reset();
+
+    // Reset school picker visually
+    const pinput = document.getElementById('regSchool_pinput');
+    const pclear = document.getElementById('regSchool_pclear');
+    if (pinput) pinput.value = '';
+    if (pclear) pclear.hidden = true;
+
+    showStep(stepStaff);
+
+    // Pre-fill email; pre-fill school picker if possible
+    document.getElementById('schoolEmail').value = email;
+    const matched = _schools.find(s => String(s.id) === String(schoolId));
+    if (matched) {
+      document.getElementById('staffSchool').value = String(matched.id);
+      const sp = document.getElementById('staffSchool_pinput');
+      const sc = document.getElementById('staffSchool_pclear');
+      if (sp) sp.value = matched.name;
+      if (sc) sc.hidden = false;
+    }
+
+    // Success banner
+    const banner = document.createElement('div');
+    banner.className = 'auth-success';
+    banner.innerHTML =
+      '<i class="fas fa-check-circle"></i>' +
+      '<span>Account created for <strong>' + API.escapeHtml(firstName + ' ' + lastName) +
+      '</strong>. Awaiting Division Office approval.</span>';
+    stepStaff.querySelector('form').prepend(banner);
+    setTimeout(() => banner.remove(), 8000);
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+    showAlert('registerForm', err.message);
+  }
+});
+
+document.getElementById('regFirstName').addEventListener('input',  () => fieldOk('regFirstName', 'regFirstNameErr'));
+document.getElementById('regLastName').addEventListener('input',   () => fieldOk('regLastName',  'regLastNameErr'));
+document.getElementById('regPosition').addEventListener('change',  () => fieldOk('regPosition',  'regPositionErr'));
+document.getElementById('regEmail').addEventListener('input',      () => fieldOk('regEmail',     'regEmailErr'));
+document.getElementById('regPassword').addEventListener('input',   () => fieldOk('regPassword',  'regPasswordErr'));
+document.getElementById('regConfirm').addEventListener('input',    () => fieldOk('regConfirm',   'regConfirmErr'));
+
+/* ── Password strength meter ── */
+(function initPwStrength() {
+  const pwInput   = document.getElementById('regPassword');
+  const container = document.getElementById('pwStrength');
+  const label     = document.getElementById('pwStrengthLabel');
+  const bars      = [1,2,3,4].map(n => document.getElementById('pwBar' + n));
+  if (!pwInput || !container) return;
+
+  const levels = [
+    { min: 0,  score: 0, cls: '',       text: '' },
+    { min: 1,  score: 1, cls: 'weak',   text: 'Weak' },
+    { min: 2,  score: 2, cls: 'fair',   text: 'Fair' },
+    { min: 3,  score: 3, cls: 'good',   text: 'Good' },
+    { min: 4,  score: 4, cls: 'strong', text: 'Strong' },
+  ];
+
+  function score(pw) {
+    let s = 0;
+    if (pw.length >= 8)                    s++;
+    if (/[A-Z]/.test(pw))                  s++;
+    if (/[0-9]/.test(pw))                  s++;
+    if (/[^A-Za-z0-9]/.test(pw))           s++;
+    return s;
+  }
+
+  pwInput.addEventListener('input', () => {
+    const pw = pwInput.value;
+    if (!pw) { container.hidden = true; return; }
+    container.hidden = false;
+    const s = score(pw);
+    const lvl = levels[s] || levels[0];
+    bars.forEach((b, i) => {
+      b.className = 'pw-bar';
+      if (i < s) b.classList.add('active-' + lvl.cls);
+    });
+    label.className = 'pw-strength-label ' + lvl.cls;
+    label.textContent = lvl.text;
+  });
+})();
