@@ -112,14 +112,18 @@ function buildPicker(selectId, groupId, schools) {
   });
   pinput.addEventListener('blur', () => {
     pfield.classList.remove('focused');
+    // Increase delay to 250ms to ensure the selection is captured 
     setTimeout(() => {
       plist.hidden = true;
-      if (!select.value) { pinput.value = ''; pclear.hidden = true; }
-      else {
+      if (!select.value) { 
+        pinput.value = ''; 
+        pclear.hidden = true; 
+      } else {
+        // Re-verify the selected school name persists in the input
         const m = schools.find(s => String(s.id) === String(select.value));
         if (m) pinput.value = m.name;
       }
-    }, 180);
+    }, 250); 
   });
   pclear.addEventListener('click', e => {
     e.stopPropagation();
@@ -298,13 +302,14 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
   let ok = true;
 
   const checks = [
-    ['regFirstName', 'regFirstNameErr', !firstName,                                           'First name is required.'],
-    ['regLastName',  'regLastNameErr',  !lastName,                                            'Last name is required.'],
-    ['regPosition',  'regPositionErr',  !position,                                            'Please select your position.'],
-    ['regSchool',    'regSchoolErr',    !schoolId,                                            'Please select your school.'],
-    ['regEmail',     'regEmailErr',     !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),  'A valid email is required.'],
-    ['regPassword',  'regPasswordErr',  pw.length < 8,                                        'Password must be at least 8 characters.'],
-    ['regConfirm',   'regConfirmErr',   pw !== confirm,                                        'Passwords do not match.'],
+    ['regFirstName', 'regFirstNameErr', !firstName, 'First name is required.'],
+    ['regLastName',  'regLastNameErr',  !lastName,  'Last name is required.'],
+    ['regPosition',  'regPositionErr',  !position,  'Please select your position.'],
+    ['regSchool',    'regSchoolErr',    !schoolId,  'Please select your school.'],
+    ['regEmail',     'regEmailErr',     !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'A valid email is required.'],
+    // ENFORCED: 8 - 16 characters as per requirements
+    ['regPassword',  'regPasswordErr',  pw.length < 8 || pw.length > 16, 'Password must be 8 - 16 characters.'],
+    ['regConfirm',   'regConfirmErr',   pw !== confirm, 'Passwords do not match.'],
   ];
   checks.forEach(([id, errId, cond, msg]) => {
     if (cond) { fieldErr(id, errId, msg); ok = false; }
