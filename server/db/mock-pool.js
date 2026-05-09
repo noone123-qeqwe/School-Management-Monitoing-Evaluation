@@ -1,23 +1,13 @@
 // Mock database pool for development without PostgreSQL
-// Password hashes below are bcrypt of 'admin123' and 'staff123'
-const ADMIN_HASH = '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; // admin123 (Laravel default - use generated)
-const STAFF_HASH = '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; // staff123
-
-// Generate proper hashes at startup
+// Test credentials:  admin / Admin@1234   |   staff: maria.santos@adventist.edu.ph / Staff@1234
 const bcrypt = require('bcryptjs');
-let adminHash = ADMIN_HASH;
-let staffHash = STAFF_HASH;
 
-// Pre-generate correct hashes
-(async () => {
-  adminHash = await bcrypt.hash('admin123', 10);
-  staffHash = await bcrypt.hash('staff123', 10);
-  mockData.admins[0].password = adminHash;
-  if (mockData.staff.length > 0) {
-    mockData.staff.forEach(s => s.password = staffHash);
-  }
-  console.log('Mock pool: password hashes generated');
-})();
+// Hashes generated synchronously so they are ready before any request arrives
+const ADMIN_HASH = bcrypt.hashSync('Admin@1234', 10);
+const STAFF_HASH = bcrypt.hashSync('Staff@1234', 10);
+console.log('Mock pool: password hashes ready (sync)');
+console.log('  Admin  — username: admin | password: Admin@1234');
+console.log('  School — email: maria.santos@adventist.edu.ph | password: Staff@1234');
 
 const mockData = {
   schools: [
@@ -63,18 +53,18 @@ const mockData = {
   staff: [
     {
       id: 1, school_id: 1, first_name: 'Maria', last_name: 'Santos',
-      position: 'School Registrar', email: 'maria.santos@amazingprogress.edu.ph',
+      position: 'School Registrar', email: 'maria.santos@adventist.edu.ph',
       password: STAFF_HASH, status: 'approved', phone: null,
       created_at: new Date().toISOString(),
-      school_name: 'Amazing Progress Learning Center', school_level: 'elementary',
+      school_name: 'Adventist Elementary School-Placer, Inc.', school_level: 'elementary',
       school_code: 'SCH-001', division: 'Division of Masbate',
     },
   ],
   admins: [
     {
       id: 1, username: 'admin', full_name: 'Division Administrator',
-      position: 'Education Program Supervisor', division: 'Division of Pasig',
-      email: 'admin@deped-pasig.gov.ph', password: ADMIN_HASH,
+      position: 'Education Program Supervisor', division: 'Division of Masbate',
+      email: 'admin@deped-masbate.gov.ph', password: ADMIN_HASH,
       created_at: new Date().toISOString(),
     },
   ],
