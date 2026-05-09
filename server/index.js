@@ -16,6 +16,13 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === 'production';
 
+/* ══ TRUST PROXY — required on Render / any reverse-proxy host ══
+   Tells Express to trust the first hop (Render's load balancer) so
+   express-rate-limit can read the real client IP from X-Forwarded-For
+   without throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR.
+══════════════════════════════════════════════════════ */
+app.set('trust proxy', 1);
+
 /* ══════════════════════════════════════════════════════
    SECURITY HEADERS (Helmet)
    Sets X-Frame-Options, X-Content-Type-Options,
@@ -196,7 +203,7 @@ app.use((err, req, res, next) => {
 /* ══════════════════════════════════════════════════════
    STARTUP
 ══════════════════════════════════════════════════════ */
-app.listen(PORT, async () => {
+async function onServerStart() {
   console.log(`SMME Portal running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`DATABASE_URL set: ${!!process.env.DATABASE_URL}`);
@@ -242,4 +249,10 @@ app.listen(PORT, async () => {
   } catch (err) {
     console.error('❌ Database connection FAILED:', err.message);
   }
-});
+}
+
+if (require.main === module) {
+  app.listen(PORT, onServerStart);
+}
+
+module.exports = { app, onServerStart };
