@@ -135,12 +135,22 @@ app.get('/pages/:page', (req, res) => {
 });
 
 const STATIC_ROOT = path.join(__dirname, '../codes');
+const LANDING_PAGE = path.join(STATIC_ROOT, 'html', 'index.html');
 
 app.use(express.static(STATIC_ROOT, {
   // Cache static assets (CSS/JS/images) for 1 day
   maxAge: '1d',
   etag: true,
 }));
+
+/* ══════════════════════════════════════════════════════
+   ROOT LANDING PAGE
+══════════════════════════════════════════════════════ */
+app.get('/', (req, res, next) => {
+  res.sendFile(LANDING_PAGE, (err) => {
+    if (err) next(err);
+  });
+});
 
 /* ══════════════════════════════════════════════════════
    SPA FALLBACK — serve index.html for unknown routes
@@ -156,7 +166,7 @@ app.get('*', (req, res, next) => {
     return next();
   }
   // Only serve SPA fallback for clean URL routes (no extension)
-  res.sendFile(path.join(STATIC_ROOT, 'index.html'), err => {
+  res.sendFile(LANDING_PAGE, err => {
     if (err) next(err);
   });
 });
