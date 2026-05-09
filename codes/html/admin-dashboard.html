@@ -5,16 +5,461 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard – SMME Portal</title>
   <link rel="stylesheet" href="../css/styles.css?v=1.7.0" />
-  <link rel="stylesheet" href="../css/dashboard.css?v=1.7.0" />
   <link rel="stylesheet" href="../css/admin.css?v=1.7.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* =========================================
+       EMBEDDED DASHBOARD.CSS & FIXES
+       ========================================= */
+    .dash-body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.42);
+      z-index: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .sidebar-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    .topbar-user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .topbar-user-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .topbar-user-role {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .dash-content {
+      scroll-margin-top: 74px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-header-text h1 {
+      margin: 0 0 4px;
+    }
+
+    .page-subtitle {
+      margin: 0;
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-xs);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    .empty-state-text {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .filter-search-wrap {
+      position: relative;
+    }
+
+    .filter-search-icon {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      font-size: 0.82rem;
+      color: var(--text-light);
+      pointer-events: none;
+    }
+
+    .filter-input-search {
+      padding-left: 30px;
+    }
+
+    .bulk-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #eef4ff;
+      border: 1px solid #cfe0ff;
+      color: #1d4ed8;
+    }
+
+    .bulk-bar-actions {
+      display: inline-flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .form-card {
+      border-style: dashed;
+    }
+
+    .form-card-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: #fafcff;
+    }
+
+    .form-card-body {
+      padding: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.84rem;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .error-msg {
+      display: block;
+      min-height: 16px;
+      font-size: 0.74rem;
+      color: var(--danger);
+      margin-top: 4px;
+    }
+
+    .label-hint {
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      font-weight: 500;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.42);
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      z-index: 1200;
+    }
+
+    .modal {
+      width: min(680px, 100%);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 20px;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .sidebar-close {
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .modal-close-btn {
+      border: 1px solid var(--border);
+    }
+
+    .modal[hidden],
+    .modal-overlay[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .bulk-bar-actions {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .topbar-user-info {
+        display: none;
+      }
+      .topbar-divider {
+        display: none;
+      }
+    }
+
+    .sidebar-link,
+    .btn,
+    .dash-card,
+    .stat-card,
+    .school-card,
+    .notice-item,
+    .activity-item,
+    .deadline-card {
+      transition: all 0.18s ease;
+    }
+
+    .sidebar-link:hover {
+      transform: translateX(2px);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .dash-card:hover,
+    .stat-card:hover,
+    .school-card:hover {
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.09);
+    }
+
+    .dash-table tbody tr {
+      transition: background-color 0.15s ease;
+    }
+
+    .dash-table tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .dash-table tbody tr:focus-within {
+      outline: 2px solid rgba(37, 99, 235, 0.16);
+      outline-offset: -2px;
+    }
+
+    .status-badge,
+    .pill {
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .status-badge:hover,
+    .pill:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+
+    .btn:focus-visible,
+    .link-btn:focus-visible,
+    .sidebar-link:focus-visible,
+    .topbar-menu:focus-visible,
+    .sidebar-close:focus-visible,
+    .modal-close-btn:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(5, 82, 204, 0.2);
+      outline-offset: 2px;
+    }
+
+    .empty-state-card {
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius);
+      background: #fcfdff;
+      padding: 24px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-card i {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--text-light);
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #e9eff8;
+      border-radius: 8px;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+      animation: skeleton-shimmer 1.2s infinite;
+    }
+
+    .skeleton-line {
+      height: 11px;
+      margin: 8px 0;
+    }
+
+    .skeleton-line.short {
+      width: 58%;
+    }
+
+    @keyframes skeleton-shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sidebar-link,
+      .btn,
+      .dash-card,
+      .stat-card,
+      .school-card,
+      .notice-item,
+      .activity-item,
+      .deadline-card,
+      .status-badge,
+      .pill {
+        transition: none !important;
+      }
+      .skeleton::after {
+        animation: none !important;
+      }
+    }
+
+    /* * ADDED FIXES FOR SIDEBAR USER & FOOTER
+     */
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      gap: 12px;
+    }
+
+    .sidebar-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-user-info {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-user-info strong {
+      font-size: 0.9rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .sidebar-user-info span {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: auto;
+    }
+
+    .sidebar-logout {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+
+    .sidebar-logout:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+  </style>
 </head>
 <body class="dash-body">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar admin-sidebar" id="sidebar">
     <div class="sidebar-header">
       <img src="../assets/smmelogo.jpg" alt="SMME Logo" class="sidebar-logo-img" />
@@ -93,10 +538,8 @@
     </div>
   </aside>
 
-  <!-- SIDEBAR OVERLAY (mobile) -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- MAIN -->
   <div class="dash-main" id="dashMain">
     <header class="dash-topbar admin-topbar">
       <div class="topbar-left">
@@ -119,7 +562,6 @@
       </div>
     </header>
 
-    <!-- PAGE: DASHBOARD -->
     <div class="dash-page active" id="page-dashboard">
       <div class="dash-content">
         <div class="page-header">
@@ -129,7 +571,6 @@
           </div>
         </div>
 
-        <!-- STAT CARDS -->
         <div class="stats-grid">
           <div class="stat-card admin-stat-card" data-color="blue">
             <div class="stat-card-icon blue"><i class="fas fa-inbox"></i></div>
@@ -165,7 +606,6 @@
           </div>
         </div>
 
-        <!-- TWO COLUMN -->
         <div class="dash-two-col">
           <div class="dash-card">
             <div class="dash-card-header">
@@ -218,7 +658,6 @@
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY -->
         <div class="dash-card">
           <div class="dash-card-header">
             <h3><i class="fas fa-history"></i> Recent Activity</h3>
@@ -228,7 +667,6 @@
       </div>
     </div>
 
-    <!-- PAGE: ALL SUBMISSIONS -->
     <div class="dash-page" id="page-submissions">
       <div class="dash-content">
         <div class="page-header">
@@ -294,7 +732,6 @@
       </div>
     </div>
 
-    <!-- PAGE: SCHOOLS -->
     <div class="dash-page" id="page-schools">
       <div class="dash-content">
         <div class="page-header">
@@ -324,7 +761,6 @@
       </div>
     </div>
 
-    <!-- PAGE: STAFF ACCOUNTS -->
     <div class="dash-page" id="page-staff">
       <div class="dash-content">
         <div class="page-header">
@@ -371,7 +807,6 @@
       </div>
     </div>
 
-    <!-- PAGE: DEADLINES -->
     <div class="dash-page" id="page-deadlines">
       <div class="dash-content">
         <div class="page-header">
@@ -440,7 +875,6 @@
       </div>
     </div>
 
-    <!-- PAGE: REPORTS -->
     <div class="dash-page" id="page-reports">
       <div class="dash-content">
         <div class="page-header">
@@ -497,7 +931,6 @@
       </div>
     </div>
 
-    <!-- PAGE: AUDIT LOG -->
     <div class="dash-page" id="page-audit">
       <div class="dash-content">
         <div class="page-header">
@@ -529,7 +962,6 @@
       </div>
     </div>
 
-    <!-- PAGE: NOTICES -->
     <div class="dash-page" id="page-notices">
       <div class="dash-content">
         <div class="page-header">
@@ -617,7 +1049,6 @@
       </div>
     </div>
 
-    <!-- PAGE: VALIDATION RULES -->
     <div class="dash-page" id="page-validation">
       <div class="dash-content">
         <div class="page-header">
@@ -632,7 +1063,6 @@
       </div>
     </div>
 
-    <!-- PAGE: SETTINGS -->
     <div class="dash-page" id="page-settings">
       <div class="dash-content">
         <div class="page-header">
@@ -703,10 +1133,7 @@
       </div>
     </div>
 
-  </div><!-- end dash-main -->
-
-  <!-- REVIEW MODAL -->
-  <div class="modal-overlay" id="reviewModal" hidden>
+  </div><div class="modal-overlay" id="reviewModal" hidden>
     <div class="modal review-modal">
       <div class="modal-header">
         <h2><i class="fas fa-file-alt"></i> Review Submission</h2>
@@ -731,7 +1158,6 @@
     </div>
   </div>
 
-  <!-- BULK RETURN MODAL -->
   <div class="modal-overlay" id="bulkReturnModal" hidden>
     <div class="modal bulk-return-modal">
       <div class="modal-header">
