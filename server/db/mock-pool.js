@@ -1,13 +1,13 @@
 // Mock database pool for development without PostgreSQL
-// Test credentials:  admin / Admin@1234   |   staff: maria.santos@adventist.edu.ph / Staff@1234
+// Test credentials:  admin / admin1234   |   staff: maria.santos@stmarys.edu.ph / staff1234
 const bcrypt = require('bcryptjs');
 
 // Hashes generated synchronously so they are ready before any request arrives
-const ADMIN_HASH = bcrypt.hashSync('Admin@1234', 10);
-const STAFF_HASH = bcrypt.hashSync('Staff@1234', 10);
+const ADMIN_HASH = bcrypt.hashSync('admin1234', 10);
+const STAFF_HASH = bcrypt.hashSync('staff1234', 10);
 console.log('Mock pool: password hashes ready (sync)');
-console.log('  Admin  — username: admin | password: Admin@1234');
-console.log('  School — email: maria.santos@adventist.edu.ph | password: Staff@1234');
+console.log('  Admin  — username: admin | password: admin1234');
+console.log('  School — email: maria.santos@stmarys.edu.ph | password: staff1234');
 
 const mockData = {
   schools: [
@@ -52,12 +52,12 @@ const mockData = {
   ],
   staff: [
     {
-      id: 1, school_id: 1, first_name: 'Maria', last_name: 'Santos',
-      position: 'School Registrar', email: 'maria.santos@adventist.edu.ph',
+      id: 1, school_id: 12, first_name: 'Maria', last_name: 'Santos',
+      position: 'School Registrar', email: 'maria.santos@stmarys.edu.ph',
       password: STAFF_HASH, status: 'approved', phone: null,
       created_at: new Date().toISOString(),
-      school_name: 'Adventist Elementary School-Placer, Inc.', school_level: 'elementary',
-      school_code: 'SCH-001', division: 'Division of Masbate',
+      school_name: 'Green Meadows Tiny Tots Inc.', school_level: 'kindergarten',
+      school_code: 'SCH-012', division: 'Division of Masbate',
     },
   ],
   admins: [
