@@ -59,6 +59,21 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); switchPage(link.dataset.page); });
 });
 
+function renderEmpty(container, message) {
+  if (!container) return;
+  container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:24px">${API.escapeHtml(message)}</p>`;
+}
+
+function renderError(container, message, retryJs) {
+  if (!container) return;
+  container.innerHTML = `
+    <div style="text-align:center;padding:24px">
+      <p style="color:var(--danger);margin-bottom:12px">${API.escapeHtml(message)}</p>
+      <button class="btn btn-sm btn-outline" onclick="${retryJs}"><i class="fas fa-rotate-right"></i> Retry</button>
+    </div>
+  `;
+}
+
 /* ===== DASHBOARD ===== */
 async function loadAdminDashboard() {
   try {
@@ -100,7 +115,11 @@ async function loadAdminDashboard() {
 
     // Activity
     renderActivity(subs.slice(0, 8));
-  } catch (err) { API.showToast(`Failed to load dashboard: ${err.message}`, 'error'); }
+  } catch (err) {
+    API.showToast(`Failed to load dashboard: ${err.message}`, 'error');
+    renderError(document.getElementById('pendingTableBody')?.closest('.table-wrap'), 'Unable to load dashboard pending table.', 'loadAdminDashboard()');
+    renderError(document.getElementById('activityList'), 'Unable to load recent activity.', 'loadAdminDashboard()');
+  }
 }
 
 function renderActivity(subs) {
@@ -182,7 +201,11 @@ async function loadAllSubmissions() {
         updateBulkBar();
       });
     });
-  } catch (err) { API.showToast(`Failed to load submissions: ${err.message}`, 'error'); }
+  } catch (err) {
+    API.showToast(`Failed to load submissions: ${err.message}`, 'error');
+    const tbody = document.getElementById('adminSubmissionsBody');
+    if (tbody) tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:var(--danger);padding:24px">Failed to load submissions. <button class="btn btn-sm btn-outline" onclick="loadAllSubmissions()">Retry</button></td></tr>`;
+  }
 }
 
 document.getElementById('adminSearch').addEventListener('input', loadAllSubmissions);
@@ -609,6 +632,28 @@ document.getElementById('deadlineForm').addEventListener('submit', async e => {
 /* ===== NOTICES ===== */
 async function loadNotices() {
   try {
+    try {
+      const analytics = await API.admin.getNoticesAnalytics();
+      const trend = analytics.trend || [];
+      document.getElementById('noticeAudience').textContent = analytics.audience || 0;
+      document.getElementById('noticeViewedSchools').textContent = analytics.viewedSchools || 0;
+      document.getElementById('noticeViewRate').textContent = `${analytics.viewRate || 0}%`;
+      const trendWrap = document.getElementById('noticeTrend');
+      if (trendWrap) {
+        const max = trend.reduce((m, row) => Math.max(m, row.views || 0), 1);
+        trendWrap.innerHTML = trend.length ? trend.map((row) => `
+          <div class="report-bar-item">
+            <div class="report-bar-label">${API.escapeHtml(new Date(row.day).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' }))}</div>
+            <div class="report-bar-track"><div class="report-bar-fill" style="width:${Math.round(((row.views || 0) / max) * 100)}%"></div></div>
+            <div class="report-bar-count">${row.views || 0}</div>
+          </div>
+        `).join('') : '<p style="color:var(--text-muted);padding:12px">No notice views in the last 7 days.</p>';
+      }
+    } catch {
+      const trendWrap = document.getElementById('noticeTrend');
+      if (trendWrap) trendWrap.innerHTML = '<p style="color:var(--text-muted);padding:12px">Analytics unavailable right now.</p>';
+    }
+
     const notices = await API.admin.getNotices();
     const list = document.getElementById('adminNoticesList');
     
@@ -626,8 +671,12 @@ async function loadNotices() {
           <button class="action-btn return" onclick="deleteNotice(${n.id})" style="flex-shrink:0"><i class="fas fa-trash"></i></button>
         </div>
       `;
-    }).join('') || `<p style="color:var(--text-muted);text-align:center;padding:24px">No notices yet.</p>`;
-  } catch (err) { API.showToast(`Failed to load notices: ${err.message}`, 'error'); }
+    }).join('');
+    if (!notices.length) renderEmpty(list, 'No notices yet. Post your first announcement.');
+  } catch (err) {
+    API.showToast(`Failed to load notices: ${err.message}`, 'error');
+    renderError(document.getElementById('adminNoticesList'), 'Unable to load notices.', 'loadNotices()');
+  }
 }
 
 async function deleteNotice(id) {
@@ -703,7 +752,7 @@ async function loadValidationRules() {
       </div>
     `).join('') || `<p style="color:var(--text-muted);text-align:center;padding:24px">No validation rules configured.</p>`;
   } catch (err) {
-    list.innerHTML = `<p style="color:var(--danger);padding:12px">Failed to load validation rules: ${API.escapeHtml(err.message)}</p>`;
+    renderError(list, `Failed to load validation rules: ${err.message}`, 'loadValidationRules()');
   }
 }
 
