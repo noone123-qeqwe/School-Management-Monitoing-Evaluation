@@ -64,7 +64,8 @@ async function seed() {
     const adminPass = process.env.SMME_ADMIN_PASSWORD;
     const canSeedAdmin = !isProd || Boolean(adminPass);
     if (canSeedAdmin) {
-      const adminPw = await bcrypt.hash(adminPass || 'admin123', 10);
+      // Changed default fallback password to 'admin1234'
+      const adminPw = await bcrypt.hash(adminPass || 'admin1234', 10);
       await client.query(
         `INSERT INTO admins (username, full_name, position, division, email, password)
          VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (username) DO NOTHING`,
@@ -77,19 +78,15 @@ async function seed() {
 
     // ── Demo staff ────────────────────────────────────────────
     if (!isProd || allowDemoSeed) {
-      const school1 = await client.query(`SELECT id FROM schools WHERE school_code='SCH-001'`);
+      // Switched to SCH-012 for "Green Meadows Tiny Tots Inc."
+      const school1 = await client.query(`SELECT id FROM schools WHERE school_code='SCH-012'`);
       if (school1.rows.length) {
         const sid = school1.rows[0].id;
-        const staffPw = await bcrypt.hash(process.env.SMME_DEMO_STAFF_PASSWORD || 'staff123', 10);
+        // Changed default fallback password to 'staff1234'
+        const staffPw = await bcrypt.hash(process.env.SMME_DEMO_STAFF_PASSWORD || 'staff1234', 10);
         await client.query(
           `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-           VALUES ($1,'Maria','Santos','School Registrar','maria.santos@amazingprogress.edu.ph',$2,'approved')
-           ON CONFLICT (email, school_id) DO NOTHING`,
-          [sid, staffPw]
-        );
-        await client.query(
-          `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-           VALUES ($1,'Jose','Reyes','School Principal','jose.reyes@amazingprogress.edu.ph',$2,'approved')
+           VALUES ($1,'Maria','Santos','School Registrar','maria.santos@stmarys.edu.ph',$2,'approved')
            ON CONFLICT (email, school_id) DO NOTHING`,
           [sid, staffPw]
         );
