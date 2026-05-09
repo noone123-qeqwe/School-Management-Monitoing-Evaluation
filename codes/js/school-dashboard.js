@@ -313,11 +313,12 @@ dUploadArea.addEventListener('drop', e => {
 const ALLOWED = ['application/pdf','application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 function addDFiles(files) {
   files.forEach(f => {
     if (!ALLOWED.includes(f.type)) { API.showToast('"' + f.name + '" is not a supported file type.', 'error'); return; }
-    if (f.size > 20 * 1024 * 1024) { API.showToast('"' + f.name + '" exceeds 20MB.', 'error'); return; }
+    if (f.size > MAX_FILE_SIZE) { API.showToast('"' + f.name + '" exceeds 100MB.', 'error'); return; }
     if (dFiles.find(x => x.name === f.name && x.size === f.size)) { API.showToast('"' + f.name + '" already added.', 'error'); return; }
     dFiles.push(f);
   });
@@ -592,15 +593,24 @@ function openResubmit(ref) {
 
 document.getElementById('resubBrowseBtn').addEventListener('click', () => document.getElementById('resubFileInput').click());
 document.getElementById('resubFileInput').addEventListener('change', e => {
-  resubFiles = resubFiles.concat(Array.from(e.target.files));
+  addResubFiles(Array.from(e.target.files));
   renderResubFileList(); e.target.value = '';
 });
 document.getElementById('resubUploadArea').addEventListener('dragover', e => { e.preventDefault(); document.getElementById('resubUploadArea').classList.add('drag-over'); });
 document.getElementById('resubUploadArea').addEventListener('dragleave', () => document.getElementById('resubUploadArea').classList.remove('drag-over'));
 document.getElementById('resubUploadArea').addEventListener('drop', e => {
   e.preventDefault(); document.getElementById('resubUploadArea').classList.remove('drag-over');
-  resubFiles = resubFiles.concat(Array.from(e.dataTransfer.files)); renderResubFileList();
+  addResubFiles(Array.from(e.dataTransfer.files)); renderResubFileList();
 });
+
+function addResubFiles(files) {
+  files.forEach(f => {
+    if (!ALLOWED.includes(f.type)) { API.showToast('"' + f.name + '" is not a supported file type.', 'error'); return; }
+    if (f.size > MAX_FILE_SIZE) { API.showToast('"' + f.name + '" exceeds 100MB.', 'error'); return; }
+    if (resubFiles.find(x => x.name === f.name && x.size === f.size)) { API.showToast('"' + f.name + '" already added.', 'error'); return; }
+    resubFiles.push(f);
+  });
+}
 
 function renderResubFileList() {
   document.getElementById('resubFileList').innerHTML = resubFiles.map((f, i) =>

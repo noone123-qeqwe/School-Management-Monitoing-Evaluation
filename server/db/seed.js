@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const pool   = require('./pool');
 
 async function seed() {
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemoSeed = process.env.ALLOW_DEMO_SEED === 'true';
   const client = await pool.connect();
   try {
     console.log('Seeding database...');
@@ -57,34 +59,45 @@ async function seed() {
     }
     console.log('✅ Schools seeded.');
 
-    // ── Default admin ─────────────────────────────────────────
-    const adminPw = await bcrypt.hash('admin123', 10);
-    await client.query(
-      `INSERT INTO admins (username, full_name, position, division, email, password)
-       VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (username) DO NOTHING`,
-      ['admin', 'Division Administrator', 'Education Program Supervisor', 'Division of Masbate', 'admin@deped-masbate.gov.ph', adminPw]
-    );
-    console.log('✅ Default admin seeded. (username: admin / password: admin123)');
+    // ── Admin bootstrap (safe in production) ─────────────────
+    const adminUser = process.env.SMME_ADMIN_USER || 'admin';
+    const adminPass = process.env.SMME_ADMIN_PASSWORD;
+    const canSeedAdmin = !isProd || Boolean(adminPass);
+    if (canSeedAdmin) {
+      const adminPw = await bcrypt.hash(adminPass || 'admin123', 10);
+      await client.query(
+        `INSERT INTO admins (username, full_name, position, division, email, password)
+         VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (username) DO NOTHING`,
+        [adminUser, 'Division Administrator', 'Education Program Supervisor', 'Division of Masbate', 'admin@deped-masbate.gov.ph', adminPw]
+      );
+      console.log('✅ Admin account seeded.');
+    } else {
+      console.log('⚠️  Admin seed skipped in production (set SMME_ADMIN_PASSWORD to enable).');
+    }
 
     // ── Demo staff ────────────────────────────────────────────
-    const school1 = await client.query(`SELECT id FROM schools WHERE school_code='SCH-001'`);
-    if (school1.rows.length) {
-      const sid = school1.rows[0].id;
-      const staffPw = await bcrypt.hash('staff123', 10);
-      await client.query(
-        `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-         VALUES ($1,'Maria','Santos','School Registrar','maria.santos@amazingprogress.edu.ph',$2,'approved')
-         ON CONFLICT (email, school_id) DO NOTHING`,
-        [sid, staffPw]
-      );
-      await client.query(
-        `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-         VALUES ($1,'Jose','Reyes','School Principal','jose.reyes@amazingprogress.edu.ph',$2,'approved')
-         ON CONFLICT (email, school_id) DO NOTHING`,
-        [sid, staffPw]
-      );
+    if (!isProd || allowDemoSeed) {
+      const school1 = await client.query(`SELECT id FROM schools WHERE school_code='SCH-001'`);
+      if (school1.rows.length) {
+        const sid = school1.rows[0].id;
+        const staffPw = await bcrypt.hash(process.env.SMME_DEMO_STAFF_PASSWORD || 'staff123', 10);
+        await client.query(
+          `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
+           VALUES ($1,'Maria','Santos','School Registrar','maria.santos@amazingprogress.edu.ph',$2,'approved')
+           ON CONFLICT (email, school_id) DO NOTHING`,
+          [sid, staffPw]
+        );
+        await client.query(
+          `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
+           VALUES ($1,'Jose','Reyes','School Principal','jose.reyes@amazingprogress.edu.ph',$2,'approved')
+           ON CONFLICT (email, school_id) DO NOTHING`,
+          [sid, staffPw]
+        );
+      }
+      console.log('✅ Demo staff seeded.');
+    } else {
+      console.log('ℹ️  Demo staff seed skipped in production.');
     }
-    console.log('✅ Demo staff seeded. (password: staff123)');
 
     // ── Default deadlines ─────────────────────────────────────
     const deadlines = [
@@ -96,7 +109,11 @@ async function seed() {
     for (const [doc_type, school_year, deadline, level] of deadlines) {
       await client.query(
         `INSERT INTO deadlines (doc_type, school_year, deadline, level)
-         VALUES ($1,$2,$3,$4)`,
+         SELECT $1,$2,$3,$4
+         WHERE NOT EXISTS (
+           SELECT 1 FROM deadlines
+           WHERE doc_type=$1 AND school_year=$2 AND deadline=$3 AND level=$4
+         )`,
         [doc_type, school_year, deadline, level]
       );
     }
@@ -104,10 +121,14 @@ async function seed() {
 
     // ── Default notices ───────────────────────────────────────
     await client.query(
-      `INSERT INTO notices (type, title, message) VALUES
-       ('info',    'Deadline Reminder',       'Enrollment reports for SY 2026–2027 must be submitted by June 15, 2026.'),
-       ('warning', 'System Maintenance',      'The portal will be unavailable on May 10, 2026 from 12:00 AM – 4:00 AM.'),
-       ('success', 'New Document Type Added', 'You can now submit TVL Strand Offerings directly through the portal.')`
+      `INSERT INTO notices (type, title, message)
+       SELECT * FROM (
+         VALUES
+         ('info',    'Deadline Reminder',       'Enrollment reports for SY 2026–2027 must be submitted by June 15, 2026.'),
+         ('warning', 'System Maintenance',      'The portal will be unavailable on May 10, 2026 from 12:00 AM – 4:00 AM.'),
+         ('success', 'New Document Type Added', 'You can now submit TVL Strand Offerings directly through the portal.')
+       ) AS seed(type, title, message)
+       WHERE NOT EXISTS (SELECT 1 FROM notices n WHERE n.title = seed.title)`
     );
     console.log('✅ Notices seeded.');
 

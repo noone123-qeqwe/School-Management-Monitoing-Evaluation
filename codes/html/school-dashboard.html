@@ -6,6 +6,7 @@
   <title>Staff Dashboard – SMME Portal</title>
   <link rel="stylesheet" href="../css/styles.css?v=1.5.1" />
   <link rel="stylesheet" href="../css/dashboard.css?v=1.5.1" />
+  <link rel="stylesheet" href="../css/school.css?v=1.5.1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="dash-body">
@@ -13,7 +14,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <img src="../assets/smmelogo.jpg" alt="SMME Logo" class="sidebar-logo-img" />
+      <img src="../assets/smmelogo.svg" alt="SMME Logo" class="sidebar-logo-img" />
       <div><span class="sidebar-title">SMME</span><span class="sidebar-sub">School Portal</span></div>
       <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
     </div>
@@ -172,7 +173,7 @@
               <div class="upload-placeholder">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <p>Drag &amp; drop files here or <button type="button" class="upload-btn" id="dBrowseBtn">Browse Files</button></p>
-                <small>PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 20MB per file</small>
+                <small>PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file</small>
               </div>
               <ul class="file-list" id="dFileList"></ul>
             </div>
@@ -393,7 +394,7 @@
         <div class="upload-placeholder">
           <i class="fas fa-cloud-upload-alt"></i>
           <p>Attach revised files or <button type="button" class="upload-btn" id="resubBrowseBtn">Browse</button></p>
-          <small>PDF, Word, Excel | Max 20MB per file</small>
+          <small>PDF, Word, Excel | Max 100MB per file</small>
         </div>
         <ul class="file-list" id="resubFileList"></ul>
       </div>
@@ -407,31 +408,5 @@
 
   <script src="../js/api.js?v=1.5.1"></script>
   <script src="../js/school-dashboard.js?v=1.5.1"></script>
-  <script>
-    document.getElementById('logoutBtn').addEventListener('click', () => API.auth.logout());
-    document.getElementById('profileForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      try {
-        await API.staff.updateProfile({
-          firstName: document.getElementById('pfFirstName').value,
-          lastName:  document.getElementById('pfLastName').value,
-          position:  document.getElementById('pfPosition').value,
-          phone:     document.getElementById('pfPhone').value,
-        });
-        API.showToast('Profile updated.', 'success');
-      } catch (err) { API.showToast(err.message, 'error'); }
-    });
-    document.getElementById('changePasswordForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      try {
-        await API.staff.changePassword({
-          currentPassword: document.getElementById('pfCurrentPw').value,
-          newPassword:     document.getElementById('pfNewPw').value,
-        });
-        API.showToast('Password updated.', 'success');
-        e.target.reset();
-      } catch (err) { API.showToast(err.message, 'error'); }
-    });
-  </script>
 </body>
 </html>

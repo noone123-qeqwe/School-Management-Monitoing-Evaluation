@@ -9,6 +9,8 @@ window.addEventListener('load', async () => {
     sessionStorage.removeItem('smme_token');
     sessionStorage.removeItem('smme_user');
     history.replaceState(null, '', window.location.pathname);
+    // Show layout immediately on logout
+    document.getElementById('authLayout').classList.add('layout-in');
     return;
   }
   const user = await API.auth.verifySession();
@@ -16,6 +18,11 @@ window.addEventListener('load', async () => {
     window.location.href = user.role === 'admin'
       ? '/html/admin-dashboard.html'
       : '/html/school-dashboard.html';
+  } else {
+    // Trigger layout fade-in after splash hides
+    setTimeout(() => {
+      document.getElementById('authLayout').classList.add('layout-in');
+    }, 1900);
   }
 });
 
@@ -361,3 +368,43 @@ document.getElementById('regPosition').addEventListener('change',  () => fieldOk
 document.getElementById('regEmail').addEventListener('input',      () => fieldOk('regEmail',     'regEmailErr'));
 document.getElementById('regPassword').addEventListener('input',   () => fieldOk('regPassword',  'regPasswordErr'));
 document.getElementById('regConfirm').addEventListener('input',    () => fieldOk('regConfirm',   'regConfirmErr'));
+
+/* ── Password strength meter ── */
+(function initPwStrength() {
+  const pwInput   = document.getElementById('regPassword');
+  const container = document.getElementById('pwStrength');
+  const label     = document.getElementById('pwStrengthLabel');
+  const bars      = [1,2,3,4].map(n => document.getElementById('pwBar' + n));
+  if (!pwInput || !container) return;
+
+  const levels = [
+    { min: 0,  score: 0, cls: '',       text: '' },
+    { min: 1,  score: 1, cls: 'weak',   text: 'Weak' },
+    { min: 2,  score: 2, cls: 'fair',   text: 'Fair' },
+    { min: 3,  score: 3, cls: 'good',   text: 'Good' },
+    { min: 4,  score: 4, cls: 'strong', text: 'Strong' },
+  ];
+
+  function score(pw) {
+    let s = 0;
+    if (pw.length >= 8)                    s++;
+    if (/[A-Z]/.test(pw))                  s++;
+    if (/[0-9]/.test(pw))                  s++;
+    if (/[^A-Za-z0-9]/.test(pw))           s++;
+    return s;
+  }
+
+  pwInput.addEventListener('input', () => {
+    const pw = pwInput.value;
+    if (!pw) { container.hidden = true; return; }
+    container.hidden = false;
+    const s = score(pw);
+    const lvl = levels[s] || levels[0];
+    bars.forEach((b, i) => {
+      b.className = 'pw-bar';
+      if (i < s) b.classList.add('active-' + lvl.cls);
+    });
+    label.className = 'pw-strength-label ' + lvl.cls;
+    label.textContent = lvl.text;
+  });
+})();

@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt  = require('bcryptjs');
 const pool    = require('../db/pool');
-const { requireAdmin } = require('../middleware/auth');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -59,6 +59,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
 router.get('/audit', requireAdmin, async (req, res) => {
   const { search, action, limit = 100 } = req.query;
   try {
+    const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 100, 1), 500);
     let where = []; let params = []; let i = 1;
     if (action) { where.push(`al.action=$${i++}`); params.push(action); }
     if (search) {
@@ -66,7 +67,7 @@ router.get('/audit', requireAdmin, async (req, res) => {
       params.push('%' + search + '%'); i++;
     }
     const wc = where.length ? 'WHERE ' + where.join(' AND ') : '';
-    params.push(parseInt(limit));
+    params.push(parsedLimit);
     const result = await pool.query(
       `SELECT al.*, sc.name AS school_name,
               st.first_name || ' ' || st.last_name AS staff_name,
@@ -89,7 +90,7 @@ router.get('/audit', requireAdmin, async (req, res) => {
 /* ─────────────────────────────────────────────
    GET/POST/DELETE /api/admin/notices
 ───────────────────────────────────────────── */
-router.get('/notices', async (req, res) => {
+router.get('/notices', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM notices ORDER BY created_at DESC');
     res.json(result.rows);
@@ -118,7 +119,7 @@ router.delete('/notices/:id', requireAdmin, async (req, res) => {
 /* ─────────────────────────────────────────────
    GET/POST/DELETE /api/admin/deadlines
 ───────────────────────────────────────────── */
-router.get('/deadlines', async (req, res) => {
+router.get('/deadlines', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM deadlines ORDER BY deadline ASC');
     res.json(result.rows);

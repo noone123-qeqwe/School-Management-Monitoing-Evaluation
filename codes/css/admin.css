@@ -355,3 +355,78 @@ body.dash-body {
   .sidebar.open { transform: translateX(0); }
   .dash-main { margin-left: 0; }
 }
+/* =========================================
+   ADDITIONS FROM DASHBOARD.CSS
+   ========================================= */
+
+/* Final polish: admin interface UX */
+.admin-sidebar {
+  background: linear-gradient(180deg, #0a1427, #1b2d4f);
+}
+
+.admin-sidebar .sidebar-link {
+  border-radius: 0 10px 10px 0;
+}
+
+.admin-sidebar .sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar .sidebar-link.active {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.08));
+}
+
+.admin-topbar {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.dash-content {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+  border-radius: 18px;
+}
+
+.dash-card,
+.profile-card,
+.profile-form-card,
+.staff-approval-card,
+.deadline-card {
+  border-color: #e8eef7;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.dash-card-header {
+  background: #f7faff;
+}
+
+.stat-card {
+  border: 1px solid #e6edf8;
+}
+
+.stat-card:hover {
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.09);
+}
+
+.dash-table th {
+  background: #f6f9ff;
+  color: #6e84a9;
+}
+
+.dash-table tr:hover td {
+  background: #f1f7ff;
+}
+
+.bulk-bar {
+  background: linear-gradient(90deg, #ecf4ff, #f4f0ff);
+}
+
+.modal {
+  border: 1px solid #e7edf7;
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.16);
+}
+
+@media (max-width: 900px) {
+  .dash-content {
+    border-radius: 12px;
+  }
+}

@@ -169,7 +169,7 @@ app.use((err, req, res, next) => {
   console.error(`[${new Date().toISOString()}] ${req.method} ${req.path} — ${err.message}`);
 
   if (err.code === 'LIMIT_FILE_SIZE')
-    return res.status(400).json({ error: 'File exceeds 20MB limit.' });
+    return res.status(400).json({ error: 'File exceeds 100MB limit.' });
 
   if (err.type === 'entity.too.large')
     return res.status(413).json({ error: 'Request body too large.' });
@@ -193,6 +193,11 @@ app.listen(PORT, async () => {
     const pool = require('./db/pool');
     await pool.query('SELECT 1');
     console.log('✅ Database connection successful');
+
+    if (isProd) {
+      console.log('Production mode: automatic migrate/seed disabled.');
+      return;
+    }
 
     const tables = await pool.query(
       `SELECT table_name FROM information_schema.tables WHERE table_schema='public'`

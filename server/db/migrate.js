@@ -138,9 +138,15 @@ CREATE TABLE IF NOT EXISTS templates (
 CREATE INDEX IF NOT EXISTS idx_submissions_school    ON submissions(school_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_status    ON submissions(status);
 CREATE INDEX IF NOT EXISTS idx_submissions_staff     ON submissions(staff_id);
+CREATE INDEX IF NOT EXISTS idx_submissions_school_submitted_at ON submissions(school_id, submitted_at DESC);
+CREATE INDEX IF NOT EXISTS idx_submissions_status_submitted_at ON submissions(status, submitted_at DESC);
 CREATE INDEX IF NOT EXISTS idx_notifications_school  ON notifications(school_id, is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_school_created_at ON notifications(school_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_log_action      ON audit_log(action);
+CREATE INDEX IF NOT EXISTS idx_audit_log_created_at  ON audit_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_staff_school          ON staff(school_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_deadlines_unique
+  ON deadlines(doc_type, school_year, deadline, level);
 `;
 
 async function migrate() {

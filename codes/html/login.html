@@ -6,54 +6,80 @@
   <title>Sign In – SMME Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../css/login.css?v=2.0.0" />
+  <link rel="stylesheet" href="../css/login.css?v=3.0.0" />
 </head>
 <body class="auth-body">
 
-  <!-- ── SPLASH SCREEN ── -->
-  <div class="splash" id="splash">
-    <div class="splash-logo">
-      <img src="../assets/smmelogo.jpg" alt="SMME" />
+  <!-- ═══════ SPLASH HERO ═══════ -->
+  <div class="splash-hero" id="splashHero">
+    <div class="splash-blur-bg"></div>
+    <div class="splash-hero-content">
+      <div class="splash-hero-logo">
+        <img src="../assets/smmelogo.svg" alt="SMME Portal" />
+      </div>
+      <h1 class="splash-hero-title">SMME</h1>
+      <p class="splash-hero-sub">School Management<br><span>Monitoring &amp; Evaluation</span></p>
+      <div class="splash-hero-loader">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
+      <small class="splash-hero-copy">&copy; 2026 Division Office</small>
     </div>
-    <p class="splash-name">School Management Monitoring &amp; Evaluation</p>
-    <div class="splash-bar"><div class="splash-bar-fill" id="splashFill"></div></div>
-    <p class="splash-status" id="splashStatus">Loading…</p>
   </div>
 
-  <!-- ── MAIN LAYOUT ── -->
+  <!-- ═══════ MAIN LAYOUT ═══════ -->
   <div class="auth-layout" id="authLayout">
 
     <!-- LEFT HERO -->
     <div class="auth-hero">
       <div class="hero-inner">
+
         <div class="hero-logo">
-          <img src="../assets/smmelogo.jpg" alt="SMME Logo" />
+          <img src="../assets/smmelogo.svg" alt="SMME Logo" />
         </div>
-        <h1 class="hero-title">School Management<br /><span>Monitoring &amp; Evaluation</span></h1>
-        <p class="hero-desc">A secure platform for private school staff to submit documents directly to the Division Office.</p>
+
+        <p class="hero-eyebrow">Division Office Portal</p>
+
+        <h1 class="hero-title">
+          School Management<br />
+          <span>Monitoring &amp; Evaluation</span>
+        </h1>
+
+        <p class="hero-desc">
+          A secure platform for private school staff to submit documents
+          directly to the Division Office — fast, organized, and reliable.
+        </p>
+
         <ul class="hero-features">
-          <li><i class="fas fa-shield-alt"></i><span>Secure document submission</span></li>
+          <li><i class="fas fa-shield-halved"></i><span>Secure document submission</span></li>
           <li><i class="fas fa-users"></i><span>Personal staff accounts</span></li>
-          <li><i class="fas fa-file-alt"></i><span>PDF, Word &amp; Excel support</span></li>
+          <li><i class="fas fa-file-lines"></i><span>PDF, Word &amp; Excel support</span></li>
           <li><i class="fas fa-graduation-cap"></i><span>All school levels covered</span></li>
         </ul>
-        <p class="hero-copy">&copy; 2026 Division Office – SMME Portal</p>
+
+        <div class="hero-divider"></div>
+        <p class="hero-copy">&copy; 2026 Division Office &mdash; SMME Portal v3.0</p>
+
       </div>
     </div>
 
-    <!-- RIGHT FORM AREA -->
+    <!-- RIGHT FORM -->
     <div class="auth-panel">
       <div class="auth-card" id="authCard">
 
         <!-- ── STEP 1: ROLE SELECTOR ── -->
         <div class="auth-step" id="stepRole">
           <div class="auth-card-logo">
-            <img src="../assets/smmelogo.jpg" alt="SMME" />
+            <img src="../assets/smmelogo.svg" alt="SMME" />
           </div>
           <h2 class="auth-title">Welcome back</h2>
           <p class="auth-sub">Choose your account type to continue</p>
+
+          <div class="auth-divider">Sign in as</div>
+
           <div class="role-list">
             <button class="role-btn" id="roleSchool">
               <div class="role-btn-icon staff">
@@ -65,6 +91,7 @@
               </div>
               <i class="fas fa-chevron-right role-btn-arrow"></i>
             </button>
+
             <button class="role-btn" id="roleAdmin">
               <div class="role-btn-icon admin">
                 <i class="fas fa-user-shield"></i>
@@ -90,7 +117,6 @@
           <p class="auth-sub">Sign in with your personal staff credentials</p>
 
           <form id="schoolLoginForm" novalidate>
-            <!-- School picker (JS builds the searchable dropdown here) -->
             <div class="field-group" id="staffSchoolGroup">
               <label class="field-label">School <span class="req">*</span></label>
               <select id="staffSchool" style="display:none">
@@ -103,7 +129,8 @@
               <label class="field-label" for="schoolEmail">Email Address <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-envelope field-icon"></i>
-                <input type="email" id="schoolEmail" class="field-input" placeholder="yourname@school.edu.ph" autocomplete="username" />
+                <input type="email" id="schoolEmail" class="field-input"
+                  placeholder="yourname@school.edu.ph" autocomplete="username" />
               </div>
               <span class="field-error" id="schoolEmailErr"></span>
             </div>
@@ -112,7 +139,8 @@
               <label class="field-label" for="schoolPassword">Password <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="schoolPassword" class="field-input" placeholder="Enter your password" autocomplete="current-password" />
+                <input type="password" id="schoolPassword" class="field-input"
+                  placeholder="Enter your password" autocomplete="current-password" />
                 <button type="button" class="field-eye" data-target="schoolPassword" aria-label="Toggle password">
                   <i class="fas fa-eye"></i>
                 </button>
@@ -121,7 +149,7 @@
             </div>
 
             <button type="submit" class="auth-btn staff-btn" id="schoolLoginBtn">
-              <i class="fas fa-sign-in-alt"></i> Sign In
+              <i class="fas fa-arrow-right-to-bracket"></i> Sign In
             </button>
           </form>
 
@@ -146,7 +174,8 @@
               <label class="field-label" for="adminUsername">Username <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-user field-icon"></i>
-                <input type="text" id="adminUsername" class="field-input" placeholder="Enter admin username" autocomplete="username" />
+                <input type="text" id="adminUsername" class="field-input"
+                  placeholder="Enter admin username" autocomplete="username" />
               </div>
               <span class="field-error" id="adminUsernameErr"></span>
             </div>
@@ -155,7 +184,8 @@
               <label class="field-label" for="adminPassword">Password <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="adminPassword" class="field-input" placeholder="Enter your password" autocomplete="current-password" />
+                <input type="password" id="adminPassword" class="field-input"
+                  placeholder="Enter your password" autocomplete="current-password" />
                 <button type="button" class="field-eye" data-target="adminPassword" aria-label="Toggle password">
                   <i class="fas fa-eye"></i>
                 </button>
@@ -164,7 +194,7 @@
             </div>
 
             <button type="submit" class="auth-btn admin-btn" id="adminLoginBtn">
-              <i class="fas fa-sign-in-alt"></i> Sign In as Admin
+              <i class="fas fa-arrow-right-to-bracket"></i> Sign In as Admin
             </button>
           </form>
         </div>
@@ -220,7 +250,6 @@
               <span class="field-error" id="regPositionErr"></span>
             </div>
 
-            <!-- School picker (JS builds the searchable dropdown here) -->
             <div class="field-group" id="regSchoolGroup">
               <label class="field-label">School <span class="req">*</span></label>
               <select id="regSchool" style="display:none">
@@ -238,18 +267,29 @@
               <span class="field-error" id="regEmailErr"></span>
             </div>
 
+            <!-- UPDATED PASSWORD SECTION -->
             <div class="field-row-2">
               <div class="field-group">
                 <label class="field-label" for="regPassword">Password <span class="req">*</span></label>
                 <div class="field-wrap">
                   <i class="fas fa-lock field-icon"></i>
-                  <input type="password" id="regPassword" class="field-input" placeholder="Min. 8 characters" />
+                  <input type="password" id="regPassword" class="field-input" placeholder="8 - 16 characters" />
                   <button type="button" class="field-eye" data-target="regPassword" aria-label="Toggle password">
                     <i class="fas fa-eye"></i>
                   </button>
                 </div>
+                <div class="pw-strength" id="pwStrength" hidden>
+                  <div class="pw-strength-bars">
+                    <div class="pw-bar" id="pwBar1"></div>
+                    <div class="pw-bar" id="pwBar2"></div>
+                    <div class="pw-bar" id="pwBar3"></div>
+                    <div class="pw-bar" id="pwBar4"></div>
+                  </div>
+                  <span class="pw-strength-label" id="pwStrengthLabel"></span>
+                </div>
                 <span class="field-error" id="regPasswordErr"></span>
               </div>
+
               <div class="field-group">
                 <label class="field-label" for="regConfirm">Confirm <span class="req">*</span></label>
                 <div class="field-wrap">
@@ -275,40 +315,22 @@
           </form>
         </div>
 
-      </div><!-- /auth-card -->
-    </div><!-- /auth-panel -->
-  </div><!-- /auth-layout -->
+      </div>
+    </div>
+  </div>
 
-  <script src="../js/api.js?v=2.0.0"></script>
-  <script src="../js/login.js?v=2.0.0"></script>
+  <script src="../js/api.js?v=3.0.0"></script>
+  <script src="../js/login.js?v=3.0.0"></script>
+
   <script>
-    /* ── Splash screen ── */
-    (function () {
-      const splash  = document.getElementById('splash');
-      const fill    = document.getElementById('splashFill');
-      const status  = document.getElementById('splashStatus');
-      const layout  = document.getElementById('authLayout');
-      const steps   = [
-        { w: '30%', t: 'Connecting…' },
-        { w: '60%', t: 'Loading resources…' },
-        { w: '85%', t: 'Almost ready…' },
-        { w: '100%', t: 'Welcome!' }
-      ];
-      let i = 0;
-      function tick() {
-        if (i >= steps.length) return;
-        fill.style.width  = steps[i].w;
-        status.textContent = steps[i].t;
-        i++;
-        if (i < steps.length) setTimeout(tick, 380);
-      }
-      setTimeout(tick, 200);
+    window.addEventListener('load', function () {
       setTimeout(function () {
-        splash.classList.add('splash-out');
-        layout.classList.add('layout-in');
-        setTimeout(function () { splash.style.display = 'none'; }, 600);
-      }, 1900);
-    })();
+        var s = document.getElementById('splashHero');
+        s.style.opacity = '0';
+        s.style.pointerEvents = 'none';
+        setTimeout(function () { s.style.display = 'none'; }, 560);
+      }, 1800);
+    });
   </script>
 </body>
 </html>

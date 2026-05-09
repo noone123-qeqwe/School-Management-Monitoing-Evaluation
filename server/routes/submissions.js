@@ -29,12 +29,31 @@ const ALLOWED_MIME = [
 
 const upload = multer({
   storage,
-  limits: { fileSize: 20 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (ALLOWED_MIME.includes(file.mimetype)) cb(null, true);
     else cb(new Error('Only PDF, Word, and Excel files are allowed.'));
   },
 });
+
+function cleanupUploadedFiles(files) {
+  if (!Array.isArray(files)) return;
+  files.forEach((file) => {
+    if (!file || !file.path) return;
+    try {
+      if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+    } catch (err) {
+      console.error('Failed to cleanup orphaned upload:', err.message);
+    }
+  });
+}
+
+function sanitizeDownloadName(name) {
+  return String(name || 'download')
+    .replace(/[\r\n"]/g, '')
+    .replace(/[^\w.\-()\s]/g, '_')
+    .trim() || 'download';
+}
 
 /* ── Reference number generator ── */
 function genRef() {
@@ -112,6 +131,7 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
     res.status(201).json({ ref, submission: sub });
   } catch (err) {
     await client.query('ROLLBACK');
+    cleanupUploadedFiles(req.files);
     console.error(err);
     res.status(500).json({ error: 'Failed to submit documents.' });
   } finally {
@@ -124,7 +144,9 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
 ───────────────────────────────────────────── */
 router.get('/', requireAuth, async (req, res) => {
   const { status, search, level, schoolId: qSchoolId, page = 1, limit = 50 } = req.query;
-  const offset = (parseInt(page) - 1) * parseInt(limit);
+  const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
+  const parsedLimit = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 100);
+  const offset = (parsedPage - 1) * parsedLimit;
 
   try {
     let where = [];
@@ -162,7 +184,7 @@ router.get('/', requireAuth, async (req, res) => {
       ORDER BY s.submitted_at DESC
       LIMIT $${i++} OFFSET $${i++}
     `;
-    params.push(parseInt(limit), offset);
+    params.push(parsedLimit, offset);
 
     const result = await pool.query(query, params);
     res.json(result.rows);
@@ -225,7 +247,10 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
     const subResult = await client.query(
       'SELECT * FROM submissions WHERE ref=$1', [req.params.ref]
     );
-    if (!subResult.rows.length) return res.status(404).json({ error: 'Submission not found.' });
+    if (!subResult.rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Submission not found.' });
+    }
     const sub = subResult.rows[0];
 
     const newStatus = action === 'approve' ? 'approved' : 'returned';
@@ -287,7 +312,8 @@ router.get('/:ref/files/:fileId', requireAuth, async (req, res) => {
     const filePath = path.join(uploadDir, file.stored_name);
     if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found on server.' });
 
-    res.setHeader('Content-Disposition', `attachment; filename="${file.original_name}"`);
+    const safeFileName = sanitizeDownloadName(file.original_name);
+    res.setHeader('Content-Disposition', `attachment; filename="${safeFileName}"`);
     res.setHeader('Content-Type', file.mime_type);
     res.sendFile(filePath);
   } catch (err) {
