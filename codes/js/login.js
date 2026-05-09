@@ -46,6 +46,17 @@ function buildPicker(selectId, groupId, schools) {
   const errEl  = document.getElementById(selectId + 'Err');
   if (!group || !select) return;
 
+  // 🛑 ADD THIS NEW BLOCK: 
+  // Populate the hidden select with options so the browser accepts the assigned value
+  schools.forEach(s => {
+    if (!select.querySelector(`option[value="${s.id}"]`)) {
+      const option = document.createElement('option');
+      option.value = s.id;
+      option.textContent = s.name;
+      select.appendChild(option);
+    }
+  });
+
   // Build markup
   const wrap = document.createElement('div');
   wrap.className = 'school-picker';
