@@ -17,6 +17,12 @@ services:
         generateValue: true
       - key: SESSION_SECRET
         generateValue: true
+      - key: SMME_ADMIN_PASSWORD
+        value: Admin@1234
+      - key: ALLOW_DEMO_SEED
+        value: "true"
+      - key: SMME_DEMO_STAFF_PASSWORD
+        value: Staff@1234
 
 databases:
   # ── PostgreSQL Database ─────────────────────────────────────

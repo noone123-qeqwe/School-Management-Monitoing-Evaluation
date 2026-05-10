@@ -123,8 +123,15 @@ async function seed() {
         ]) {
           await client.query(
             `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
-             VALUES ($1,$2,$3,$4,$5,$6,'approved') ON CONFLICT (email, school_id) DO NOTHING`,
+             VALUES ($1,$2,$3,$4,$5,$6,'approved')
+             ON CONFLICT (email, school_id) DO NOTHING`,
             [sid, first, last, position, email, hash]
+          );
+          // Also update if staff exists under a different school
+          await client.query(
+            `UPDATE staff SET school_id=$1, password=$2, status='approved'
+             WHERE email=$3 AND school_id != $1`,
+            [sid, hash, email]
           );
         }
         console.log('   ✅  Demo staff seeded.');
