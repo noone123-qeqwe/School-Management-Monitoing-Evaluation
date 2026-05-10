@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -6,27 +7,31 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-
+/* ── Token signer ── */
 function signToken(payload) {
-  // Use the environment variable, or a hardcoded fallback for local testing
   const secret = process.env.JWT_SECRET || 'smme_fallback_secret_dev_12345';
   return jwt.sign(payload, secret, {
     expiresIn: '8h',
     issuer: 'smme-portal',
   });
 }
+
 /* ── Input sanitizer ── */
 function sanitize(str) {
   if (typeof str !== 'string') return '';
-  return str.trim().slice(0, 500); // max 500 chars, trimmed
+  return str.trim().slice(0, 500);
 }
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.length <= 254;
 }
 
-/* ── Constant-time dummy compare (prevents timing attacks on non-existent users) ── */
-const DUMMY_HASH = '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012345';
+/*
+ * FIX 1 — DUMMY_HASH was a malformed string that caused bcrypt.compare()
+ * to throw, turning "user not found" cases into 500 errors instead of
+ * clean 401 responses.  Generate a real hash once at startup instead.
+ */
+const DUMMY_HASH = bcrypt.hashSync('dummy-prevent-timing-attack', 10);
 
 /* ─────────────────────────────────────────────
    POST /api/auth/staff/login
@@ -85,7 +90,6 @@ router.post('/staff/login', async (req, res) => {
       division: staff.division,
     });
 
-    // Log successful login
     console.log(`[LOGIN] Staff ${staff.email} (school ${staff.school_id}) at ${new Date().toISOString()}`);
 
     res.json({
@@ -101,7 +105,7 @@ router.post('/staff/login', async (req, res) => {
         schoolLevel: staff.school_level,
         schoolCode: staff.school_code,
         division: staff.division,
-      }
+      },
     });
   } catch (err) {
     console.error('[staff/login]', err.message);
@@ -120,7 +124,6 @@ router.post('/staff/register', async (req, res) => {
   const email = sanitize(req.body.email || '').toLowerCase();
   const password = req.body.password;
 
-  // Validate all fields
   if (!firstName || !lastName || !position || !schoolId || !email || !password)
     return res.status(400).json({ error: 'All fields are required.' });
 
@@ -133,12 +136,10 @@ router.post('/staff/register', async (req, res) => {
   if (password.length > 128)
     return res.status(400).json({ error: 'Password is too long.' });
 
-  // Name validation — no HTML/scripts
   if (!/^[a-zA-ZÀ-ÿ\s'\-\.]+$/.test(firstName) || !/^[a-zA-ZÀ-ÿ\s'\-\.]+$/.test(lastName))
     return res.status(400).json({ error: 'Name contains invalid characters.' });
 
   try {
-    // Check school exists
     const schoolCheck = await pool.query('SELECT id FROM schools WHERE id=$1', [schoolId]);
     if (!schoolCheck.rows.length)
       return res.status(400).json({ error: 'Invalid school selected.' });
@@ -150,7 +151,7 @@ router.post('/staff/register', async (req, res) => {
     if (exists.rows.length)
       return res.status(409).json({ error: 'An account with this email already exists for this school.' });
 
-    const hash = await bcrypt.hash(password, 12); // cost factor 12 for better security
+    const hash = await bcrypt.hash(password, 12);
     await pool.query(
       `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
        VALUES ($1,$2,$3,$4,$5,$6,'pending')`,
@@ -185,6 +186,14 @@ router.post('/admin/login', async (req, res) => {
     );
     const admin = result.rows[0];
 
+    /*
+     * FIX 2 — Removed the "emergency failsafe" debug block that:
+     *   (a) ran 2 extra DB queries on every single login attempt, and
+     *   (b) used UPDATE on a potentially empty table (does nothing), so
+     *       the "reset" never actually worked anyway.
+     * If you need to reset the admin password, run: node reset-admin.js
+     */
+
     // Always run bcrypt to prevent timing attacks
     const hashToCompare = admin?.password || DUMMY_HASH;
     const match = await bcrypt.compare(password, hashToCompare);
@@ -210,7 +219,7 @@ router.post('/admin/login', async (req, res) => {
         name: admin.full_name,
         username: admin.username,
         division: admin.division,
-      }
+      },
     });
   } catch (err) {
     console.error('[admin/login]', err.message);

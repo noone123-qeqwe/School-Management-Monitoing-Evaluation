@@ -157,11 +157,28 @@ async function seed() {
     }
 
     // 4. Deadlines
+    // 4. Deadlines
     for (const [docType, schoolYear, deadline, level] of DEADLINES_DATA) {
       await client.query(
         `INSERT INTO deadlines (doc_type, school_year, deadline, level)
-         SELECT $1,$2,$3,$4 WHERE NOT EXISTS (
+         SELECT $1::text, $2::text, $3::date, $4::text WHERE NOT EXISTS (
            SELECT 1 FROM deadlines WHERE doc_type=$1 AND school_year=$2 AND deadline=$3 AND level=$4
+         )`,
+        [docType, schoolYear, deadline, level]
+      );
+    }
+    console.log(`   ✅  ${DEADLINES_DATA.length} deadlines seeded.`);
+
+    // 4. Deadlines
+    for (const [docType, schoolYear, deadline, level] of DEADLINES_DATA) {
+      await client.query(
+        `INSERT INTO deadlines (doc_type, school_year, deadline, level)
+         SELECT $1::text, $2::text, $3::date, $4::text WHERE NOT EXISTS (
+           SELECT 1 FROM deadlines 
+           WHERE doc_type = $1::text 
+             AND school_year = $2::text 
+             AND deadline = $3::date 
+             AND level = $4::text
          )`,
         [docType, schoolYear, deadline, level]
       );
@@ -172,7 +189,9 @@ async function seed() {
     for (const [type, title, message] of NOTICES_DATA) {
       await client.query(
         `INSERT INTO notices (type, title, message)
-         SELECT $1,$2,$3 WHERE NOT EXISTS (SELECT 1 FROM notices WHERE title=$2)`,
+         SELECT $1::text, $2::text, $3::text WHERE NOT EXISTS (
+           SELECT 1 FROM notices WHERE title = $2::text
+         )`,
         [type, title, message]
       );
     }
