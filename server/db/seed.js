@@ -74,7 +74,7 @@ async function seed() {
   const allowDemo   = process.env.ALLOW_DEMO_SEED === 'true';
   const adminUser   = process.env.SMME_ADMIN_USER          || 'admin';
   const adminPass   = process.env.SMME_ADMIN_PASSWORD;
-  const demoStaffPw = process.env.SMME_DEMO_STAFF_PASSWORD || 'staff123';
+  const demoStaffPw = process.env.SMME_DEMO_STAFF_PASSWORD || 'Staff@1234';
 
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -100,7 +100,7 @@ async function seed() {
     const canSeedAdmin = !isProd || Boolean(adminPass);
     if (canSeedAdmin) {
       if (!adminPass) console.warn('   ⚠️   No SMME_ADMIN_PASSWORD — using insecure default. Set it before going live!');
-      const hash = await bcrypt.hash(adminPass || 'admin123', 12);
+      const hash = await bcrypt.hash(adminPass || 'Admin@1234', 12);
       await client.query(
         `INSERT INTO admins (username, full_name, position, division, email, password)
          VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (username) DO NOTHING`,
