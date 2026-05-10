@@ -68,12 +68,12 @@ const db = {
   ],
   staff: [
     {
-      id: 1, school_id: 1, first_name: 'Maria', last_name: 'Santos',
+      id: 1, school_id: 12, first_name: 'Maria', last_name: 'Santos',
       position: 'School Registrar', email: 'maria.santos@adventist.edu.ph',
       password: STAFF_HASH, status: 'approved', phone: null,
       created_at: new Date().toISOString(),
-      school_name: 'Adventist Elementary School-Placer, Inc.',
-      school_level: 'elementary', school_code: 'SCH-001',
+      school_name: 'Green Meadows Tiny Tots Inc.',
+      school_level: 'kindergarten', school_code: 'SCH-012',
       division: 'Division of Masbate',
     },
   ],

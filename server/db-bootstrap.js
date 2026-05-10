@@ -99,15 +99,15 @@ const db = {
   ],
   staff: [
     {
-      id: 1, school_id: 1,
+      id: 1, school_id: 12,
       first_name: 'Maria', last_name: 'Santos',
       position: 'School Registrar',
       email: 'maria.santos@adventist.edu.ph',
       password: STAFF_HASH, status: 'approved', phone: null,
       created_at: new Date().toISOString(),
       // Denormalised school fields (mirrors the real JOIN query)
-      school_name: 'Adventist Elementary School-Placer, Inc.',
-      school_level: 'elementary', school_code: 'SCH-001',
+      school_name: 'Green Meadows Tiny Tots Inc.',
+      school_level: 'kindergarten', school_code: 'SCH-012',
       division: 'Division of Masbate',
     },
   ],
@@ -371,13 +371,13 @@ async function seed() {
 
     // 3. Demo staff (dev / explicit opt-in only)
     if (!isProd || allowDemo) {
-      const { rows } = await client.query(`SELECT id FROM schools WHERE school_code = 'SCH-001'`);
+      const { rows } = await client.query(`SELECT id FROM schools WHERE school_code = 'SCH-012'`);
       if (rows.length > 0) {
         const sid  = rows[0].id;
         const hash = await bcrypt.hash(demoStaffPw, 12);
         for (const [first, last, position, email] of [
-          ['Maria', 'Santos', 'School Registrar', 'maria.santos@amazingprogress.edu.ph'],
-          ['Jose',  'Reyes',  'School Principal',  'jose.reyes@amazingprogress.edu.ph'],
+          ['Maria', 'Santos', 'School Registrar', 'maria.santos@adventist.edu.ph'],
+          ['Jose',  'Reyes',  'School Principal',  'jose.reyes@adventist.edu.ph'],
         ]) {
           await client.query(
             `INSERT INTO staff (school_id, first_name, last_name, position, email, password, status)
@@ -387,7 +387,7 @@ async function seed() {
         }
         console.log('   ✅  Demo staff seeded.');
       } else {
-        console.warn('   ⚠️   SCH-001 not found — demo staff skipped.');
+        console.warn('   ⚠️   SCH-012 not found — demo staff skipped.');
       }
     } else {
       console.log('   ℹ️   Demo staff skipped in production (set ALLOW_DEMO_SEED=true to override).');
