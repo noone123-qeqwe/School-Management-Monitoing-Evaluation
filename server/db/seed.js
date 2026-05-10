@@ -114,11 +114,10 @@ async function seed() {
       if (!adminPass) console.warn('   ⚠️   No SMME_ADMIN_PASSWORD — using insecure default. Set it before going live!');
       const hash = await bcrypt.hash(adminPass || 'Admin@1234', 12);
 
-      // FIX: Changed DO NOTHING to DO UPDATE SET password = EXCLUDED.password
       await client.query(
         `INSERT INTO admins (username, full_name, position, division, email, password)
-         VALUES ($1,$2,$3,$4,$5,$6) 
-         ON CONFLICT (username) DO NOTHING`,
+         VALUES ($1,$2,$3,$4,$5,$6)
+         ON CONFLICT (username) DO UPDATE SET password = EXCLUDED.password`,
         [adminUser, 'Division Administrator', 'Education Program Supervisor', 'Division of Masbate', 'admin@deped-masbate.gov.ph', hash]
       );
       console.log(`   ✅  Admin account seeded/updated (username: ${adminUser}).`);
@@ -156,28 +155,15 @@ async function seed() {
       console.log('   ℹ️   Demo staff skipped in production (set ALLOW_DEMO_SEED=true to override).');
     }
 
-    // 4. Deadlines
-    // 4. Deadlines
+    // 4. Deadlines — FIX 5: removed duplicate loop (was running twice)
     for (const [docType, schoolYear, deadline, level] of DEADLINES_DATA) {
       await client.query(
         `INSERT INTO deadlines (doc_type, school_year, deadline, level)
          SELECT $1::text, $2::text, $3::date, $4::text WHERE NOT EXISTS (
-           SELECT 1 FROM deadlines WHERE doc_type=$1 AND school_year=$2 AND deadline=$3 AND level=$4
-         )`,
-        [docType, schoolYear, deadline, level]
-      );
-    }
-    console.log(`   ✅  ${DEADLINES_DATA.length} deadlines seeded.`);
-
-    // 4. Deadlines
-    for (const [docType, schoolYear, deadline, level] of DEADLINES_DATA) {
-      await client.query(
-        `INSERT INTO deadlines (doc_type, school_year, deadline, level)
-         SELECT $1::text, $2::text, $3::date, $4::text WHERE NOT EXISTS (
-           SELECT 1 FROM deadlines 
-           WHERE doc_type = $1::text 
-             AND school_year = $2::text 
-             AND deadline = $3::date 
+           SELECT 1 FROM deadlines
+           WHERE doc_type = $1::text
+             AND school_year = $2::text
+             AND deadline = $3::date
              AND level = $4::text
          )`,
         [docType, schoolYear, deadline, level]

@@ -249,34 +249,38 @@ app.listen(PORT, async () => {
       return;
     }
 
-    const tables = await pool.query(
-      `SELECT table_name FROM information_schema.tables WHERE table_schema='public'`
-    );
-    const tableNames = tables.rows.map(r => r.table_name);
+    try {
+      // FIX 7 — use async exec so the event loop is never blocked during startup
+      const { exec } = require('child_process');
+      const { promisify } = require('util');
+      const execAsync = promisify(exec);
 
-    if (tableNames.length === 0) {
-      console.log('⚠️  No tables found — running migrations...');
-      const { execSync } = require('child_process');
-      try {
-        execSync('node server/db/migrate.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
-        execSync('node server/db/seed.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
-        console.log('✅ Auto-migration complete');
-      } catch (migErr) {
-        console.error('❌ Auto-migration failed:', migErr.message);
-      }
-    } else {
-      console.log('Tables found:', tableNames.join(', '));
-      try {
-        const { rows } = await pool.query('SELECT COUNT(*) FROM schools');
-        if (parseInt(rows[0].count) < 38) {
-          console.log('⚠️  School list outdated — re-seeding...');
-          const { execSync } = require('child_process');
-          execSync('node server/db/seed.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
-          console.log('✅ Schools re-seeded');
+      const tables = await pool.query(
+        `SELECT table_name FROM information_schema.tables WHERE table_schema='public'`
+      );
+      const tableNames = tables.rows.map(r => r.table_name);
+
+      if (tableNames.length === 0) {
+        console.log('⚠️  No tables found — running migrations...');
+        try {
+          await execAsync('node server/db/migrate.js', { cwd: path.join(__dirname, '..') });
+          await execAsync('node server/db/seed.js', { cwd: path.join(__dirname, '..') });
+          console.log('✅ Auto-migration complete');
+        } catch (migErr) {
+          console.error('❌ Auto-migration failed:', migErr.message);
         }
-      } catch { }
+      } else {
+        console.log('Tables found:', tableNames.join(', '));
+        try {
+          const { rows } = await pool.query('SELECT COUNT(*) FROM schools');
+          if (parseInt(rows[0].count) < 38) {
+            console.log('⚠️  School list outdated — re-seeding...');
+            await execAsync('node server/db/seed.js', { cwd: path.join(__dirname, '..') });
+            console.log('✅ Schools re-seeded');
+          }
+        } catch { }
+      }
+    } catch (err) {
+      console.error('❌ Database connection FAILED:', err.message);
     }
-  } catch (err) {
-    console.error('❌ Database connection FAILED:', err.message);
-  }
-});
+  });
