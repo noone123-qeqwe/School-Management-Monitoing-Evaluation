@@ -1064,3 +1064,15 @@ body.auth-body {
       linear-gradient(150deg, #f8fafc, #eef2ff);
   }
 }
+
+/* =========================================
+   ADDITIONAL POLISH
+   ========================================= */
+.auth-btn::after {
+  content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg); transition: none;
+}
+.auth-btn:hover::after { animation: buttonShimmer 0.7s ease-in-out; }
+@keyframes buttonShimmer { 100% { left: 200%; } }
+
