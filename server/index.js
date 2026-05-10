@@ -67,6 +67,7 @@ const generalLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many requests. Please try again later.' },
   skip: (req) => !req.path.startsWith('/api'),
+  validate: { xForwardedForHeader: false },
 });
 
 const authLimiter = rateLimit({
@@ -76,12 +77,14 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many login attempts. Please wait 15 minutes before trying again.' },
   skipSuccessfulRequests: true, // only count failed attempts
+  validate: { xForwardedForHeader: false },
 });
 
 const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 20,
   message: { error: 'Upload limit reached. Please try again in an hour.' },
+  validate: { xForwardedForHeader: false },
 });
 
 app.use(generalLimiter);
