@@ -20,6 +20,9 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === 'production';
 
+// Trust first proxy (required on Render / reverse-proxy hosts)
+app.set('trust proxy', 1);
+
 /* ══════════════════════════════════════════════════════
    SECURITY HEADERS (Helmet)
    Sets X-Frame-Options, X-Content-Type-Options,
