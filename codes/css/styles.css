@@ -701,32 +701,32 @@ textarea { resize: vertical; min-height: 100px; }
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 36px 40px;
+  padding: 48px 56px;
   border: 1px solid rgba(255,255,255,.1);
-  border-radius: 24px;
+  border-radius: 28px;
   background: rgba(255,255,255,.04);
   backdrop-filter: blur(12px);
 }
 
 .intro-logo-img {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 16px;
-  border-radius: 18px;
-  box-shadow: 0 0 0 6px rgba(30,58,95,.15), 0 0 40px rgba(30,58,95,.25);
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+  border-radius: 22px;
+  box-shadow: 0 0 0 8px rgba(30,58,95,.18), 0 0 48px rgba(30,58,95,.3);
 }
 
 .intro-title {
-  font-size: 2rem;
+  font-size: 2.8rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 
 .intro-subtitle {
   color: rgba(255,255,255,.6);
-  font-size: 0.88rem;
-  margin: 0 0 16px;
+  font-size: 1rem;
+  margin: 0 0 20px;
 }
 
 .intro-loader {

@@ -135,9 +135,9 @@ body.auth-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  padding: 52px 44px 40px;
-  border-radius: 24px;
+  gap: 22px;
+  padding: 60px 56px 48px;
+  border-radius: 28px;
   background: rgba(255,255,255,.03);
   border: 1px solid rgba(255,255,255,.1);
   backdrop-filter: blur(20px);
@@ -146,8 +146,8 @@ body.auth-body {
 }
 
 .splash-hero-logo {
-  width: 140px; height: 140px;
-  border-radius: 22px;
+  width: 180px; height: 180px;
+  border-radius: 26px;
   overflow: hidden;
   border: 2px solid rgba(212,160,23,.4);
   box-shadow: 0 0 0 8px rgba(30,58,95,.15), 0 0 60px rgba(30,58,95,.3), 0 0 120px rgba(212,160,23,.1);
@@ -157,7 +157,7 @@ body.auth-body {
 
 .splash-hero-title {
   font-family: 'Plus Jakarta Sans', 'Sora', sans-serif;
-  font-size: 2.8rem;
+  font-size: 3.6rem;
   font-weight: 800;
   letter-spacing: -2px;
   color: #ffffff;
@@ -165,7 +165,7 @@ body.auth-body {
   text-shadow: 0 2px 12px rgba(0,0,0,.3);
 }
 .splash-hero-sub {
-  font-size: .9rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: var(--text-inv-2);
   text-align: center;
