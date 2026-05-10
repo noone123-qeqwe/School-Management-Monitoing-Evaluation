@@ -265,9 +265,10 @@ body.dash-body {
 .sidebar-logo-img {
   width: 52px;
   height: 52px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-right: 12px;
   border: 2px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(212,160,23,.15);
 }
 
 .sidebar-brand {
@@ -930,7 +931,10 @@ textarea {
 }
 
 .hero h1 span {
-  color: #93c5fd;
+  background: linear-gradient(135deg, #93c5fd 0%, #d4a017 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero p {
@@ -1040,9 +1044,9 @@ textarea {
   place-items: center;
   color: #fff;
   background:
-    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.28), transparent 30%),
-    radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.2), transparent 35%),
-    linear-gradient(135deg, #07142c, #0f2450);
+    radial-gradient(circle at 20% 20%, rgba(30,58,95,.35), transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(212,160,23,.18), transparent 35%),
+    linear-gradient(135deg, #0b1d3b, #152d4a);
 }
 
 .intro-screen::after {
