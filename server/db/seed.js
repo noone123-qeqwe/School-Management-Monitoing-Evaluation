@@ -85,6 +85,18 @@ async function seed() {
   try {
     console.log('\n🌱  Seeding database…\n');
 
+    // 0. Cleanup: remove duplicate schools (keep lowest id per school_code)
+    await client.query(`
+      DELETE FROM schools
+      WHERE id NOT IN (
+        SELECT MIN(id) FROM schools GROUP BY school_code
+      );
+    `).catch(() => {});
+    // Ensure unique constraint exists
+    await client.query(`
+      ALTER TABLE schools ADD CONSTRAINT IF NOT EXISTS schools_school_code_key UNIQUE (school_code);
+    `).catch(() => {});
+
     // 1. Schools
     console.log('   Seeding schools…');
     for (const s of SCHOOL_LIST) {
@@ -94,7 +106,7 @@ async function seed() {
         [s.name, s.school_code, s.level, s.division, s.email]
       );
     }
-    console.log(`   ✅  ${SCHOOL_LIST.length} schools seeded (duplicates skipped).`);
+    console.log(`   ✅  ${SCHOOL_LIST.length} schools seeded (duplicates cleaned).`);
 
     // 2. Admin account
     const canSeedAdmin = !isProd || Boolean(adminPass);
