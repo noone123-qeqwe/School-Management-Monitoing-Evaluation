@@ -4,19 +4,19 @@ try {
   // If dotenv isn't installed/resolvable in this runtime, env vars may already be provided (e.g., Render).
 }
 
-const express    = require('express');
-const path       = require('path');
-const cors       = require('cors');
-const helmet     = require('helmet');
-const rateLimit  = require('express-rate-limit');
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
-const authRoutes          = require('./routes/auth');
-const submissionRoutes    = require('./routes/submissions');
-const staffRoutes         = require('./routes/staff');
-const adminRoutes         = require('./routes/admin');
-const notificationRoutes  = require('./routes/notifications');
+const authRoutes = require('./routes/auth');
+const submissionRoutes = require('./routes/submissions');
+const staffRoutes = require('./routes/staff');
+const adminRoutes = require('./routes/admin');
+const notificationRoutes = require('./routes/notifications');
 
-const app  = express();
+const app = express();
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -31,14 +31,14 @@ app.set('trust proxy', 1);
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc:  ["'self'"],
-      scriptSrc:   ["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com'],
-      styleSrc:    ["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com'],
-      fontSrc:     ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com'],
-      imgSrc:      ["'self'", 'data:', 'blob:'],
-      connectSrc:  ["'self'"],
-      frameSrc:    ["'none'"],
-      objectSrc:   ["'none'"],
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com'],
+      fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com'],
+      imgSrc: ["'self'", 'data:', 'blob:'],
+      connectSrc: ["'self'"],
+      frameSrc: ["'self'"], // Changed from 'none' to allow PDF previews
+      objectSrc: ["'self'"],
       upgradeInsecureRequests: isProd ? [] : null,
     },
   },
@@ -67,6 +67,15 @@ const generalLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many requests. Please try again later.' },
   skip: (req) => !req.path.startsWith('/api'),
+  validate: { xForwardedForHeader: false },
+});
+
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // Limit each IP to 5 registrations per hour
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many accounts created from this IP. Please try again later.' },
   validate: { xForwardedForHeader: false },
 });
 
@@ -107,18 +116,18 @@ app.use((req, res, next) => {
 /* ══════════════════════════════════════════════════════
    API ROUTES
 ══════════════════════════════════════════════════════ */
-app.use('/api/auth/staff/login',    authLimiter);
-app.use('/api/auth/admin/login',    authLimiter);
+app.use('/api/auth/staff/login', authLimiter);
+app.use('/api/auth/admin/login', authLimiter);
 app.use('/api/auth/staff/register', authLimiter);
 app.use('/api/submissions', (req, res, next) => {
   if (req.method === 'POST') return uploadLimiter(req, res, next);
   return next();
 });
 
-app.use('/api/auth',          authRoutes);
-app.use('/api/submissions',   submissionRoutes);
-app.use('/api/staff',         staffRoutes);
-app.use('/api/admin',         adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/submissions', submissionRoutes);
+app.use('/api/staff', staffRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 /* ══════════════════════════════════════════════════════
@@ -148,12 +157,11 @@ app.get('/pages/:page', (req, res) => {
 });
 
 const STATIC_ROOT_CANDIDATES = [
-  path.join(__dirname, '../codes'),      // <project>/codes (from server/)
-  path.join(__dirname, '../../codes'),  // sometimes run from a different cwd
-  path.join(__dirname, '../../Files/codes'), // legacy Render/workspace layouts
-  path.join(__dirname, '../Files/codes'),
+  path.join(__dirname, '../public'), // Added to search for public folder
+  path.join(__dirname, '../codes'),
+  path.join(__dirname, '../../codes'),
+  path.join(__dirname, '../../Files/codes'),
 ];
-
 const STATIC_ROOT = STATIC_ROOT_CANDIDATES.find(p => {
   try {
     return require('fs').existsSync(p);
@@ -251,7 +259,7 @@ app.listen(PORT, async () => {
       const { execSync } = require('child_process');
       try {
         execSync('node server/db/migrate.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
-        execSync('node server/db/seed.js',    { stdio: 'inherit', cwd: path.join(__dirname, '..') });
+        execSync('node server/db/seed.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
         console.log('✅ Auto-migration complete');
       } catch (migErr) {
         console.error('❌ Auto-migration failed:', migErr.message);
@@ -266,7 +274,7 @@ app.listen(PORT, async () => {
           execSync('node server/db/seed.js', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
           console.log('✅ Schools re-seeded');
         }
-      } catch {}
+      } catch { }
     }
   } catch (err) {
     console.error('❌ Database connection FAILED:', err.message);

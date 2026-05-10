@@ -118,8 +118,7 @@ async function seed() {
       await client.query(
         `INSERT INTO admins (username, full_name, position, division, email, password)
          VALUES ($1,$2,$3,$4,$5,$6) 
-         ON CONFLICT (username) DO UPDATE 
-         SET password = EXCLUDED.password`,
+         ON CONFLICT (username) DO NOTHING`,
         [adminUser, 'Division Administrator', 'Education Program Supervisor', 'Division of Masbate', 'admin@deped-masbate.gov.ph', hash]
       );
       console.log(`   ✅  Admin account seeded/updated (username: ${adminUser}).`);

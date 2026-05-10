@@ -30,7 +30,7 @@ window.addEventListener('load', async () => {
 let _schools = [];
 async function loadSchools() {
   if (_schools.length) return _schools;
-  try { _schools = await API.auth.getSchools(); } catch (e) {}
+  try { _schools = await API.auth.getSchools(); } catch (e) { }
   return _schools;
 }
 
@@ -41,9 +41,9 @@ async function loadSchools() {
 function buildPicker(selectId, groupId, schools) {
   if (document.getElementById(selectId + '_picker')) return; // already built
 
-  const group  = document.getElementById(groupId);
+  const group = document.getElementById(groupId);
   const select = document.getElementById(selectId);
-  const errEl  = document.getElementById(selectId + 'Err');
+  const errEl = document.getElementById(selectId + 'Err');
   if (!group || !select) return;
 
   // 🛑 ADD THIS NEW BLOCK: 
@@ -63,12 +63,12 @@ function buildPicker(selectId, groupId, schools) {
   wrap.id = selectId + '_picker';
   wrap.innerHTML =
     '<div class="school-picker-field" id="' + selectId + '_pfield">' +
-      '<i class="fas fa-school school-picker-icon"></i>' +
-      '<input type="text" id="' + selectId + '_pinput"' +
-        ' class="school-picker-input" placeholder="Search for your school…"' +
-        ' autocomplete="off" />' +
-      '<button type="button" class="school-picker-clear" id="' + selectId + '_pclear"' +
-        ' hidden aria-label="Clear"><i class="fas fa-times"></i></button>' +
+    '<i class="fas fa-school school-picker-icon"></i>' +
+    '<input type="text" id="' + selectId + '_pinput"' +
+    ' class="school-picker-input" placeholder="Search for your school…"' +
+    ' autocomplete="off" />' +
+    '<button type="button" class="school-picker-clear" id="' + selectId + '_pclear"' +
+    ' hidden aria-label="Clear"><i class="fas fa-times"></i></button>' +
     '</div>' +
     '<ul class="school-picker-list" id="' + selectId + '_plist" role="listbox" hidden></ul>';
 
@@ -76,10 +76,10 @@ function buildPicker(selectId, groupId, schools) {
   if (errEl) group.insertBefore(wrap, errEl);
   else group.appendChild(wrap);
 
-  const pfield  = document.getElementById(selectId + '_pfield');
-  const pinput  = document.getElementById(selectId + '_pinput');
-  const plist   = document.getElementById(selectId + '_plist');
-  const pclear  = document.getElementById(selectId + '_pclear');
+  const pfield = document.getElementById(selectId + '_pfield');
+  const pinput = document.getElementById(selectId + '_pinput');
+  const plist = document.getElementById(selectId + '_plist');
+  const pclear = document.getElementById(selectId + '_pclear');
 
   function render(q) {
     q = (q || '').trim().toLowerCase();
@@ -92,17 +92,17 @@ function buildPicker(selectId, groupId, schools) {
     }
     plist.innerHTML = hits.map(s =>
       '<li class="sp-option" role="option" data-id="' + s.id + '" data-name="' + API.escapeHtml(s.name) + '">' +
-        '<span class="sp-option-name">' + API.escapeHtml(s.name) + '</span>' +
-        '<span class="sp-option-level">' + API.escapeHtml(API.levelLabel ? API.levelLabel(s.level) : (s.level || '')) + '</span>' +
+      '<span class="sp-option-name">' + API.escapeHtml(s.name) + '</span>' +
+      '<span class="sp-option-level">' + API.escapeHtml(API.levelLabel ? API.levelLabel(s.level) : (s.level || '')) + '</span>' +
       '</li>'
     ).join('');
     plist.querySelectorAll('.sp-option').forEach(opt => {
       opt.addEventListener('mousedown', e => {
         e.preventDefault();
-        select.value  = opt.dataset.id;
-        pinput.value  = opt.dataset.name;
+        select.value = opt.dataset.id;
+        pinput.value = opt.dataset.name;
         pclear.hidden = false;
-        plist.hidden  = true;
+        plist.hidden = true;
         pfield.classList.remove('focused', 'invalid');
         if (errEl) errEl.textContent = '';
         select.dispatchEvent(new Event('change'));
@@ -116,30 +116,30 @@ function buildPicker(selectId, groupId, schools) {
     plist.hidden = false;
   });
   pinput.addEventListener('input', () => {
-    select.value  = '';
+    select.value = '';
     pclear.hidden = !pinput.value;
     render(pinput.value);
-    plist.hidden  = false;
+    plist.hidden = false;
   });
   pinput.addEventListener('blur', () => {
     pfield.classList.remove('focused');
     // Increase delay to 250ms to ensure the selection is captured 
     setTimeout(() => {
       plist.hidden = true;
-      if (!select.value) { 
-        pinput.value = ''; 
-        pclear.hidden = true; 
+      if (!select.value) {
+        pinput.value = '';
+        pclear.hidden = true;
       } else {
         // Re-verify the selected school name persists in the input
         const m = schools.find(s => String(s.id) === String(select.value));
         if (m) pinput.value = m.name;
       }
-    }, 250); 
+    }, 500);
   });
   pclear.addEventListener('click', e => {
     e.stopPropagation();
-    select.value  = '';
-    pinput.value  = '';
+    select.value = '';
+    pinput.value = '';
     pclear.hidden = true;
     pfield.classList.remove('invalid');
     if (errEl) errEl.textContent = '';
@@ -151,15 +151,15 @@ function buildPicker(selectId, groupId, schools) {
 async function initPickers() {
   const schools = await loadSchools();
   buildPicker('staffSchool', 'staffSchoolGroup', schools);
-  buildPicker('regSchool',   'regSchoolGroup',   schools);
+  buildPicker('regSchool', 'regSchoolGroup', schools);
 }
 
 /* ── Panel navigation ── */
-const stepRole     = document.getElementById('stepRole');
-const stepStaff    = document.getElementById('stepStaff');
-const stepAdmin    = document.getElementById('stepAdmin');
+const stepRole = document.getElementById('stepRole');
+const stepStaff = document.getElementById('stepStaff');
+const stepAdmin = document.getElementById('stepAdmin');
 const stepRegister = document.getElementById('stepRegister');
-const allSteps     = [stepRole, stepStaff, stepAdmin, stepRegister];
+const allSteps = [stepRole, stepStaff, stepAdmin, stepRegister];
 
 function showStep(step) {
   allSteps.forEach(s => s.setAttribute('hidden', ''));
@@ -176,14 +176,14 @@ document.getElementById('registerLink').addEventListener('click', async e => {
   showStep(stepRegister);
   await initPickers();
 });
-document.getElementById('backFromStaff').addEventListener('click',    () => showStep(stepRole));
-document.getElementById('backFromAdmin').addEventListener('click',     () => showStep(stepRole));
-document.getElementById('backFromRegister').addEventListener('click',  () => showStep(stepStaff));
+document.getElementById('backFromStaff').addEventListener('click', () => showStep(stepRole));
+document.getElementById('backFromAdmin').addEventListener('click', () => showStep(stepRole));
+document.getElementById('backFromRegister').addEventListener('click', () => showStep(stepStaff));
 
 /* ── Password toggle ── */
 document.querySelectorAll('.field-eye').forEach(btn => {
   btn.addEventListener('click', () => {
-    const inp  = document.getElementById(btn.dataset.target);
+    const inp = document.getElementById(btn.dataset.target);
     const icon = btn.querySelector('i');
     if (inp.type === 'password') {
       inp.type = 'text';
@@ -198,16 +198,16 @@ document.querySelectorAll('.field-eye').forEach(btn => {
 /* ── Validation helpers ── */
 function fieldErr(id, errId, msg) {
   const pfield = document.getElementById(id + '_pfield'); // picker
-  const el     = document.getElementById(id);
-  const err    = document.getElementById(errId);
+  const el = document.getElementById(id);
+  const err = document.getElementById(errId);
   if (pfield) pfield.classList.add('invalid');
   else if (el) el.classList.add('invalid');
   if (err) err.textContent = msg;
 }
 function fieldOk(id, errId) {
   const pfield = document.getElementById(id + '_pfield');
-  const el     = document.getElementById(id);
-  const err    = document.getElementById(errId);
+  const el = document.getElementById(id);
+  const err = document.getElementById(errId);
   if (pfield) pfield.classList.remove('invalid');
   else if (el) el.classList.remove('invalid');
   if (err) err.textContent = '';
@@ -235,17 +235,17 @@ document.getElementById('schoolLoginForm').addEventListener('submit', async e =>
   hideAlert('schoolLoginForm');
 
   const schoolId = document.getElementById('staffSchool').value;
-  const email    = document.getElementById('schoolEmail').value.trim();
+  const email = document.getElementById('schoolEmail').value.trim();
   const password = document.getElementById('schoolPassword').value;
   let ok = true;
 
-  fieldOk('staffSchool',    'staffSchoolErr');
-  fieldOk('schoolEmail',    'schoolEmailErr');
+  fieldOk('staffSchool', 'staffSchoolErr');
+  fieldOk('schoolEmail', 'schoolEmailErr');
   fieldOk('schoolPassword', 'schoolPasswordErr');
 
-  if (!schoolId) { fieldErr('staffSchool',    'staffSchoolErr',    'Please select your school.');  ok = false; }
-  if (!email)    { fieldErr('schoolEmail',    'schoolEmailErr',    'Email is required.');           ok = false; }
-  if (!password) { fieldErr('schoolPassword', 'schoolPasswordErr', 'Password is required.');        ok = false; }
+  if (!schoolId) { fieldErr('staffSchool', 'staffSchoolErr', 'Please select your school.'); ok = false; }
+  if (!email) { fieldErr('schoolEmail', 'schoolEmailErr', 'Email is required.'); ok = false; }
+  if (!password) { fieldErr('schoolPassword', 'schoolPasswordErr', 'Password is required.'); ok = false; }
   if (!ok) return;
 
   const btn = document.getElementById('schoolLoginBtn');
@@ -261,8 +261,8 @@ document.getElementById('schoolLoginForm').addEventListener('submit', async e =>
   }
 });
 
-document.getElementById('staffSchool').addEventListener('change',   () => fieldOk('staffSchool',    'staffSchoolErr'));
-document.getElementById('schoolEmail').addEventListener('input',    () => fieldOk('schoolEmail',    'schoolEmailErr'));
+document.getElementById('staffSchool').addEventListener('change', () => fieldOk('staffSchool', 'staffSchoolErr'));
+document.getElementById('schoolEmail').addEventListener('input', () => fieldOk('schoolEmail', 'schoolEmailErr'));
 document.getElementById('schoolPassword').addEventListener('input', () => fieldOk('schoolPassword', 'schoolPasswordErr'));
 
 /* ── Admin login ── */
@@ -303,24 +303,24 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
   hideAlert('registerForm');
 
   const firstName = document.getElementById('regFirstName').value.trim();
-  const lastName  = document.getElementById('regLastName').value.trim();
-  const position  = document.getElementById('regPosition').value;
-  const schoolId  = document.getElementById('regSchool').value;
-  const email     = document.getElementById('regEmail').value.trim();
-  const pw        = document.getElementById('regPassword').value;
-  const confirm   = document.getElementById('regConfirm').value;
-  const terms     = document.getElementById('regTerms').checked;
+  const lastName = document.getElementById('regLastName').value.trim();
+  const position = document.getElementById('regPosition').value;
+  const schoolId = document.getElementById('regSchool').value;
+  const email = document.getElementById('regEmail').value.trim();
+  const pw = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const terms = document.getElementById('regTerms').checked;
   let ok = true;
 
   const checks = [
     ['regFirstName', 'regFirstNameErr', !firstName, 'First name is required.'],
-    ['regLastName',  'regLastNameErr',  !lastName,  'Last name is required.'],
-    ['regPosition',  'regPositionErr',  !position,  'Please select your position.'],
-    ['regSchool',    'regSchoolErr',    !schoolId,  'Please select your school.'],
-    ['regEmail',     'regEmailErr',     !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'A valid email is required.'],
+    ['regLastName', 'regLastNameErr', !lastName, 'Last name is required.'],
+    ['regPosition', 'regPositionErr', !position, 'Please select your position.'],
+    ['regSchool', 'regSchoolErr', !schoolId, 'Please select your school.'],
+    ['regEmail', 'regEmailErr', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'A valid email is required.'],
     // ENFORCED: 8 - 16 characters as per requirements
-    ['regPassword',  'regPasswordErr',  pw.length < 8 || pw.length > 16, 'Password must be 8 - 16 characters.'],
-    ['regConfirm',   'regConfirmErr',   pw !== confirm, 'Passwords do not match.'],
+    ['regPassword', 'regPasswordErr', pw.length < 8 || pw.length > 16, 'Password must be 8 - 16 characters.'],
+    ['regConfirm', 'regConfirmErr', pw !== confirm, 'Passwords do not match.'],
   ];
   checks.forEach(([id, errId, cond, msg]) => {
     if (cond) { fieldErr(id, errId, msg); ok = false; }
@@ -378,35 +378,35 @@ document.getElementById('registerForm').addEventListener('submit', async e => {
   }
 });
 
-document.getElementById('regFirstName').addEventListener('input',  () => fieldOk('regFirstName', 'regFirstNameErr'));
-document.getElementById('regLastName').addEventListener('input',   () => fieldOk('regLastName',  'regLastNameErr'));
-document.getElementById('regPosition').addEventListener('change',  () => fieldOk('regPosition',  'regPositionErr'));
-document.getElementById('regEmail').addEventListener('input',      () => fieldOk('regEmail',     'regEmailErr'));
-document.getElementById('regPassword').addEventListener('input',   () => fieldOk('regPassword',  'regPasswordErr'));
-document.getElementById('regConfirm').addEventListener('input',    () => fieldOk('regConfirm',   'regConfirmErr'));
+document.getElementById('regFirstName').addEventListener('input', () => fieldOk('regFirstName', 'regFirstNameErr'));
+document.getElementById('regLastName').addEventListener('input', () => fieldOk('regLastName', 'regLastNameErr'));
+document.getElementById('regPosition').addEventListener('change', () => fieldOk('regPosition', 'regPositionErr'));
+document.getElementById('regEmail').addEventListener('input', () => fieldOk('regEmail', 'regEmailErr'));
+document.getElementById('regPassword').addEventListener('input', () => fieldOk('regPassword', 'regPasswordErr'));
+document.getElementById('regConfirm').addEventListener('input', () => fieldOk('regConfirm', 'regConfirmErr'));
 
 /* ── Password strength meter ── */
 (function initPwStrength() {
-  const pwInput   = document.getElementById('regPassword');
+  const pwInput = document.getElementById('regPassword');
   const container = document.getElementById('pwStrength');
-  const label     = document.getElementById('pwStrengthLabel');
-  const bars      = [1,2,3,4].map(n => document.getElementById('pwBar' + n));
+  const label = document.getElementById('pwStrengthLabel');
+  const bars = [1, 2, 3, 4].map(n => document.getElementById('pwBar' + n));
   if (!pwInput || !container) return;
 
   const levels = [
-    { min: 0,  score: 0, cls: '',       text: '' },
-    { min: 1,  score: 1, cls: 'weak',   text: 'Weak' },
-    { min: 2,  score: 2, cls: 'fair',   text: 'Fair' },
-    { min: 3,  score: 3, cls: 'good',   text: 'Good' },
-    { min: 4,  score: 4, cls: 'strong', text: 'Strong' },
+    { min: 0, score: 0, cls: '', text: '' },
+    { min: 1, score: 1, cls: 'weak', text: 'Weak' },
+    { min: 2, score: 2, cls: 'fair', text: 'Fair' },
+    { min: 3, score: 3, cls: 'good', text: 'Good' },
+    { min: 4, score: 4, cls: 'strong', text: 'Strong' },
   ];
 
   function score(pw) {
     let s = 0;
     if (pw.length >= 8 && pw.length <= 16) s++; // valid length range: 8-16
-    if (/[A-Z]/.test(pw))                  s++;
-    if (/[0-9]/.test(pw))                  s++;
-    if (/[^A-Za-z0-9]/.test(pw))           s++;
+    if (/[A-Z]/.test(pw)) s++;
+    if (/[0-9]/.test(pw)) s++;
+    if (/[^A-Za-z0-9]/.test(pw)) s++;
     return s;
   }
 

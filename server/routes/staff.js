@@ -1,6 +1,6 @@
 const express = require('express');
-const bcrypt  = require('bcryptjs');
-const pool    = require('../db/pool');
+const bcrypt = require('bcryptjs');
+const pool = require('../db/pool');
 const { requireAdmin, requireStaff, requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
@@ -15,8 +15,8 @@ router.get('/', requireAuth, async (req, res) => {
       const { search, schoolId, status } = req.query;
       let where = []; let params = []; let i = 1;
       if (schoolId) { where.push(`s.school_id=$${i++}`); params.push(schoolId); }
-      if (status)   { where.push(`s.status=$${i++}`);    params.push(status); }
-      if (search)   {
+      if (status) { where.push(`s.status=$${i++}`); params.push(status); }
+      if (search) {
         where.push(`(s.first_name ILIKE $${i} OR s.last_name ILIKE $${i} OR s.email ILIKE $${i})`);
         params.push('%' + search + '%'); i++;
       }
@@ -88,7 +88,8 @@ router.patch('/me/password', requireStaff, async (req, res) => {
     return res.status(400).json({ error: 'New password must be at least 8 characters.' });
   try {
     const result = await pool.query('SELECT password FROM staff WHERE id=$1', [req.user.id]);
-    const match  = await bcrypt.compare(currentPassword, result.rows[0].password);
+    if (!result.rows.length) return res.status(404).json({ error: 'User not found.' });
+    const match = await bcrypt.compare(currentPassword, result.rows[0].password);
     if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
     const hash = await bcrypt.hash(newPassword, 10);
     await pool.query('UPDATE staff SET password=$1 WHERE id=$2', [hash, req.user.id]);

@@ -1,8 +1,8 @@
-const express  = require('express');
-const multer   = require('multer');
-const path     = require('path');
-const fs       = require('fs');
-const pool     = require('../db/pool');
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const pool = require('../db/pool');
 const { requireAuth, requireAdmin, requireStaff } = require('../middleware/auth');
 
 const router = express.Router();
@@ -13,7 +13,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
-  filename:    (req, file, cb) => {
+  filename: (req, file, cb) => {
     const safe = Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
     cb(null, safe);
   },
@@ -37,7 +37,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (ALLOWED_MIME.includes(file.mimetype) || hasAllowedExtension(file.originalname)) cb(null, true);
+    if (ALLOWED_MIME.includes(file.mimetype) && hasAllowedExtension(file.originalname)) cb(null, true);
     else cb(new Error('Only PDF, Word, and Excel files are allowed.'));
   },
 });
@@ -61,11 +61,10 @@ function sanitizeDownloadName(name) {
     .trim() || 'download';
 }
 
-/* ── Reference number generator ── */
 function genRef() {
   const year = new Date().getFullYear();
-  const num  = String(Math.floor(Math.random() * 90000) + 10000);
-  return `SMME-${year}-${num}`;
+  const rand = Math.floor(Math.random() * 900000) + 100000; // Increased to 6 digits
+  return `SMME-${year}-${rand}`;
 }
 
 /* ── Audit helper ── */
@@ -218,7 +217,7 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'received',$9,$10)
        RETURNING *`,
       [ref, req.user.schoolId, req.user.id, docType, schoolYear, subject,
-       remarks || null, req.files.length, originalRef || null, isRevision]
+        remarks || null, req.files.length, originalRef || null, isRevision]
     );
     const sub = result.rows[0];
 
@@ -370,21 +369,21 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
     // Notify the school
     await notify(client, {
       schoolId: sub.school_id,
-      type:     action === 'approve' ? 'success' : 'warning',
-      title:    action === 'approve' ? 'Submission Approved' : 'Submission Returned',
-      message:  action === 'approve'
+      type: action === 'approve' ? 'success' : 'warning',
+      title: action === 'approve' ? 'Submission Approved' : 'Submission Returned',
+      message: action === 'approve'
         ? `Your submission ${req.params.ref} has been approved by the Division Office.`
         : `Your submission ${req.params.ref} was returned. Feedback: ${feedback}`,
       ref: req.params.ref,
     });
 
     await audit(client, {
-      action:   action === 'approve' ? 'approve' : 'return',
-      ref:      req.params.ref,
+      action: action === 'approve' ? 'approve' : 'return',
+      ref: req.params.ref,
       schoolId: sub.school_id,
-      adminId:  req.user.id,
-      docType:  sub.doc_type,
-      remarks:  feedback || null,
+      adminId: req.user.id,
+      docType: sub.doc_type,
+      remarks: feedback || null,
     });
 
     await client.query('COMMIT');

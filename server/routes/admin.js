@@ -1,6 +1,6 @@
 const express = require('express');
-const bcrypt  = require('bcryptjs');
-const pool    = require('../db/pool');
+const bcrypt = require('bcryptjs');
+const pool = require('../db/pool');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -40,11 +40,11 @@ router.get('/stats', requireAdmin, async (req, res) => {
       pool.query("SELECT COUNT(*) FROM staff WHERE status='pending'"),
     ]);
     res.json({
-      total:        parseInt(total.rows[0].count),
-      pending:      parseInt(pending.rows[0].count),
-      approved:     parseInt(approved.rows[0].count),
-      returned:     parseInt(returned.rows[0].count),
-      schools:      parseInt(schools.rows[0].count),
+      total: parseInt(total.rows[0].count),
+      pending: parseInt(pending.rows[0].count),
+      approved: parseInt(approved.rows[0].count),
+      returned: parseInt(returned.rows[0].count),
+      schools: parseInt(schools.rows[0].count),
       staffPending: parseInt(staff.rows[0].count),
     });
   } catch (err) {
@@ -285,7 +285,8 @@ router.patch('/password', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'Both passwords are required.' });
   try {
     const result = await pool.query('SELECT password FROM admins WHERE id=$1', [req.user.id]);
-    const match  = await bcrypt.compare(currentPassword, result.rows[0].password);
+    if (!result.rows.length) return res.status(404).json({ error: 'User not found.' }); // <-- ADDED THIS LINE
+    const match = await bcrypt.compare(currentPassword, result.rows[0].password);
     if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
     const hash = await bcrypt.hash(newPassword, 10);
     await pool.query('UPDATE admins SET password=$1 WHERE id=$2', [hash, req.user.id]);
