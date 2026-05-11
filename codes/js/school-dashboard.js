@@ -1,20 +1,9 @@
 /* ===== AUTH GUARD ===== */
-// Verify token server-side on load — catches expired tokens that sessionStorage still holds.
 let user = API.auth.getUser();
 if (!user || user.role !== 'staff') { window.location.href = '/html/login.html'; }
 
-(async () => {
-  const verified = await API.auth.verifySession();
-  if (!verified || verified.role !== 'staff') {
-    window.location.href = '/html/login.html';
-    return;
-  }
-  // Refresh in-memory user from verified server response
-  user = verified;
-})();
-
-/* ===== POPULATE UI ===== */
-if (user) {
+function populateStaffDashboard() {
+  if (!user) return;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   const val = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
   set('sidebarStaffName', user.name);
@@ -45,6 +34,34 @@ if (user) {
     if (sel.options[i].value === user.position) { sel.selectedIndex = i; break; }
   }
 }
+
+function draftKey() {
+  return 'smme_draft_' + (user && user.id != null ? String(user.id) : 'guest');
+}
+function tmplKey() {
+  return 'smme_templates_' + (user && user.id != null ? String(user.id) : 'guest');
+}
+
+function bootstrapStaffDashboard() {
+  loadDashboard();
+  loadSubmissions('all');
+  loadSubmissions('mine');
+  refreshNotifBell();
+  checkDraft();
+}
+
+populateStaffDashboard();
+(async () => {
+  const verified = await API.auth.verifySession();
+  if (!verified || verified.role !== 'staff') {
+    window.location.href = '/html/login.html';
+    return;
+  }
+  user = verified;
+  sessionStorage.setItem('smme_user', JSON.stringify(verified));
+  populateStaffDashboard();
+  bootstrapStaffDashboard();
+})();
 
 /* ===== SIDEBAR TOGGLE ===== */
 const sidebar = document.getElementById('sidebar');
@@ -446,8 +463,6 @@ function formatSize(bytes) {
 }
 
 /* ===== DRAFT (localStorage only — lightweight) ===== */
-const DRAFT_KEY = 'smme_draft_' + (user ? user.id : '');
-
 function saveDraftLocal() {
   const data = {
     docType: document.getElementById('dDocType').value,
@@ -456,14 +471,14 @@ function saveDraftLocal() {
     remarks: document.getElementById('dRemarks').value,
     savedAt: new Date().toISOString(),
   };
-  localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  localStorage.setItem(draftKey(), JSON.stringify(data));
   API.showToast('Draft saved.', 'success');
   checkDraft();
 }
 
 function checkDraft() {
   try {
-    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    const draft = JSON.parse(localStorage.getItem(draftKey()) || 'null');
     const banner = document.getElementById('draftBanner');
     if (!draft) { banner.setAttribute('hidden', ''); return; }
     banner.removeAttribute('hidden');
@@ -476,7 +491,7 @@ document.getElementById('saveDraftBtn').addEventListener('click', saveDraftLocal
 
 document.getElementById('loadDraftBtn').addEventListener('click', () => {
   try {
-    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    const draft = JSON.parse(localStorage.getItem(draftKey()) || 'null');
     if (!draft) return;
     document.getElementById('dDocType').value = draft.docType || '';
     document.getElementById('dSchoolYear').value = draft.schoolYear || '';
@@ -488,16 +503,14 @@ document.getElementById('loadDraftBtn').addEventListener('click', () => {
 });
 
 document.getElementById('discardDraftBtn').addEventListener('click', () => {
-  localStorage.removeItem(DRAFT_KEY);
+  localStorage.removeItem(draftKey());
   document.getElementById('draftBanner').setAttribute('hidden', '');
   API.showToast('Draft discarded.');
 });
 
 /* ===== TEMPLATES (localStorage) ===== */
-const TMPL_KEY = 'smme_templates_' + (user ? user.id : '');
-
 function getTemplates() {
-  try { return JSON.parse(localStorage.getItem(TMPL_KEY) || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(tmplKey()) || '[]'); } catch { return []; }
 }
 
 document.getElementById('saveTemplateBtn').addEventListener('click', () => {
@@ -507,7 +520,7 @@ document.getElementById('saveTemplateBtn').addEventListener('click', () => {
   if (!docType) { API.showToast('Select a document type before saving a template.', 'error'); return; }
   const tmpls = getTemplates();
   tmpls.push({ id: Date.now(), name: docType + (schoolYear ? ' \u2013 ' + schoolYear : ''), docType, schoolYear, subject });
-  localStorage.setItem(TMPL_KEY, JSON.stringify(tmpls));
+  localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
   API.showToast('Template saved.', 'success');
 });
 
@@ -543,7 +556,7 @@ function applyTemplate(i) {
 function removeTemplate(i) {
   const tmpls = getTemplates();
   tmpls.splice(i, 1);
-  localStorage.setItem(TMPL_KEY, JSON.stringify(tmpls));
+  localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
   document.getElementById('loadTemplateBtn').click();
 }
 
@@ -587,7 +600,7 @@ document.getElementById('dashSubmitForm').addEventListener('submit', async e => 
     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
 
     // Clear draft
-    localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(draftKey());
     document.getElementById('draftBanner').setAttribute('hidden', '');
 
     document.getElementById('dashRefNumber').textContent = ref;
@@ -831,13 +844,6 @@ document.getElementById('changePasswordForm').addEventListener('submit', async e
 /* ===== LOGOUT ===== */
 document.getElementById('logoutBtn').addEventListener('click', () => API.auth.logout());
 
-/* ===== INIT ===== */
-loadDashboard();
-loadSubmissions('all');
-loadSubmissions('mine');
-refreshNotifBell();
-checkDraft();
-// Poll notifications every 60s
-
+/* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
 setInterval(refreshNotifBell, 60000);
 

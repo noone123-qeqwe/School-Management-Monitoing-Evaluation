@@ -148,6 +148,43 @@ router.delete('/notices/:id', requireAdmin, async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
 });
 
+/* Aggregate notice view analytics (must stay above /notices/:id/* wildcard patterns if added) */
+router.get('/notices/analytics', requireAdmin, async (req, res) => {
+  try {
+    const schoolsRes = await pool.query('SELECT COUNT(*)::int AS c FROM schools');
+    const totalSchools = schoolsRes.rows[0]?.c || 0;
+
+    const viewedRes = await pool.query(
+      `SELECT COUNT(DISTINCT school_id)::int AS c
+       FROM notice_views
+       WHERE viewed_at >= NOW() - INTERVAL '30 days'`
+    );
+    const viewedSchools = viewedRes.rows[0]?.c || 0;
+
+    const trendRes = await pool.query(
+      `SELECT (date_trunc('day', viewed_at))::date AS day,
+              COUNT(*)::int AS views
+       FROM notice_views
+       WHERE viewed_at >= NOW() - INTERVAL '7 days'
+       GROUP BY 1
+       ORDER BY 1 ASC`
+    );
+
+    const audience = totalSchools;
+    const viewRate = audience > 0 ? Math.round((viewedSchools / audience) * 100) : 0;
+
+    res.json({
+      audience,
+      viewedSchools,
+      viewRate,
+      trend: trendRes.rows.map((r) => ({ day: r.day, views: r.views })),
+    });
+  } catch (err) {
+    console.error('[notices/analytics]', err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 router.get('/notices/:id/stats', requireAdmin, async (req, res) => {
   try {
     const noticeResult = await pool.query(
@@ -244,6 +281,11 @@ router.get('/validation-rules', requireAdmin, async (req, res) => {
 router.post('/validation-rules', requireAdmin, async (req, res) => {
   const { code, label, severity = 'error', isEnabled = true, ruleConfig = {} } = req.body;
   if (!code || !label) return res.status(400).json({ error: 'Code and label are required.' });
+  let cfg = ruleConfig;
+  if (cfg != null && typeof cfg === 'string') {
+    try { cfg = JSON.parse(cfg); } catch { cfg = {}; }
+  }
+  if (cfg == null || typeof cfg !== 'object' || Array.isArray(cfg)) cfg = {};
   try {
     const result = await pool.query(
       `INSERT INTO validation_rules (code, label, severity, is_enabled, rule_config, updated_by)
@@ -257,7 +299,7 @@ router.post('/validation-rules', requireAdmin, async (req, res) => {
          updated_by = EXCLUDED.updated_by,
          updated_at = NOW()
        RETURNING *`,
-      [code, label, severity, !!isEnabled, ruleConfig, req.user.id]
+      [code, label, severity, !!isEnabled, cfg, req.user.id]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {

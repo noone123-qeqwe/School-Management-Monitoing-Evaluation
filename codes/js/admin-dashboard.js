@@ -1,9 +1,9 @@
 /* ===== AUTH GUARD ===== */
-const user = API.auth.getUser();
+let user = API.auth.getUser();
 if (!user || user.role !== 'admin') { window.location.href = '/html/login.html'; }
 
-/* ===== POPULATE UI ===== */
-if (user) {
+function populateAdminHeader() {
+  if (!user) return;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('sidebarAdminName',    user.name);
   set('sidebarDivision',     user.division || 'Masbate City SDO');
@@ -13,6 +13,19 @@ if (user) {
   set('settingsAdminName',   user.name);
   set('settingsDivision',    user.division || 'Masbate City SDO');
 }
+
+populateAdminHeader();
+(async () => {
+  const verified = await API.auth.verifySession();
+  if (!verified || verified.role !== 'admin') {
+    window.location.href = '/html/login.html';
+    return;
+  }
+  user = verified;
+  sessionStorage.setItem('smme_user', JSON.stringify(verified));
+  populateAdminHeader();
+})();
+
 document.getElementById('currentDate').textContent =
   new Date().toLocaleDateString('en-PH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
@@ -726,14 +739,6 @@ async function loadValidationRules() {
   const list = document.getElementById('validationRulesList');
   if (!list) return;
   try {
-    const defaults = [
-      { code: 'subject_min_length', label: 'Minimum Subject Length', severity: 'error', isEnabled: true, ruleConfig: { min: 8 } },
-      { code: 'duplicate_doc_year_recent', label: 'Duplicate Document-Year Check', severity: 'warning', isEnabled: true, ruleConfig: { days: 30 } },
-      { code: 'max_files_per_submission', label: 'Maximum Files Per Submission', severity: 'error', isEnabled: true, ruleConfig: { max: 10 } },
-    ];
-    for (const rule of defaults) {
-      await API.admin.saveValidationRule(rule);
-    }
     const rules = await API.admin.getValidationRules();
     list.innerHTML = rules.map((r) => `
       <div class="audit-item">
@@ -750,7 +755,7 @@ async function loadValidationRules() {
           </button>
         </div>
       </div>
-    `).join('') || `<p style="color:var(--text-muted);text-align:center;padding:24px">No validation rules configured.</p>`;
+    `).join('') || `<p style="color:var(--text-muted);text-align:center;padding:24px">No validation rules yet. Run <code>npm run db:seed</code> once to install defaults.</p>`;
   } catch (err) {
     renderError(list, `Failed to load validation rules: ${err.message}`, 'loadValidationRules()');
   }

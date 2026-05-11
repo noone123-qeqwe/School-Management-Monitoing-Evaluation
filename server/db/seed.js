@@ -148,7 +148,7 @@ async function seed() {
         }
         console.log('   ✅  Demo staff seeded.');
       } else {
-        console.warn('   ⚠️   SCH-012 not found — demo staff skipped.');
+        console.warn('   ⚠️   SCH-001 not found — demo staff skipped.');
       }
     } else {
       console.log('   ℹ️   Demo staff skipped in production (set ALLOW_DEMO_SEED=true to override).');
@@ -181,6 +181,22 @@ async function seed() {
       );
     }
     console.log(`   ✅  ${NOTICES_DATA.length} notices seeded.`);
+
+    // 6. Default validation rules (idempotent)
+    const defaultRules = [
+      ['subject_min_length', 'Minimum Subject Length', 'error', true, JSON.stringify({ min: 8 })],
+      ['duplicate_doc_year_recent', 'Duplicate Document-Year Check', 'warning', true, JSON.stringify({ days: 30 })],
+      ['max_files_per_submission', 'Maximum Files Per Submission', 'error', true, JSON.stringify({ max: 10 })],
+    ];
+    for (const [code, label, severity, enabled, cfg] of defaultRules) {
+      await client.query(
+        `INSERT INTO validation_rules (code, label, severity, is_enabled, rule_config)
+         VALUES ($1,$2,$3,$4,$5::jsonb)
+         ON CONFLICT (code) DO NOTHING`,
+        [code, label, severity, enabled, cfg]
+      );
+    }
+    console.log(`   ✅  Validation rules seeded (defaults, skipped if present).`);
 
     console.log('\n🎉  Database seeded successfully!\n');
   } catch (err) {

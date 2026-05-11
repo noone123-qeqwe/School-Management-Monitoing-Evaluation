@@ -34,7 +34,7 @@ async function fix() {
         const staffHash = await bcrypt.hash('Staff@1234', 12);
 
         const schoolResult = await pool.query(
-            `SELECT id FROM schools WHERE school_code = 'SCH-012'`
+            `SELECT id FROM schools WHERE school_code = 'SCH-001'`
         );
 
         if (schoolResult.rows.length === 0) {

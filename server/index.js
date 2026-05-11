@@ -118,7 +118,7 @@ app.use((req, res, next) => {
 ══════════════════════════════════════════════════════ */
 app.use('/api/auth/staff/login', authLimiter);
 app.use('/api/auth/admin/login', authLimiter);
-app.use('/api/auth/staff/register', authLimiter);
+app.use('/api/auth/staff/register', registerLimiter);
 app.use('/api/submissions', (req, res, next) => {
   if (req.method === 'POST') return uploadLimiter(req, res, next);
   return next();
@@ -177,16 +177,20 @@ if (!STATIC_ROOT) {
 
 const LANDING_PAGE = STATIC_ROOT ? path.join(STATIC_ROOT, 'index.html') : null;
 
-app.use(express.static(STATIC_ROOT, {
-  // Cache static assets (CSS/JS/images) for 1 day
-  maxAge: '1d',
-  etag: true,
-}));
+if (STATIC_ROOT) {
+  app.use(express.static(STATIC_ROOT, {
+    maxAge: '1d',
+    etag: true,
+  }));
+}
 
 /* ══════════════════════════════════════════════════════
    ROOT LANDING PAGE
 ══════════════════════════════════════════════════════ */
 app.get('/', (req, res, next) => {
+  if (!LANDING_PAGE) {
+    return res.status(503).type('text').send('Static content root not configured.');
+  }
   res.sendFile(LANDING_PAGE, (err) => {
     if (err) next(err);
   });
@@ -205,6 +209,7 @@ app.get('*', (req, res, next) => {
   ) {
     return next();
   }
+  if (!LANDING_PAGE) return next();
   // Only serve SPA fallback for clean URL routes (no extension)
   res.sendFile(LANDING_PAGE, err => {
     if (err) next(err);

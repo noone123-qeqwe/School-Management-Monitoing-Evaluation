@@ -204,6 +204,7 @@ const API = (() => {
     async postNotice(data)         { return post('/admin/notices', data); },
     async deleteNotice(id)         { return del('/admin/notices/' + id); },
     async getNoticeStats(id)       { return get('/admin/notices/' + id + '/stats'); },
+    async getNoticesAnalytics()    { return get('/admin/notices/analytics'); },
     async markNoticeViewed(id)     { return post('/admin/notices/' + id + '/view', {}); },
 
     // Deadlines

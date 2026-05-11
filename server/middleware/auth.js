@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+/** Same fallback as routes/auth.js — development only. */
+function resolveJwtSecret() {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  if (process.env.NODE_ENV === 'production') return null;
+  return 'smme_fallback_secret_dev_12345';
+}
+
 /**
  * Verify JWT from Authorization header.
  * Validates signature, expiry, and issuer.
@@ -9,13 +16,14 @@ function requireAuth(req, res, next) {
   const token = extractToken(req);
   if (!token) return res.status(401).json({ error: 'Authentication required.' });
 
-  if (!process.env.JWT_SECRET) {
-    console.error('JWT_SECRET is not set');
+  const secret = resolveJwtSecret();
+  if (!secret) {
+    console.error('JWT_SECRET is not set (required in production)');
     return res.status(500).json({ error: 'Server configuration error.' });
   }
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET, {
+    req.user = jwt.verify(token, secret, {
       issuer: 'smme-portal',
       algorithms: ['HS256'], // explicitly allow only HS256
     });

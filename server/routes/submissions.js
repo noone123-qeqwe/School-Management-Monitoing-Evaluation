@@ -179,8 +179,10 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
     cleanupUploadedFiles(req.files);
     return res.status(400).json({ error: 'Document type, school year, and subject are required.' });
   }
-  if (!req.files || req.files.length === 0)
+  if (!req.files || req.files.length === 0) {
+    cleanupUploadedFiles(req.files);
     return res.status(400).json({ error: 'At least one file is required.' });
+  }
 
   const client = await pool.connect();
   try {

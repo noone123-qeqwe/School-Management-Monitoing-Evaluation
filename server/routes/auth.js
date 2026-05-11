@@ -7,9 +7,16 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-/* ── Token signer ── */
+/* ── Token signer (must use same secret resolution as ../middleware/auth.js) ── */
+function resolveJwtSecret() {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  if (process.env.NODE_ENV === 'production') return null;
+  return 'smme_fallback_secret_dev_12345';
+}
+
 function signToken(payload) {
-  const secret = process.env.JWT_SECRET || 'smme_fallback_secret_dev_12345';
+  const secret = resolveJwtSecret();
+  if (!secret) return null;
   return jwt.sign(payload, secret, {
     expiresIn: '8h',
     issuer: 'smme-portal',
@@ -89,6 +96,8 @@ router.post('/staff/login', async (req, res) => {
       schoolCode: staff.school_code,
       division: staff.division,
     });
+    if (!token)
+      return res.status(500).json({ error: 'Server configuration error.' });
 
     console.log(`[LOGIN] Staff ${staff.email} (school ${staff.school_id}) at ${new Date().toISOString()}`);
 
@@ -208,6 +217,8 @@ router.post('/admin/login', async (req, res) => {
       username: admin.username,
       division: admin.division,
     });
+    if (!token)
+      return res.status(500).json({ error: 'Server configuration error.' });
 
     console.log(`[LOGIN] Admin ${admin.username} at ${new Date().toISOString()}`);
 

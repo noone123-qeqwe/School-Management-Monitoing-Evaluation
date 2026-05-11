@@ -26,6 +26,17 @@ router.get('/unread-count', requireStaff, async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
 });
 
+/* PATCH /api/notifications/read-all — register before /:id/read */
+router.patch('/read-all', requireStaff, async (req, res) => {
+  try {
+    await pool.query(
+      'UPDATE notifications SET is_read=TRUE WHERE school_id=$1',
+      [req.user.schoolId]
+    );
+    res.json({ message: 'All marked as read.' });
+  } catch (err) { res.status(500).json({ error: 'Server error.' }); }
+});
+
 /* PATCH /api/notifications/:id/read */
 router.patch('/:id/read', requireStaff, async (req, res) => {
   try {
@@ -34,17 +45,6 @@ router.patch('/:id/read', requireStaff, async (req, res) => {
       [req.params.id, req.user.schoolId]
     );
     res.json({ message: 'Marked as read.' });
-  } catch (err) { res.status(500).json({ error: 'Server error.' }); }
-});
-
-/* PATCH /api/notifications/read-all */
-router.patch('/read-all', requireStaff, async (req, res) => {
-  try {
-    await pool.query(
-      'UPDATE notifications SET is_read=TRUE WHERE school_id=$1',
-      [req.user.schoolId]
-    );
-    res.json({ message: 'All marked as read.' });
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
 });
 
