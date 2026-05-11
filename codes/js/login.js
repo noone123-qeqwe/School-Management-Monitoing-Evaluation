@@ -154,7 +154,7 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
 
       try {
-        await API.auth.loginStaff(null, email, password);
+        await API.auth.loginStaff(email, password);
         window.location.href = '/html/school-dashboard.html';
       } catch (err) {
         if (typeof API !== 'undefined' && API.showToast) {

@@ -45,11 +45,10 @@ const DUMMY_HASH = bcrypt.hashSync('dummy-prevent-timing-attack', 10);
 ───────────────────────────────────────────── */
 router.post('/staff/login', async (req, res) => {
   const email = sanitize(req.body.email || '').toLowerCase();
-  const schoolId = sanitize(String(req.body.schoolId || ''));
   const password = req.body.password;
 
-  if (!email || !schoolId || !password)
-    return res.status(400).json({ error: 'Email, school, and password are required.' });
+  if (!email || !password)
+    return res.status(400).json({ error: 'Email and password are required.' });
 
   if (!isValidEmail(email))
     return res.status(400).json({ error: 'Invalid email format.' });
@@ -58,15 +57,19 @@ router.post('/staff/login', async (req, res) => {
     return res.status(400).json({ error: 'Invalid password.' });
 
   try {
+    // Find staff by email only — school dropdown was removed from the UI.
+    // If a staff member exists in multiple schools, prefer the approved one.
     const result = await pool.query(
       `SELECT s.id, s.first_name, s.last_name, s.email, s.password,
               s.position, s.status, s.school_id, s.phone,
               sc.name AS school_name, sc.level AS school_level,
               sc.school_code, sc.division
        FROM staff s
-       JOIN schools sc ON sc.id = s.school_id
-       WHERE s.email = $1 AND s.school_id = $2`,
-      [email, schoolId]
+       LEFT JOIN schools sc ON sc.id = s.school_id
+       WHERE s.email = $1
+       ORDER BY CASE s.status WHEN 'approved' THEN 0 WHEN 'pending' THEN 1 ELSE 2 END
+       LIMIT 1`,
+      [email]
     );
 
     const staff = result.rows[0];
@@ -91,15 +94,15 @@ router.post('/staff/login', async (req, res) => {
       email: staff.email,
       position: staff.position,
       schoolId: staff.school_id,
-      schoolName: staff.school_name,
-      schoolLevel: staff.school_level,
-      schoolCode: staff.school_code,
-      division: staff.division,
+      schoolName: staff.school_name || '',
+      schoolLevel: staff.school_level || '',
+      schoolCode: staff.school_code || '',
+      division: staff.division || '',
     });
     if (!token)
       return res.status(500).json({ error: 'Server configuration error.' });
 
-    console.log(`[LOGIN] Staff ${staff.email} (school ${staff.school_id}) at ${new Date().toISOString()}`);
+    console.log(`[LOGIN] Staff ${staff.email} (school ${staff.school_id || 'unassigned'}) at ${new Date().toISOString()}`);
 
     res.json({
       token,
@@ -110,10 +113,10 @@ router.post('/staff/login', async (req, res) => {
         email: staff.email,
         position: staff.position,
         schoolId: staff.school_id,
-        schoolName: staff.school_name,
-        schoolLevel: staff.school_level,
-        schoolCode: staff.school_code,
-        division: staff.division,
+        schoolName: staff.school_name || '',
+        schoolLevel: staff.school_level || '',
+        schoolCode: staff.school_code || '',
+        division: staff.division || '',
       },
     });
   } catch (err) {
@@ -129,11 +132,13 @@ router.post('/staff/register', async (req, res) => {
   const firstName = sanitize(req.body.firstName || '');
   const lastName = sanitize(req.body.lastName || '');
   const position = sanitize(req.body.position || '');
-  const schoolId = sanitize(String(req.body.schoolId || ''));
   const email = sanitize(req.body.email || '').toLowerCase();
   const password = req.body.password;
 
-  if (!firstName || !lastName || !position || !schoolId || !email || !password)
+  // schoolId is now optional — admin assigns schools after approval
+  const schoolId = req.body.schoolId ? sanitize(String(req.body.schoolId)) : null;
+
+  if (!firstName || !lastName || !position || !email || !password)
     return res.status(400).json({ error: 'All fields are required.' });
 
   if (!isValidEmail(email))
@@ -149,16 +154,21 @@ router.post('/staff/register', async (req, res) => {
     return res.status(400).json({ error: 'Name contains invalid characters.' });
 
   try {
-    const schoolCheck = await pool.query('SELECT id FROM schools WHERE id=$1', [schoolId]);
-    if (!schoolCheck.rows.length)
-      return res.status(400).json({ error: 'Invalid school selected.' });
+    // If schoolId is provided, validate it
+    if (schoolId) {
+      const schoolCheck = await pool.query('SELECT id FROM schools WHERE id=$1', [schoolId]);
+      if (!schoolCheck.rows.length)
+        return res.status(400).json({ error: 'Invalid school selected.' });
+    }
 
-    const exists = await pool.query(
-      'SELECT id FROM staff WHERE email=$1 AND school_id=$2',
-      [email, schoolId]
-    );
+    // Check for duplicate email (globally if no school, or per-school if provided)
+    const existsQuery = schoolId
+      ? 'SELECT id FROM staff WHERE email=$1 AND school_id=$2'
+      : 'SELECT id FROM staff WHERE email=$1';
+    const existsParams = schoolId ? [email, schoolId] : [email];
+    const exists = await pool.query(existsQuery, existsParams);
     if (exists.rows.length)
-      return res.status(409).json({ error: 'An account with this email already exists for this school.' });
+      return res.status(409).json({ error: 'An account with this email already exists.' });
 
     const hash = await bcrypt.hash(password, 12);
     await pool.query(
@@ -167,7 +177,7 @@ router.post('/staff/register', async (req, res) => {
       [schoolId, firstName, lastName, position, email, hash]
     );
 
-    console.log(`[REGISTER] New staff ${email} for school ${schoolId} at ${new Date().toISOString()}`);
+    console.log(`[REGISTER] New staff ${email} (school: ${schoolId || 'unassigned'}) at ${new Date().toISOString()}`);
     res.status(201).json({ message: 'Account created. Awaiting Division Office approval.' });
   } catch (err) {
     console.error('[staff/register]', err.message);

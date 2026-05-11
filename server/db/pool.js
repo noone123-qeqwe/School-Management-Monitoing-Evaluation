@@ -141,9 +141,10 @@ class MockPool {
       if (q.includes('COUNT(*)')) return { rows: [{ count: String(db.staff.filter(s => s.status === 'pending').length) }] };
 
       if (q.startsWith('SELECT')) {
-        if (q.includes('JOIN SCHOOLS')) {
-          const [email, schoolId] = params;
-          const row = db.staff.find(s => s.email === (email || '').toLowerCase() && String(s.school_id) === String(schoolId));
+        if (q.includes('JOIN SCHOOLS') || q.includes('LEFT JOIN SCHOOLS')) {
+          // Login query — find by email only (schoolId removed from frontend)
+          const email = params[0];
+          const row = db.staff.find(s => s.email === (email || '').toLowerCase());
           return { rows: row ? [row] : [] };
         }
         if (params.length === 1) {

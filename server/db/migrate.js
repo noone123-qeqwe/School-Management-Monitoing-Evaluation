@@ -59,7 +59,7 @@ async function migrate() {
     await client.query(`
       CREATE TABLE IF NOT EXISTS staff (
         id         SERIAL PRIMARY KEY,
-        school_id  INTEGER NOT NULL REFERENCES schools(id),
+        school_id  INTEGER REFERENCES schools(id),
         first_name TEXT NOT NULL,
         last_name  TEXT NOT NULL,
         position   TEXT NOT NULL,
@@ -71,6 +71,8 @@ async function migrate() {
         UNIQUE (email, school_id)
       );
     `);
+    // For existing databases: allow NULL school_id (staff registers without school)
+    await client.query(`ALTER TABLE staff ALTER COLUMN school_id DROP NOT NULL;`).catch(() => {});
     console.log('   ✅  staff');
 
     await client.query(`

@@ -66,8 +66,18 @@ const API = (() => {
      AUTH
   ══════════════════════════════════════════ */
   const auth = {
-    async loginStaff(schoolId, email, password) {
-      const data = await post('/auth/staff/login', { schoolId, email, password });
+    async loginStaff(emailOrSchoolId, emailOrPassword, passwordOrUndef) {
+      // Support both: loginStaff(email, password) and legacy loginStaff(schoolId, email, password)
+      let email, password;
+      if (passwordOrUndef !== undefined) {
+        // Legacy 3-arg call: loginStaff(schoolId, email, password) — schoolId is ignored
+        email = emailOrPassword;
+        password = passwordOrUndef;
+      } else {
+        email = emailOrSchoolId;
+        password = emailOrPassword;
+      }
+      const data = await post('/auth/staff/login', { email, password });
       setToken(data.token);
       setUser(data.user);
       return data.user;
