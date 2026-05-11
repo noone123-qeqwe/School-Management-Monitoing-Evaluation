@@ -159,6 +159,7 @@ function feedbackCell(s) {
 
 /* ===== LOAD DASHBOARD ===== */
 async function loadDashboard() {
+  API.ui.showSkeleton('recentSubmissionsBody', 'table', 4);
   try {
     const subs = await API.submissions.list({ limit: 100 });
     document.getElementById('statTotal').textContent = subs.length;
@@ -175,6 +176,7 @@ async function loadDashboard() {
 async function loadDivisionNotices() {
   const list = document.getElementById('schoolNoticesList');
   if (!list) return;
+  API.ui.showSkeleton('schoolNoticesList', 'list', 3);
   try {
     const notices = await API.admin.getNotices();
     if (!notices.length) {
@@ -206,6 +208,7 @@ async function loadTasksSummary() {
   const list = document.getElementById('tasksList');
   const progressEl = document.getElementById('progressSummary');
   if (!list || !progressEl) return;
+  API.ui.showSkeleton('tasksList', 'list', 4);
   try {
     const { tasks, progress } = await API.staff.tasksSummary();
     list.innerHTML = tasks.slice(0, 6).map((t) => {
@@ -265,13 +268,15 @@ function renderRecentTable(subs) {
 async function loadSubmissions(mode) {
   const search = document.getElementById(mode === 'mine' ? 'mineSearch' : 'submissionSearch').value.toLowerCase();
   const status = document.getElementById(mode === 'mine' ? 'mineFilter' : 'submissionFilter').value;
+  const tbodyId = mode === 'mine' ? 'mineSubmissionsBody' : 'allSubmissionsBody';
+
+  API.ui.showSkeleton(tbodyId, 'table', 5);
   try {
     const params = { limit: 200 };
     if (status) params.status = status;
     if (search) params.search = search;
     const subs = await API.submissions.list(params);
     const filtered = mode === 'mine' ? subs.filter(s => Number(s.staff_id) === Number(user.id)) : subs;
-    const tbodyId = mode === 'mine' ? 'mineSubmissionsBody' : 'allSubmissionsBody';
     const cols = mode === 'mine' ? 8 : 10;
     const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
@@ -387,6 +392,7 @@ async function loadCompliance() {
   const year = document.getElementById('complianceYear').value;
   const grid = document.getElementById('complianceGrid');
   if (!grid) return;
+  API.ui.showSkeleton('complianceGrid', 'card', 6);
   try {
     const [subs, deadlines] = await Promise.all([
       API.submissions.list({ limit: 500 }),
@@ -418,6 +424,7 @@ document.getElementById('complianceYear').addEventListener('change', loadComplia
 async function loadDeadlines() {
   const list = document.getElementById('deadlinesList');
   if (!list) return;
+  API.ui.showSkeleton('deadlinesList', 'list', 3);
   try {
     const deadlines = await API.admin.getDeadlines();
     if (!deadlines.length) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:32px">No deadlines set by the Division Office yet.</p>'; return; }
