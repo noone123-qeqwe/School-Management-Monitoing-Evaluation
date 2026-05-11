@@ -1,5 +1,5 @@
 /* ============================================================
-   SMME PORTAL — AUTH / LOGIN  (v5.0 — Refined Navy & Gold)
+   SMME PORTAL — AUTH / LOGIN  (v5.0 — Dark Navy Edition)
    ============================================================ */
 
 *,
@@ -31,30 +31,29 @@
   --grad-btn-hover: linear-gradient(135deg, #1e3a5f 0%, #2c4a73 100%);
 
   /* ── Semantic Colors ── */
-  --red: #dc2626;
-  --red-light: #fef2f2;
-  --red-ring: rgba(220, 38, 38, 0.15);
-  --green: #16a34a;
-  --green-light: #ecfdf5;
+  --red: #ef4444;
+  --red-light: rgba(220, 38, 38, 0.15);
+  --red-ring: rgba(220, 38, 38, 0.25);
+  --green: #10b981;
+  --green-light: rgba(16, 185, 129, 0.15);
 
-  /* ── Text ── */
-  --text: #0f172a;
-  --text-2: #64748b;
-  /* Slate gray for secondary */
+  /* ── Text (Updated for Dark Mode) ── */
+  --text: #f8fafc;
+  --text-2: #cbd5e1;
   --text-3: #94a3b8;
   --text-inv: rgba(255, 255, 255, 0.95);
   --text-inv-2: rgba(255, 255, 255, 0.62);
   --text-inv-3: rgba(255, 255, 255, 0.32);
 
-  /* ── Surface ── */
-  --bg: #f8fafc;
-  --white: #ffffff;
-  --border: #e2e8f0;
-  --border-focus: #1e3a5f;
+  /* ── Surface (Updated for Dark Mode) ── */
+  --bg: #071327;
+  --white: #0f2450;
+  --border: rgba(255, 255, 255, 0.12);
+  --border-focus: #d4a017;
   --border-inv: rgba(255, 255, 255, 0.1);
 
   /* ── Focus Ring ── */
-  --focus-ring: 0 0 0 3px rgba(30, 58, 95, 0.2);
+  --focus-ring: 0 0 0 3px rgba(212, 160, 23, 0.25);
 
   /* ── Shape (8px grid base) ── */
   --r-sm: 8px;
@@ -71,10 +70,10 @@
   --s6: 48px;
 
   /* ── Shadows ── */
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 10px 24px -4px rgba(0, 0, 0, 0.09), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
-  --shadow-btn: 0 4px 14px rgba(11, 29, 59, 0.28);
-  --shadow-btn-hover: 0 8px 24px rgba(11, 29, 59, 0.38);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 10px 24px -4px rgba(0, 0, 0, 0.4), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-btn: 0 4px 14px rgba(0, 0, 0, 0.28);
+  --shadow-btn-hover: 0 8px 24px rgba(0, 0, 0, 0.38);
 
   /* ── Transitions ── */
   --trans: all 0.2s ease-in-out;
@@ -391,7 +390,6 @@ body.auth-body {
 }
 
 .hero-title span {
-  /* Gold-tinted accent on second line */
   color: var(--gold-light);
 }
 
@@ -583,7 +581,7 @@ body.auth-body {
 }
 
 .auth-back:hover {
-  color: var(--navy-3);
+  color: var(--gold);
 }
 
 .auth-back:hover i {
@@ -611,14 +609,14 @@ body.auth-body {
 }
 
 .staff-badge {
-  background: rgba(30, 58, 95, 0.07);
-  color: var(--navy-3);
-  border: 1px solid rgba(30, 58, 95, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .admin-badge {
   background: var(--gold-dim);
-  color: #8a5f00;
+  color: var(--gold-light);
   border: 1px solid var(--gold-border);
 }
 
@@ -644,7 +642,7 @@ body.auth-body {
   background: var(--border);
 }
 
-/* ── ROLE BUTTONS ── */
+/* ── ROLE BUTTONS (Dark Mode Fixed) ── */
 .role-list {
   display: flex;
   flex-direction: column;
@@ -658,7 +656,7 @@ body.auth-body {
   padding: var(--s3) var(--s3);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
   text-align: left;
   width: 100%;
@@ -669,8 +667,8 @@ body.auth-body {
 }
 
 .role-btn:hover {
-  border-color: var(--navy-3);
-  background: #f8fafc;
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.08);
   transform: translateY(-1px);
   box-shadow: var(--shadow-card-hover);
 }
@@ -694,14 +692,6 @@ body.auth-body {
   transform: scaleY(1);
 }
 
-#roleAdmin:hover {
-  border-color: #8a5f00;
-}
-
-#roleAdmin:hover::before {
-  background: var(--grad-gold);
-}
-
 .role-btn-icon {
   width: 44px;
   height: 44px;
@@ -715,19 +705,19 @@ body.auth-body {
 }
 
 .role-btn-icon.staff {
-  background: rgba(30, 58, 95, 0.08);
-  color: var(--navy-3);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-2);
 }
 
 .role-btn-icon.admin {
   background: var(--gold-dim);
-  color: #a06b00;
+  color: var(--gold-light);
 }
 
 .role-btn:hover .role-btn-icon.staff {
   background: var(--grad-primary);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(11, 29, 59, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
 }
 
 .role-btn:hover .role-btn-icon.admin {
@@ -762,7 +752,7 @@ body.auth-body {
 }
 
 .role-btn:hover .role-btn-arrow {
-  color: var(--navy-3);
+  color: var(--gold);
   transform: translateX(4px);
 }
 
@@ -784,7 +774,7 @@ body.auth-body {
 }
 
 .field-group:focus-within .field-label {
-  color: var(--navy-3);
+  color: var(--gold-light);
 }
 
 .req {
@@ -802,7 +792,7 @@ body.auth-body {
   left: 18px;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  color: var(--text-3);
   font-size: 0.84rem;
   pointer-events: none;
   z-index: 1;
@@ -810,15 +800,15 @@ body.auth-body {
 }
 
 .field-wrap:focus-within .field-icon {
-  color: var(--navy-3);
+  color: var(--gold-light);
 }
 
 .field-input {
   width: 100%;
   height: 56px;
   padding: 0 18px 0 48px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
@@ -834,12 +824,18 @@ body.auth-body {
 }
 
 .field-input:hover {
-  border-color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .field-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, .18);
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-ring);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.field-input option {
+  background: var(--navy-2);
+  color: var(--text);
 }
 
 .field-select {
@@ -854,7 +850,7 @@ body.auth-body {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #94a3b8;
+  color: var(--text-3);
   font-size: 0.82rem;
   padding: 8px;
   cursor: pointer;
@@ -863,8 +859,8 @@ body.auth-body {
 }
 
 .field-eye:hover {
-  color: var(--navy-3);
-  background: rgba(30, 58, 95, 0.07);
+  color: var(--gold-light);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .field-error {
@@ -881,25 +877,6 @@ body.auth-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s2);
-}
-
-/* ── NEW AUTH OPTIONS ── */
-.auth-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 14px 0 20px;
-}
-
-.remember-wrap {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.forgot-link {
-  color: #60a5fa;
-  text-decoration: none;
 }
 
 /* ── SCHOOL PICKER ── */
@@ -932,7 +909,7 @@ body.auth-body {
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   color: var(--text);
-  background: var(--white);
+  background: rgba(0, 0, 0, 0.2);
   outline: none;
   transition: var(--trans);
 }
@@ -942,13 +919,13 @@ body.auth-body {
 }
 
 .school-picker-field.focused .school-picker-input {
-  border-color: var(--navy-3);
+  border-color: var(--border-focus);
   box-shadow: var(--focus-ring);
-  background: #fafbff;
+  background: rgba(0, 0, 0, 0.35);
 }
 
 .school-picker-field.focused .school-picker-icon {
-  color: var(--navy-3);
+  color: var(--gold-light);
 }
 
 .school-picker-field.invalid .school-picker-input {
@@ -963,7 +940,7 @@ body.auth-body {
   width: 22px;
   height: 22px;
   border: none;
-  background: var(--border);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   color: var(--text-2);
   font-size: 0.62rem;
@@ -987,10 +964,10 @@ body.auth-body {
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background: var(--white);
+  background: var(--navy-2);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   max-height: 220px;
   overflow-y: auto;
   z-index: 9999;
@@ -1002,7 +979,7 @@ body.auth-body {
 }
 
 .school-picker-list::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
 }
 
@@ -1018,7 +995,7 @@ body.auth-body {
 }
 
 .sp-option:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .sp-option-name {
@@ -1036,8 +1013,8 @@ body.auth-body {
   font-family: 'Inter', sans-serif;
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--navy-3);
-  background: rgba(30, 58, 95, 0.08);
+  color: var(--gold-light);
+  background: var(--gold-dim);
   padding: 2px 7px;
   border-radius: 5px;
   white-space: nowrap;
@@ -1059,7 +1036,7 @@ body.auth-body {
 
 .sp-empty i {
   font-size: 1.3rem;
-  color: #cbd5e1;
+  color: var(--text-3);
 }
 
 /* ══════════════════════════════════════════════
@@ -1132,6 +1109,7 @@ body.auth-body {
   background: var(--grad-primary);
   color: #fff;
   box-shadow: var(--shadow-btn);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .staff-btn:hover:not(:disabled) {
@@ -1163,7 +1141,7 @@ body.auth-body {
 }
 
 .auth-link-row a {
-  color: var(--navy-3);
+  color: var(--gold-light);
   font-weight: 600;
   text-decoration: none;
   transition: var(--trans);
@@ -1171,7 +1149,7 @@ body.auth-body {
 
 .auth-link-row a:hover {
   text-decoration: underline;
-  color: var(--navy);
+  color: var(--gold);
 }
 
 .terms-label {
@@ -1188,12 +1166,12 @@ body.auth-body {
 
 .terms-label input {
   margin-top: 3px;
-  accent-color: var(--navy-3);
+  accent-color: var(--gold);
   flex-shrink: 0;
 }
 
 .terms-label a {
-  color: var(--navy-3);
+  color: var(--gold-light);
   font-weight: 600;
   text-decoration: none;
 }
@@ -1208,9 +1186,9 @@ body.auth-body {
   align-items: center;
   gap: 10px;
   background: var(--red-light);
-  border: 1px solid #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.4);
   border-left: 3px solid var(--red);
-  color: #991b1b;
+  color: #fca5a5;
   border-radius: var(--r-md);
   padding: 10px 14px;
   font-family: 'Inter', sans-serif;
@@ -1224,9 +1202,9 @@ body.auth-body {
   align-items: flex-start;
   gap: 10px;
   background: var(--green-light);
-  border: 1px solid #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
   border-left: 3px solid var(--green);
-  color: #065f46;
+  color: #6ee7b7;
   border-radius: var(--r-md);
   padding: 12px 14px;
   font-family: 'Inter', sans-serif;
@@ -1258,7 +1236,7 @@ body.auth-body {
   flex: 1;
   height: 3px;
   border-radius: 3px;
-  background: var(--border);
+  background: rgba(255, 255, 255, 0.15);
   transition: background 0.25s ease;
 }
 
@@ -1330,7 +1308,7 @@ body.auth-body {
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   max-width: 360px;
   animation: toastIn 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -1362,12 +1340,12 @@ body.auth-body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* ══════════════════════════════════════════════
