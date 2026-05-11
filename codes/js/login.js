@@ -101,6 +101,12 @@
       if (u && u.role === 'admin') { window.location.href = '/html/admin-dashboard.html'; return; }
     }
 
+    if (params.get('reason') === 'timeout') {
+      if (typeof API !== 'undefined' && API.showToast) {
+        setTimeout(() => API.showToast('You have been logged out due to inactivity.', 'info'), 300);
+      }
+    }
+
     // ── Step navigation buttons ──
     $('roleSchool')?.addEventListener('click', () => { clearErrors(); showStep('stepStaff'); });
     $('roleAdmin')?.addEventListener('click', () => { clearErrors(); showStep('stepAdmin'); });

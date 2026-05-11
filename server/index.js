@@ -282,7 +282,9 @@ app.listen(PORT, async () => {
           await execAsync('node server/db/seed.js', { cwd: path.join(__dirname, '..') });
           console.log('✅ Schools re-seeded');
         }
-      } catch { }
+      } catch (err) {
+        console.log('⚠️  Could not check school count (table may not exist yet or connection failed).');
+      }
     }
   } catch (err) {
     console.error('❌ Database connection FAILED:', err.message);

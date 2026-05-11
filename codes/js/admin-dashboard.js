@@ -5,13 +5,13 @@ if (!user || user.role !== 'admin') { window.location.href = '/html/login.html';
 function populateAdminHeader() {
   if (!user) return;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('sidebarAdminName',    user.name);
-  set('sidebarDivision',     user.division || 'Masbate City SDO');
-  set('topbarAdminName',     user.name);
-  set('adminWelcome',        `Welcome, ${user.name}`);
-  set('adminDivisionLabel',  user.division || 'Masbate City Schools Division Office (SDO)');
-  set('settingsAdminName',   user.name);
-  set('settingsDivision',    user.division || 'Masbate City SDO');
+  set('sidebarAdminName', user.name);
+  set('sidebarDivision', user.division || 'Masbate City SDO');
+  set('topbarAdminName', user.name);
+  set('adminWelcome', `Welcome, ${user.name}`);
+  set('adminDivisionLabel', user.division || 'Masbate City Schools Division Office (SDO)');
+  set('settingsAdminName', user.name);
+  set('settingsDivision', user.division || 'Masbate City SDO');
 }
 
 populateAdminHeader();
@@ -27,45 +27,45 @@ populateAdminHeader();
 })();
 
 document.getElementById('currentDate').textContent =
-  new Date().toLocaleDateString('en-PH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
 /* ===== SIDEBAR TOGGLE ===== */
-const sidebar      = document.getElementById('sidebar');
-const topbarMenu   = document.getElementById('topbarMenu');
+const sidebar = document.getElementById('sidebar');
+const topbarMenu = document.getElementById('topbarMenu');
 const sidebarClose = document.getElementById('sidebarClose');
-topbarMenu.addEventListener('click',   () => sidebar.classList.add('open'));
+topbarMenu.addEventListener('click', () => sidebar.classList.add('open'));
 sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
 
 /* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
   document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-  
+
   const page = document.getElementById(`page-${pageId}`);
   const link = document.querySelector(`.sidebar-link[data-page="${pageId}"]`);
-  
+
   if (page) page.classList.add('active');
   if (link) link.classList.add('active');
-  
-  const titles = { 
-    dashboard:'Dashboard', submissions:'All Submissions', schools:'Registered Schools',
-    staff:'Staff Accounts', deadlines:'Submission Deadlines', reports:'Reports & Analytics',
-    audit:'Audit Log', notices:'Division Notices', validation:'Validation Rules', settings:'Settings' 
+
+  const titles = {
+    dashboard: 'Dashboard', submissions: 'All Submissions', schools: 'Registered Schools',
+    staff: 'Staff Accounts', deadlines: 'Submission Deadlines', reports: 'Reports & Analytics',
+    audit: 'Audit Log', notices: 'Division Notices', validation: 'Validation Rules', settings: 'Settings'
   };
-  
+
   document.getElementById('topbarTitle').textContent = titles[pageId] || pageId;
   sidebar.classList.remove('open');
   window.scrollTo(0, 0);
-  
-  if (pageId === 'dashboard')   loadAdminDashboard();
+
+  if (pageId === 'dashboard') loadAdminDashboard();
   if (pageId === 'submissions') loadAllSubmissions();
-  if (pageId === 'schools')     loadSchools();
-  if (pageId === 'staff')       loadStaffPage();
-  if (pageId === 'reports')     loadReports();
-  if (pageId === 'audit')       loadAuditLog();
-  if (pageId === 'deadlines')   loadDeadlineMgmt();
-  if (pageId === 'notices')     loadNotices();
-  if (pageId === 'validation')  loadValidationRules();
+  if (pageId === 'schools') loadSchools();
+  if (pageId === 'staff') loadStaffPage();
+  if (pageId === 'reports') loadReports();
+  if (pageId === 'audit') loadAuditLog();
+  if (pageId === 'deadlines') loadDeadlineMgmt();
+  if (pageId === 'notices') loadNotices();
+  if (pageId === 'validation') loadValidationRules();
 }
 
 document.querySelectorAll('.sidebar-link').forEach(link => {
@@ -192,17 +192,18 @@ async function loadReviewThread(ref) {
 
 /* ===== DASHBOARD ===== */
 async function loadAdminDashboard() {
+  API.ui.showSkeleton('pendingTableBody', 'table', 5);
   try {
     const [stats, subs] = await Promise.all([
       API.admin.stats(),
       API.submissions.list({ limit: 200 }),
     ]);
-    
+
     document.getElementById('statTotalSubs').textContent = stats.total;
-    document.getElementById('statPending').textContent   = stats.pending;
-    document.getElementById('statApproved').textContent  = stats.approved;
-    document.getElementById('statSchools').textContent   = stats.schools;
-    document.getElementById('pendingBadge').textContent  = stats.pending;
+    document.getElementById('statPending').textContent = stats.pending;
+    document.getElementById('statApproved').textContent = stats.approved;
+    document.getElementById('statSchools').textContent = stats.schools;
+    document.getElementById('pendingBadge').textContent = stats.pending;
 
     if (stats.staffPending > 0) {
       document.getElementById('staffPendingBadge').removeAttribute('hidden');
@@ -214,7 +215,7 @@ async function loadAdminDashboard() {
     // Pending table
     const pending = subs.filter(s => s.status === 'review' || s.status === 'received').slice(0, 6);
     const tbody = document.getElementById('pendingTableBody');
-    
+
     tbody.innerHTML = pending.length ? pending.map(s => `
       <tr>
         <td><strong>${API.escapeHtml(s.ref)}</strong></td>
@@ -242,12 +243,12 @@ async function loadAdminDashboard() {
 function renderActivity(subs) {
   const list = document.getElementById('activityList');
   if (!list) return;
-  const colorMap = { approved:'green', returned:'red', received:'blue', review:'yellow' };
-  
+  const colorMap = { approved: 'green', returned: 'red', received: 'blue', review: 'yellow' };
+
   list.innerHTML = subs.map(s => {
     const color = colorMap[s.status] || 'blue';
     let text = '';
-    
+
     if (s.status === 'approved') {
       text = `<strong>${API.escapeHtml(s.ref)}</strong> approved \u2013 ${API.escapeHtml(s.doc_type)} from ${API.escapeHtml(s.school_name || '')}`;
     } else if (s.status === 'returned') {
@@ -255,7 +256,7 @@ function renderActivity(subs) {
     } else {
       text = `<strong>${API.escapeHtml(s.ref)}</strong> submitted by ${API.escapeHtml(s.school_name || '')} \u2013 ${API.escapeHtml(s.doc_type)}`;
     }
-    
+
     return `
       <div class="activity-item">
         <div class="activity-dot ${color}"></div>
@@ -270,23 +271,24 @@ function renderActivity(subs) {
 let selectedRefs = [];
 
 async function loadAllSubmissions() {
-  const search  = document.getElementById('adminSearch').value.toLowerCase();
+  const search = document.getElementById('adminSearch').value.toLowerCase();
   const statusF = document.getElementById('adminStatusFilter').value;
-  const levelF  = document.getElementById('adminLevelFilter').value;
-  
+  const levelF = document.getElementById('adminLevelFilter').value;
+
+  API.ui.showSkeleton('adminSubmissionsBody', 'table', 6);
   try {
     const params = { limit: 500 };
     if (statusF) params.status = statusF;
-    if (levelF)  params.level  = levelF;
-    if (search)  params.search = search;
-    
+    if (levelF) params.level = levelF;
+    if (search) params.search = search;
+
     const subs = await API.submissions.list(params);
     const tbody = document.getElementById('adminSubmissionsBody');
-    
+
     tbody.innerHTML = subs.length ? subs.map(s => {
       const checked = selectedRefs.includes(s.ref) ? 'checked' : '';
       const revisionPill = s.is_revision ? `<span class="pill" style="background:#ede9fe;color:#5b21b6;font-size:.68rem">Rev</span>` : '';
-      
+
       return `
         <tr>
           <td><input type="checkbox" class="row-check" data-ref="${API.escapeHtml(s.ref)}" ${checked} /></td>
@@ -310,8 +312,8 @@ async function loadAllSubmissions() {
 
     tbody.querySelectorAll('.row-check').forEach(cb => {
       cb.addEventListener('change', () => {
-        if (cb.checked) { 
-          if (!selectedRefs.includes(cb.dataset.ref)) selectedRefs.push(cb.dataset.ref); 
+        if (cb.checked) {
+          if (!selectedRefs.includes(cb.dataset.ref)) selectedRefs.push(cb.dataset.ref);
         } else {
           selectedRefs = selectedRefs.filter(r => r !== cb.dataset.ref);
         }
@@ -325,15 +327,15 @@ async function loadAllSubmissions() {
   }
 }
 
-document.getElementById('adminSearch').addEventListener('input', loadAllSubmissions);
+document.getElementById('adminSearch').addEventListener('input', API.debounce(loadAllSubmissions, 400));
 document.getElementById('adminStatusFilter').addEventListener('change', loadAllSubmissions);
 document.getElementById('adminLevelFilter').addEventListener('change', loadAllSubmissions);
 
-document.getElementById('selectAll').addEventListener('change', function() {
+document.getElementById('selectAll').addEventListener('change', function () {
   document.querySelectorAll('.row-check').forEach(cb => {
     cb.checked = this.checked;
-    if (this.checked) { 
-      if (!selectedRefs.includes(cb.dataset.ref)) selectedRefs.push(cb.dataset.ref); 
+    if (this.checked) {
+      if (!selectedRefs.includes(cb.dataset.ref)) selectedRefs.push(cb.dataset.ref);
     } else {
       selectedRefs = selectedRefs.filter(r => r !== cb.dataset.ref);
     }
@@ -343,9 +345,9 @@ document.getElementById('selectAll').addEventListener('change', function() {
 
 function updateBulkBar() {
   const bar = document.getElementById('bulkBar');
-  if (selectedRefs.length > 0) { 
-    bar.removeAttribute('hidden'); 
-    document.getElementById('bulkCount').textContent = `${selectedRefs.length} selected`; 
+  if (selectedRefs.length > 0) {
+    bar.removeAttribute('hidden');
+    document.getElementById('bulkCount').textContent = `${selectedRefs.length} selected`;
   } else {
     bar.setAttribute('hidden', '');
   }
@@ -375,7 +377,7 @@ document.getElementById('bulkReturnBtn').addEventListener('click', () => {
 document.getElementById('bulkReturnConfirmBtn').addEventListener('click', async () => {
   const remarks = document.getElementById('bulkReturnRemarks').value.trim();
   if (!remarks) { document.getElementById('bulkReturnErr').textContent = 'Please provide a reason.'; return; }
-  
+
   const btn = document.getElementById('bulkReturnConfirmBtn');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   try {
@@ -404,7 +406,7 @@ async function openReview(ref) {
   currentReviewRef = ref;
   try {
     const s = await API.submissions.get(ref);
-    
+
     let fileLinks = '';
     if (s.files && s.files.length) {
       fileLinks = `<br/><strong>Download Files:</strong> ` + s.files.map(f => `
@@ -426,7 +428,7 @@ async function openReview(ref) {
       ${s.feedback ? `<br/><strong>Previous Feedback:</strong> <em>${API.escapeHtml(s.feedback)}</em>` : ''}
       ${fileLinks}
     `;
-    
+
     document.getElementById('reviewRemarks').value = s.feedback || '';
     document.getElementById('reviewRemarksErr').textContent = '';
     document.getElementById('reviewModal').removeAttribute('hidden');
@@ -450,7 +452,7 @@ async function downloadFile(ref, fileId, filename) {
     API.showToast(`Download failed: ${err.message}`, 'error');
   }
 }
-document.getElementById('reviewModalClose').addEventListener('click',  closeReviewModal);
+document.getElementById('reviewModalClose').addEventListener('click', closeReviewModal);
 document.getElementById('reviewModalClose2').addEventListener('click', closeReviewModal);
 
 document.getElementById('reviewPostCommentBtn')?.addEventListener('click', async () => {
@@ -499,44 +501,47 @@ document.getElementById('returnBtn').addEventListener('click', async () => {
 async function loadSchools() {
   const search = document.getElementById('schoolSearch').value.toLowerCase();
   const levelF = document.getElementById('schoolLevelFilter').value;
+  API.ui.showSkeleton('schoolsGrid', 'card', 6);
   try {
     const schools = await API.admin.schools();
-    const iconMap = { kindergarten:'kinder', elementary:'elem', junior:'junior', senior:'senior' };
-    const tagMap  = { kindergarten:'tag-kinder', elementary:'tag-elem', junior:'tag-junior', senior:'tag-senior' };
-    
+    const iconMap = { kindergarten: 'kinder', elementary: 'elem', junior: 'junior', senior: 'senior' };
+    const tagMap = { kindergarten: 'tag-kinder', elementary: 'tag-elem', junior: 'tag-junior', senior: 'tag-senior' };
+
     const filtered = schools.filter(s => {
       const ms = !search || s.name.toLowerCase().includes(search) || s.school_code.toLowerCase().includes(search);
       const ml = !levelF || s.level === levelF;
       return ms && ml;
     });
-    
+
     document.getElementById('schoolsGrid').innerHTML = filtered.map(s => `
       <div class="school-card">
         <div class="school-card-header">
-          <div class="school-card-icon ${iconMap[s.level]||''}"><i class="fas fa-school"></i></div>
+          <div class="school-card-icon ${iconMap[s.level] || ''}"><i class="fas fa-school"></i></div>
           <div>
             <div class="school-card-name">${API.escapeHtml(s.name)}</div>
             <div class="school-card-id">${s.school_code}</div>
           </div>
         </div>
         <div class="school-card-meta">
-          <span class="school-meta-tag ${tagMap[s.level]||''}">${API.levelLabel(s.level)}</span>
-          <span class="school-meta-tag" style="background:#f1f5f9;color:#64748b">${s.submission_count||0} submissions</span>
-          <span class="school-meta-tag" style="background:#f1f5f9;color:#64748b">${s.staff_count||0} staff</span>
+          <span class="school-meta-tag ${tagMap[s.level] || ''}">${API.levelLabel(s.level)}</span>
+          <span class="school-meta-tag" style="background:#f1f5f9;color:#64748b">${s.submission_count || 0} submissions</span>
+          <span class="school-meta-tag" style="background:#f1f5f9;color:#64748b">${s.staff_count || 0} staff</span>
         </div>
-        <p style="font-size:.78rem;color:var(--text-muted);margin-top:10px">${API.escapeHtml(s.email||'')}</p>
+        <p style="font-size:.78rem;color:var(--text-muted);margin-top:10px">${API.escapeHtml(s.email || '')}</p>
       </div>
     `).join('') || `<p style="color:var(--text-muted);padding:24px;text-align:center">No schools found.</p>`;
   } catch (err) { API.showToast(`Failed to load schools: ${err.message}`, 'error'); }
 }
-document.getElementById('schoolSearch').addEventListener('input', loadSchools);
+document.getElementById('schoolSearch').addEventListener('input', API.debounce(loadSchools, 400));
 document.getElementById('schoolLevelFilter').addEventListener('change', loadSchools);
 
 /* ===== STAFF ACCOUNTS ===== */
 async function loadStaffPage() {
+  API.ui.showSkeleton('pendingStaffList', 'list', 2);
+  API.ui.showSkeleton('allStaffBody', 'table', 5);
   try {
     const allStaff = await API.staff.list();
-    const pending  = allStaff.filter(a => !a.status || a.status === 'pending');
+    const pending = allStaff.filter(a => !a.status || a.status === 'pending');
 
     // Pending approvals
     const pendingContainer = document.getElementById('pendingStaffList');
@@ -558,15 +563,15 @@ async function loadStaffPage() {
     const search = document.getElementById('staffSearch').value.toLowerCase();
     const filtered = allStaff.filter(a => !search ||
       (a.first_name + ' ' + a.last_name).toLowerCase().includes(search) ||
-      (a.email||'').toLowerCase().includes(search));
+      (a.email || '').toLowerCase().includes(search));
 
     document.getElementById('allStaffBody').innerHTML = filtered.length ? filtered.map(a => {
       const status = a.status || 'pending';
-      const badge  = status === 'approved' ? `<span class="pill pill-approved">Approved</span>` :
-                     status === 'rejected' ? `<span class="pill pill-returned">Rejected</span>` :
-                     `<span class="pill pill-review">Pending</span>`;
-      const date   = a.created_at ? new Date(a.created_at).toLocaleDateString('en-PH', { month:'short', day:'numeric', year:'numeric' }) : '\u2014';
-      
+      const badge = status === 'approved' ? `<span class="pill pill-approved">Approved</span>` :
+        status === 'rejected' ? `<span class="pill pill-returned">Rejected</span>` :
+          `<span class="pill pill-review">Pending</span>`;
+      const date = a.created_at ? new Date(a.created_at).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' }) : '\u2014';
+
       return `
         <tr>
           <td><strong>${API.escapeHtml(a.first_name + ' ' + a.last_name)}</strong></td>
@@ -592,47 +597,47 @@ async function updateStaffStatus(id, status) {
     loadStaffPage(); loadAdminDashboard();
   } catch (err) { API.showToast(`Failed: ${err.message}`, 'error'); }
 }
-document.getElementById('staffSearch').addEventListener('input', loadStaffPage);
+document.getElementById('staffSearch').addEventListener('input', API.debounce(loadStaffPage, 400));
 
 /* ===== REPORTS ===== */
 async function loadReports() {
   try {
     const [stats, subs] = await Promise.all([API.admin.stats(), API.submissions.list({ limit: 1000 })]);
     document.getElementById('rptApprovalRate').textContent = stats.total ? Math.round(stats.approved / stats.total * 100) + '%' : '0%';
-    document.getElementById('rptReturned').textContent     = stats.returned || 0;
-    
+    document.getElementById('rptReturned').textContent = stats.returned || 0;
+
     const now = new Date();
-    const thisMonth = subs.filter(s => { 
-      const d = new Date(s.submitted_at); 
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); 
+    const thisMonth = subs.filter(s => {
+      const d = new Date(s.submitted_at);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     });
     document.getElementById('rptThisMonth').textContent = thisMonth.length;
 
-    const byType = {}; 
-    subs.forEach(s => { byType[s.doc_type] = (byType[s.doc_type]||0) + 1; });
-    const typeEntries = Object.entries(byType).sort((a,b) => b[1]-a[1]).slice(0,8);
+    const byType = {};
+    subs.forEach(s => { byType[s.doc_type] = (byType[s.doc_type] || 0) + 1; });
+    const typeEntries = Object.entries(byType).sort((a, b) => b[1] - a[1]).slice(0, 8);
     const maxType = typeEntries[0] ? typeEntries[0][1] : 1;
-    
+
     document.getElementById('reportBars').innerHTML = typeEntries.map(([label, count]) => `
       <div class="report-bar-item">
         <div class="report-bar-label">${API.escapeHtml(label)}</div>
         <div class="report-bar-track">
-          <div class="report-bar-fill" style="width:${Math.round(count/maxType*100)}%"></div>
+          <div class="report-bar-fill" style="width:${Math.round(count / maxType * 100)}%"></div>
         </div>
         <div class="report-bar-count">${count}</div>
       </div>
     `).join('') || `<p style="color:var(--text-muted);padding:16px">No data yet.</p>`;
 
-    const bySchool = {}; 
-    subs.forEach(s => { bySchool[s.school_name||'Unknown'] = (bySchool[s.school_name||'Unknown']||0) + 1; });
-    const schoolEntries = Object.entries(bySchool).sort((a,b) => b[1]-a[1]);
+    const bySchool = {};
+    subs.forEach(s => { bySchool[s.school_name || 'Unknown'] = (bySchool[s.school_name || 'Unknown'] || 0) + 1; });
+    const schoolEntries = Object.entries(bySchool).sort((a, b) => b[1] - a[1]);
     const maxSchool = schoolEntries[0] ? schoolEntries[0][1] : 1;
-    
+
     document.getElementById('reportBySchool').innerHTML = schoolEntries.map(([label, count]) => `
       <div class="report-bar-item">
         <div class="report-bar-label" style="width:160px">${API.escapeHtml(label)}</div>
         <div class="report-bar-track">
-          <div class="report-bar-fill" style="width:${Math.round(count/maxSchool*100)}%;background:var(--success)"></div>
+          <div class="report-bar-fill" style="width:${Math.round(count / maxSchool * 100)}%;background:var(--success)"></div>
         </div>
         <div class="report-bar-count">${count}</div>
       </div>
@@ -645,10 +650,10 @@ document.getElementById('exportAdminBtn').addEventListener('click', async () => 
   try {
     const subs = await API.submissions.list({ limit: 5000 });
     API.exportToCSV(
-      subs.map(s => [s.ref, s.school_name||'', API.levelLabel(s.school_level), s.doc_type, s.school_year,
-        (s.first_name||'') + ' ' + (s.last_name||''), new Date(s.submitted_at).toLocaleDateString('en-PH'),
-        s.file_count||0, s.status, s.feedback||'']),
-      ['Reference','School','Level','Document Type','School Year','Submitted By','Date','Files','Status','Feedback'],
+      subs.map(s => [s.ref, s.school_name || '', API.levelLabel(s.school_level), s.doc_type, s.school_year,
+      (s.first_name || '') + ' ' + (s.last_name || ''), new Date(s.submitted_at).toLocaleDateString('en-PH'),
+      s.file_count || 0, s.status, s.feedback || '']),
+      ['Reference', 'School', 'Level', 'Document Type', 'School Year', 'Submitted By', 'Date', 'Files', 'Status', 'Feedback'],
       'all_submissions.csv'
     );
   } catch (err) { API.showToast(`Export failed: ${err.message}`, 'error'); }
@@ -658,33 +663,34 @@ document.getElementById('exportReportBtn').addEventListener('click', async () =>
   try {
     const subs = await API.submissions.list({ limit: 5000 });
     API.exportToCSV(
-      subs.map(s => [s.ref, s.school_name||'', s.doc_type, s.school_year, s.status, new Date(s.submitted_at).toLocaleDateString('en-PH')]),
-      ['Reference','School','Document Type','School Year','Status','Date'],
-      `report_${new Date().toISOString().slice(0,10)}.csv`
+      subs.map(s => [s.ref, s.school_name || '', s.doc_type, s.school_year, s.status, new Date(s.submitted_at).toLocaleDateString('en-PH')]),
+      ['Reference', 'School', 'Document Type', 'School Year', 'Status', 'Date'],
+      `report_${new Date().toISOString().slice(0, 10)}.csv`
     );
   } catch (err) { API.showToast(`Export failed: ${err.message}`, 'error'); }
 });
 
 /* ===== AUDIT LOG ===== */
 async function loadAuditLog() {
-  const search  = document.getElementById('auditSearch').value.toLowerCase();
+  const search = document.getElementById('auditSearch').value.toLowerCase();
   const actionF = document.getElementById('auditActionFilter').value;
+  API.ui.showSkeleton('auditLogList', 'list', 6);
   try {
     const params = { limit: 200 };
     if (actionF) params.action = actionF;
-    if (search)  params.search = search;
+    if (search) params.search = search;
     const log = await API.admin.audit(params);
-    
-    const badgeMap  = { submit:'submit', approve:'approve', return:'return', resub:'resub', login:'login' };
-    const labelMap  = { submit:'Submitted', approve:'Approved', return:'Returned', resub:'Resubmitted', login:'Account Action' };
-    
+
+    const badgeMap = { submit: 'submit', approve: 'approve', return: 'return', resub: 'resub', login: 'login' };
+    const labelMap = { submit: 'Submitted', approve: 'Approved', return: 'Returned', resub: 'Resubmitted', login: 'Account Action' };
+
     document.getElementById('auditLogList').innerHTML = log.length ? log.map(e => `
       <div class="audit-item">
-        <span class="audit-badge ${badgeMap[e.action]||'login'}">${labelMap[e.action]||e.action}</span>
+        <span class="audit-badge ${badgeMap[e.action] || 'login'}">${labelMap[e.action] || e.action}</span>
         <div class="audit-text">
-          <strong>${API.escapeHtml(e.ref||'\u2014')}</strong>
+          <strong>${API.escapeHtml(e.ref || '\u2014')}</strong>
           ${e.doc_type ? ` \u2013 ${API.escapeHtml(e.doc_type)}` : ''}
-          | School: ${API.escapeHtml(e.school_name||'\u2014')}
+          | School: ${API.escapeHtml(e.school_name || '\u2014')}
           | By: ${API.escapeHtml(e.staff_name || e.admin_name || '\u2014')}
           ${e.remarks ? `<br/><em style="font-size:.78rem;color:var(--text-muted)">Feedback: ${API.escapeHtml(e.remarks)}</em>` : ''}
         </div>
@@ -693,15 +699,15 @@ async function loadAuditLog() {
     `).join('') : `<p style="color:var(--text-muted);text-align:center;padding:32px">No audit entries found.</p>`;
   } catch (err) { API.showToast(`Failed to load audit log: ${err.message}`, 'error'); }
 }
-document.getElementById('auditSearch').addEventListener('input', loadAuditLog);
+document.getElementById('auditSearch').addEventListener('input', API.debounce(loadAuditLog, 400));
 document.getElementById('auditActionFilter').addEventListener('change', loadAuditLog);
 
 document.getElementById('exportAuditBtn').addEventListener('click', async () => {
   try {
     const log = await API.admin.audit({ limit: 5000 });
     API.exportToCSV(
-      log.map(e => [e.action, e.ref||'', e.school_name||'', e.staff_name||e.admin_name||'', e.doc_type||'', e.remarks||'', new Date(e.created_at).toLocaleString('en-PH')]),
-      ['Action','Reference','School','By','Document','Remarks','Timestamp'],
+      log.map(e => [e.action, e.ref || '', e.school_name || '', e.staff_name || e.admin_name || '', e.doc_type || '', e.remarks || '', new Date(e.created_at).toLocaleString('en-PH')]),
+      ['Action', 'Reference', 'School', 'By', 'Document', 'Remarks', 'Timestamp'],
       'audit_log.csv'
     );
   } catch (err) { API.showToast(`Export failed: ${err.message}`, 'error'); }
@@ -709,14 +715,15 @@ document.getElementById('exportAuditBtn').addEventListener('click', async () => 
 
 /* ===== DEADLINES ===== */
 async function loadDeadlineMgmt() {
+  API.ui.showSkeleton('deadlineMgmtList', 'list', 4);
   try {
     const deadlines = await API.admin.getDeadlines();
     const list = document.getElementById('deadlineMgmtList');
-    
+
     list.innerHTML = deadlines.length ? deadlines.map(d => {
       const days = API.getDaysUntil(d.deadline);
       const numCls = days < 0 ? 'overdue' : days <= 3 ? 'urgent' : days <= 7 ? 'warning' : 'ok';
-      
+
       return `
         <div class="deadline-mgmt-row">
           <div class="deadline-days" style="min-width:56px;text-align:center">
@@ -753,10 +760,10 @@ document.getElementById('cancelDeadline').addEventListener('click', () => {
 document.getElementById('deadlineForm').addEventListener('submit', async e => {
   e.preventDefault();
   const docType = document.getElementById('dlDocType').value;
-  const year    = document.getElementById('dlYear').value;
-  const date    = document.getElementById('dlDate').value;
-  const level   = document.getElementById('dlLevel').value;
-  
+  const year = document.getElementById('dlYear').value;
+  const date = document.getElementById('dlDate').value;
+  const level = document.getElementById('dlLevel').value;
+
   if (!docType || !date) { API.showToast('Document type and date are required.', 'error'); return; }
   try {
     await API.admin.postDeadline({ docType, schoolYear: year, deadline: date, level });
@@ -769,6 +776,7 @@ document.getElementById('deadlineForm').addEventListener('submit', async e => {
 
 /* ===== NOTICES ===== */
 async function loadNotices() {
+  API.ui.showSkeleton('adminNoticesList', 'list', 4);
   try {
     try {
       const analytics = await API.admin.getNoticesAnalytics();
@@ -794,7 +802,7 @@ async function loadNotices() {
 
     const notices = await API.admin.getNotices();
     const list = document.getElementById('adminNoticesList');
-    
+
     list.innerHTML = notices.map(n => {
       const ic = n.type === 'info' ? 'fa-info-circle' : n.type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle';
       return `
@@ -834,11 +842,11 @@ document.getElementById('cancelNotice').addEventListener('click', () => {
 document.getElementById('noticeForm').addEventListener('submit', async e => {
   e.preventDefault();
   const title = document.getElementById('noticeTitle').value.trim();
-  const msg   = document.getElementById('noticeMessage').value.trim();
-  const type  = document.getElementById('noticeType').value;
+  const msg = document.getElementById('noticeMessage').value.trim();
+  const type = document.getElementById('noticeType').value;
   const targetLevel = document.getElementById('noticeTargetLevel').value;
   const targetSchoolId = document.getElementById('noticeTargetSchool').value;
-  
+
   if (!title || !msg) { API.showToast('Title and message are required.', 'error'); return; }
   try {
     await API.admin.postNotice({ type, title, message: msg, targetLevel, targetSchoolId: targetSchoolId || null });
@@ -856,13 +864,14 @@ async function populateNoticeTargetSchools() {
     if (!target) return;
     target.innerHTML = '<option value="">All Schools (for selected level)</option>' +
       schools.map(s => `<option value="${s.id}">${API.escapeHtml(s.name)} (${API.levelLabel(s.level)})</option>`).join('');
-  } catch {}
+  } catch { }
 }
 populateNoticeTargetSchools();
 
 async function loadValidationRules() {
   const list = document.getElementById('validationRulesList');
   if (!list) return;
+  API.ui.showSkeleton('validationRulesList', 'list', 4);
   try {
     const rules = await API.admin.getValidationRules();
     list.innerHTML = rules.map((r) => `
@@ -903,8 +912,8 @@ document.getElementById('adminProfileForm').addEventListener('submit', async e =
     await API.admin.updateProfile({
       fullName: document.getElementById('adminFullName').value,
       position: document.getElementById('adminPosition').value,
-      email:    document.getElementById('adminEmail').value,
-      phone:    document.getElementById('adminPhone').value,
+      email: document.getElementById('adminEmail').value,
+      phone: document.getElementById('adminPhone').value,
     });
     API.showToast('Profile updated.', 'success');
   } catch (err) { API.showToast(`Update failed: ${err.message}`, 'error'); }
@@ -915,7 +924,7 @@ document.getElementById('adminPwForm').addEventListener('submit', async e => {
   try {
     await API.admin.changePassword({
       currentPassword: document.getElementById('adminCurrPw').value,
-      newPassword:     document.getElementById('adminNewPw').value,
+      newPassword: document.getElementById('adminNewPw').value,
     });
     API.showToast('Password updated.', 'success');
     document.getElementById('adminPwForm').reset();

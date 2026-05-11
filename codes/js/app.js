@@ -112,7 +112,8 @@ function showToast(message, type) {
       ? "fa-exclamation-circle"
       : "fa-info-circle";
 
-  toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+  toast.innerHTML = `<i class="fas ${icon}"></i> `;
+  toast.appendChild(document.createTextNode(message));
   document.body.appendChild(toast);
 
   setTimeout(() => {

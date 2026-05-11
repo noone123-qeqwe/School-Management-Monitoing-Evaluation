@@ -304,9 +304,9 @@ async function loadSubmissions(mode) {
   } catch (err) { API.showToast('Failed to load submissions: ' + err.message, 'error'); }
 }
 
-document.getElementById('submissionSearch').addEventListener('input', () => loadSubmissions('all'));
+document.getElementById('submissionSearch').addEventListener('input', API.debounce(() => loadSubmissions('all'), 400));
 document.getElementById('submissionFilter').addEventListener('change', () => loadSubmissions('all'));
-document.getElementById('mineSearch').addEventListener('input', () => loadSubmissions('mine'));
+document.getElementById('mineSearch').addEventListener('input', API.debounce(() => loadSubmissions('mine'), 400));
 document.getElementById('mineFilter').addEventListener('change', () => loadSubmissions('mine'));
 
 /* ===== EXPORT CSV ===== */
@@ -927,4 +927,3 @@ document.getElementById('logoutBtn').addEventListener('click', () => API.auth.lo
 
 /* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
 setInterval(refreshNotifBell, 60000);
-
