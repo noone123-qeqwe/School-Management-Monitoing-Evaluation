@@ -1,780 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard – SMME Portal</title>
-  <link rel="stylesheet" href="../css/admin.css?v=1.7.0" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - SMME Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/user.css">
 </head>
+
 <body class="dash-body">
 
-  <!-- SIDEBAR -->
+  <!-- Sidebar -->
   <aside class="sidebar admin-sidebar" id="sidebar">
     <div class="sidebar-header">
-      <img src="../assets/smmelogo.jpg" alt="SMME Logo" class="sidebar-logo-img" />
-      <div class="sidebar-brand">
-        <span class="sidebar-title">SMME</span>
-        <span class="sidebar-sub">Admin Panel</span>
+      <img src="../assets/logo.png" alt="Logo" class="sidebar-logo-img">
+      <div>
+        <span class="sidebar-title">SMME Portal</span>
+        <span class="sidebar-sub" id="sidebarDivision">Division Office</span>
       </div>
-      <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
     </div>
-
     <div class="sidebar-user">
-      <div class="sidebar-avatar admin-avatar"><i class="fas fa-user-shield"></i></div>
+      <div class="sidebar-avatar admin-avatar"><i class="fas fa-shield-alt"></i></div>
       <div class="sidebar-user-info">
-        <strong id="sidebarAdminName">Administrator</strong>
-        <span id="sidebarDivision">Division Office</span>
+        <strong id="sidebarAdminName">Admin User</strong>
+        <span>Administrator</span>
       </div>
     </div>
-
     <nav class="sidebar-nav">
-      <div class="sidebar-nav-section">Main</div>
-      <a href="#" class="sidebar-link active" data-page="dashboard">
-        <span class="sidebar-link-icon"><i class="fas fa-th-large"></i></span>
-        <span class="sidebar-link-text">Dashboard</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="submissions">
-        <span class="sidebar-link-icon"><i class="fas fa-inbox"></i></span>
-        <span class="sidebar-link-text">All Submissions</span>
-        <span class="nav-badge" id="pendingBadge">0</span>
-      </a>
-
+      <div class="sidebar-nav-section">Main Menu</div>
+      <a href="#" class="sidebar-link active" data-page="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a>
+      <a href="#" class="sidebar-link" data-page="submissions"><i class="fas fa-folder-open"></i> Submissions <span
+          class="nav-badge" id="pendingBadge" hidden>0</span></a>
+      <a href="#" class="sidebar-link" data-page="schools"><i class="fas fa-school"></i> Schools</a>
+      <a href="#" class="sidebar-link" data-page="staff"><i class="fas fa-users"></i> Staff <span class="nav-badge"
+          id="staffPendingBadge" hidden>0</span></a>
       <div class="sidebar-nav-section">Management</div>
-      <a href="#" class="sidebar-link" data-page="schools">
-        <span class="sidebar-link-icon"><i class="fas fa-school"></i></span>
-        <span class="sidebar-link-text">Registered Schools</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="staff">
-        <span class="sidebar-link-icon"><i class="fas fa-users"></i></span>
-        <span class="sidebar-link-text">Staff Accounts</span>
-        <span class="nav-badge" id="staffPendingBadge" hidden>0</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="deadlines">
-        <span class="sidebar-link-icon"><i class="fas fa-calendar-alt"></i></span>
-        <span class="sidebar-link-text">Deadlines</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="notices">
-        <span class="sidebar-link-icon"><i class="fas fa-bell"></i></span>
-        <span class="sidebar-link-text">Notices</span>
-      </a>
-
-      <div class="sidebar-nav-section">Analytics</div>
-      <a href="#" class="sidebar-link" data-page="reports">
-        <span class="sidebar-link-icon"><i class="fas fa-chart-bar"></i></span>
-        <span class="sidebar-link-text">Reports</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="audit">
-        <span class="sidebar-link-icon"><i class="fas fa-history"></i></span>
-        <span class="sidebar-link-text">Audit Log</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="validation">
-        <span class="sidebar-link-icon"><i class="fas fa-shield-check"></i></span>
-        <span class="sidebar-link-text">Validation Rules</span>
-      </a>
-
-      <div class="sidebar-nav-section">Account</div>
-      <a href="#" class="sidebar-link" data-page="settings">
-        <span class="sidebar-link-icon"><i class="fas fa-cog"></i></span>
-        <span class="sidebar-link-text">Settings</span>
-      </a>
+      <a href="#" class="sidebar-link" data-page="deadlines"><i class="fas fa-calendar-alt"></i> Deadlines</a>
+      <a href="#" class="sidebar-link" data-page="notices"><i class="fas fa-bullhorn"></i> Notices</a>
+      <a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a>
+      <a href="#" class="sidebar-link" data-page="audit"><i class="fas fa-history"></i> Audit Log</a>
+      <a href="#" class="sidebar-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
     </nav>
-
     <div class="sidebar-footer">
-      <button class="sidebar-logout" id="logoutBtn">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Sign Out</span>
-      </button>
+      <button class="sidebar-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
   </aside>
 
-  <!-- SIDEBAR OVERLAY (mobile) -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <!-- MAIN -->
-  <div class="dash-main" id="dashMain">
+  <!-- Main Content -->
+  <main class="dash-main">
+    <!-- Topbar -->
     <header class="dash-topbar admin-topbar">
       <div class="topbar-left">
-        <button class="topbar-menu" id="topbarMenu" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
-        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <button class="topbar-menu" id="topbarMenu"><i class="fas fa-bars"></i></button>
+        <h2 class="topbar-title" id="topbarTitle">Dashboard</h2>
       </div>
       <div class="topbar-right">
-        <div class="topbar-date">
-          <i class="fas fa-calendar-alt"></i>
-          <span id="currentDate"></span>
-        </div>
-        <div class="topbar-divider"></div>
+        <div class="topbar-date"><i class="fas fa-calendar-day"></i> <span id="currentDate"></span></div>
         <div class="topbar-user">
           <div class="topbar-avatar admin-avatar-sm"><i class="fas fa-user-shield"></i></div>
-          <div class="topbar-user-info">
-            <span class="topbar-user-name" id="topbarAdminName">Admin</span>
-            <span class="topbar-user-role">Division Admin</span>
-          </div>
+          <span id="topbarAdminName">Admin</span>
         </div>
       </div>
     </header>
 
-    <!-- PAGE: DASHBOARD -->
-    <div class="dash-page active" id="page-dashboard">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1 id="adminWelcome">Admin Dashboard</h1>
+    <div class="dash-content">
+      <!-- Dashboard Page -->
+      <section class="dash-page active" id="page-dashboard">
+        <div class="admin-page-header">
+          <div>
+            <h1 id="adminWelcome">Welcome, Admin</h1>
             <p class="page-subtitle" id="adminDivisionLabel">Division Office</p>
           </div>
         </div>
 
-        <!-- STAT CARDS -->
+        <!-- Stats Grid -->
         <div class="stats-grid">
-          <div class="stat-card admin-stat-card" data-color="blue">
-            <div class="stat-card-icon blue"><i class="fas fa-inbox"></i></div>
-            <div class="stat-card-body">
+          <div class="stat-card admin-stat-card blue">
+            <div class="stat-icon blue"><i class="fas fa-file-alt"></i></div>
+            <div class="stat-info">
               <span class="stat-num" id="statTotalSubs">0</span>
               <span class="stat-label">Total Submissions</span>
             </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-inbox"></i></div>
           </div>
-          <div class="stat-card admin-stat-card" data-color="amber">
-            <div class="stat-card-icon amber"><i class="fas fa-hourglass-half"></i></div>
-            <div class="stat-card-body">
+          <div class="stat-card admin-stat-card yellow">
+            <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+            <div class="stat-info">
               <span class="stat-num" id="statPending">0</span>
               <span class="stat-label">Pending Review</span>
             </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-hourglass-half"></i></div>
           </div>
-          <div class="stat-card admin-stat-card" data-color="green">
-            <div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div>
-            <div class="stat-card-body">
+          <div class="stat-card admin-stat-card green">
+            <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-info">
               <span class="stat-num" id="statApproved">0</span>
               <span class="stat-label">Approved</span>
             </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-check-circle"></i></div>
           </div>
-          <div class="stat-card admin-stat-card" data-color="violet">
-            <div class="stat-card-icon violet"><i class="fas fa-school"></i></div>
-            <div class="stat-card-body">
+          <div class="stat-card admin-stat-card purple">
+            <div class="stat-icon purple"><i class="fas fa-school"></i></div>
+            <div class="stat-info">
               <span class="stat-num" id="statSchools">0</span>
-              <span class="stat-label">Registered Schools</span>
+              <span class="stat-label">Schools</span>
             </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-school"></i></div>
           </div>
         </div>
 
-        <!-- VISUAL ANALYTICS (Chart.js) -->
-        <div class="dash-card" id="adminChartsWrap" style="margin-bottom:18px">
-          <div class="dash-card-header">
-            <h3><i class="fas fa-chart-line"></i> Visual analytics</h3>
-          </div>
-          <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;padding:8px 0 4px">
-            <div style="min-height:280px;position:relative">
+        <!-- Charts and Activity Layout -->
+        <div class="dash-two-col">
+          <div class="admin-dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-chart-bar"></i> Submissions by School</h3>
+            </div>
+            <div style="padding: 20px; height: 300px;">
               <canvas id="chartBySchool"></canvas>
             </div>
-            <div style="min-height:280px;position:relative">
+          </div>
+          <div class="admin-dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-chart-pie"></i> Status Distribution</h3>
+            </div>
+            <div style="padding: 20px; height: 300px;">
               <canvas id="chartStatusPie"></canvas>
             </div>
           </div>
-          <div style="min-height:240px;position:relative;padding-top:8px;border-top:1px solid var(--border, #e2e8f0);margin-top:8px">
-            <canvas id="chartVolumeLine"></canvas>
-          </div>
         </div>
 
-        <!-- TWO COLUMN -->
         <div class="dash-two-col">
-          <div class="dash-card">
+          <div class="admin-dash-card">
             <div class="dash-card-header">
-              <h3><i class="fas fa-clock"></i> Pending Review</h3>
-              <button class="link-btn" onclick="switchPage('submissions')">View All <i class="fas fa-arrow-right" style="font-size:0.75rem"></i></button>
+              <h3><i class="fas fa-chart-line"></i> Submission Volume (8 Weeks)</h3>
             </div>
-            <div class="table-wrap">
-              <table class="dash-table">
-                <thead>
-                  <tr>
-                    <th>Reference</th>
-                    <th>School</th>
-                    <th>Document</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="pendingTableBody"></tbody>
-              </table>
+            <div style="padding: 20px; height: 300px;">
+              <canvas id="chartVolumeLine"></canvas>
             </div>
           </div>
-
-          <div class="dash-card schools-level-card">
+          <div class="admin-dash-card">
             <div class="dash-card-header">
-              <h3><i class="fas fa-chart-pie"></i> Schools by Level</h3>
+              <h3><i class="fas fa-bell"></i> Recent Activity</h3>
             </div>
-            <div class="level-breakdown">
-              <div class="level-bar-item">
-                <div class="level-bar-label"><span class="level-dot kinder-dot"></span><span>Kindergarten</span></div>
-                <div class="level-bar-track"><div class="level-bar-fill kinder-fill" style="width:13%"></div></div>
-                <span class="level-bar-count">5</span>
-              </div>
-              <div class="level-bar-item">
-                <div class="level-bar-label"><span class="level-dot elem-dot"></span><span>Elementary</span></div>
-                <div class="level-bar-track"><div class="level-bar-fill elem-fill" style="width:42%"></div></div>
-                <span class="level-bar-count">16</span>
-              </div>
-              <div class="level-bar-item">
-                <div class="level-bar-label"><span class="level-dot junior-dot"></span><span>Junior High</span></div>
-                <div class="level-bar-track"><div class="level-bar-fill junior-fill" style="width:26%"></div></div>
-                <span class="level-bar-count">10</span>
-              </div>
-              <div class="level-bar-item">
-                <div class="level-bar-label"><span class="level-dot senior-dot"></span><span>Senior High</span></div>
-                <div class="level-bar-track"><div class="level-bar-fill senior-fill" style="width:18%"></div></div>
-                <span class="level-bar-count">7</span>
-              </div>
+            <div class="activity-list" id="activityList">
+              <!-- Activity populated by JS -->
             </div>
-            <div class="level-breakdown-note">Total: 38 registered private schools</div>
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY -->
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <h3><i class="fas fa-history"></i> Recent Activity</h3>
-          </div>
-          <div class="activity-list" id="activityList"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: ALL SUBMISSIONS -->
-    <div class="dash-page" id="page-submissions">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>All Submissions</h1>
-            <p class="page-subtitle">Review and manage documents from all schools</p>
-          </div>
-          <button class="btn btn-outline" id="exportAdminBtn"><i class="fas fa-download"></i> Export CSV</button>
-        </div>
-        <div class="bulk-bar" id="bulkBar" hidden>
-          <i class="fas fa-check-square" style="font-size:1rem"></i>
-          <span id="bulkCount">0 selected</span>
-          <div class="bulk-bar-actions">
-            <button class="btn btn-sm btn-success" id="bulkApproveBtn"><i class="fas fa-check"></i> Approve Selected</button>
-            <button class="btn btn-sm btn-warning" id="bulkReturnBtn"><i class="fas fa-undo"></i> Return Selected</button>
-            <button class="btn btn-sm btn-ghost" id="bulkClearBtn"><i class="fas fa-times"></i> Clear</button>
-          </div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <div class="table-filters">
-              <div class="filter-search-wrap">
-                <i class="fas fa-search filter-search-icon"></i>
-                <input type="text" id="adminSearch" placeholder="Search by school, reference, document..." class="filter-input filter-input-search" />
-              </div>
-              <select id="adminStatusFilter" class="filter-select">
-                <option value="">All Status</option>
-                <option value="received">Received</option>
-                <option value="review">Under Review</option>
-                <option value="approved">Approved</option>
-                <option value="returned">Returned</option>
-              </select>
-              <select id="adminLevelFilter" class="filter-select">
-                <option value="">All Levels</option>
-                <option value="kindergarten">Kindergarten</option>
-                <option value="elementary">Elementary</option>
-                <option value="junior">Junior High</option>
-                <option value="senior">Senior High</option>
-              </select>
-            </div>
+        <!-- Pending Table Preview -->
+        <div class="admin-dash-card">
+          <div class="dash-card-header" style="display: flex; justify-content: space-between;">
+            <h3><i class="fas fa-tasks"></i> Needs Review</h3>
+            <button class="btn btn-sm btn-outline" onclick="switchPage('submissions')">View All</button>
           </div>
           <div class="table-wrap">
             <table class="dash-table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selectAll" title="Select all" /></th>
-                  <th>Reference No.</th>
+                  <th>Reference</th>
                   <th>School</th>
-                  <th>Level</th>
-                  <th>Document Type</th>
-                  <th>School Year</th>
-                  <th>Submitted By</th>
+                  <th>Type</th>
                   <th>Date</th>
-                  <th>Files</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody id="adminSubmissionsBody"></tbody>
+              <tbody id="pendingTableBody">
+                <!-- Populated by JS -->
+              </tbody>
             </table>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Additional template pages (submissions, schools, etc.) injected here dynamically -->
     </div>
+  </main>
 
-    <!-- PAGE: SCHOOLS -->
-    <div class="dash-page" id="page-schools">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Registered Schools</h1>
-            <p class="page-subtitle">All private schools registered under this division</p>
-          </div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <div class="table-filters">
-              <div class="filter-search-wrap">
-                <i class="fas fa-search filter-search-icon"></i>
-                <input type="text" id="schoolSearch" placeholder="Search schools..." class="filter-input filter-input-search" />
-              </div>
-              <select id="schoolLevelFilter" class="filter-select">
-                <option value="">All Levels</option>
-                <option value="kindergarten">Kindergarten</option>
-                <option value="elementary">Elementary</option>
-                <option value="junior">Junior High</option>
-                <option value="senior">Senior High</option>
-              </select>
-            </div>
-          </div>
-          <div class="schools-grid" id="schoolsGrid"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: STAFF ACCOUNTS -->
-    <div class="dash-page" id="page-staff">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Staff Accounts</h1>
-            <p class="page-subtitle">Manage school staff who can submit documents</p>
-          </div>
-        </div>
-        <div class="dash-card" id="pendingStaffCard">
-          <div class="dash-card-header">
-            <h3><i class="fas fa-user-clock"></i> Pending Approval</h3>
-          </div>
-          <div id="pendingStaffList" class="pending-staff-list">
-            <p class="empty-state-text">No pending registrations.</p>
-          </div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <h3><i class="fas fa-users"></i> All Staff</h3>
-            <div class="table-filters">
-              <div class="filter-search-wrap">
-                <i class="fas fa-search filter-search-icon"></i>
-                <input type="text" id="staffSearch" placeholder="Search staff..." class="filter-input filter-input-search" />
-              </div>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table class="dash-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>School</th>
-                  <th>Email</th>
-                  <th>Status</th>
-                  <th>Registered</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="allStaffBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: DEADLINES -->
-    <div class="dash-page" id="page-deadlines">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Submission Deadlines</h1>
-            <p class="page-subtitle">Set and manage deadlines visible to all schools</p>
-          </div>
-          <button class="btn btn-primary" id="addDeadlineBtn"><i class="fas fa-plus"></i> Add Deadline</button>
-        </div>
-        <div class="dash-card form-card" id="deadlineFormCard" hidden>
-          <div class="form-card-header">
-            <h3><i class="fas fa-calendar-plus"></i> New Deadline</h3>
-          </div>
-          <div class="form-card-body">
-            <form id="deadlineForm">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Document Type <span class="required">*</span></label>
-                  <select id="dlDocType">
-                    <option value="">-- Select --</option>
-                    <option>Enrollment Report</option>
-                    <option>Faculty Credentials</option>
-                    <option>Compliance Requirements</option>
-                    <option>Financial Reports</option>
-                    <option>Accreditation Documents</option>
-                    <option>Curriculum Documents</option>
-                    <option>Assessment Data</option>
-                    <option>Graduation Requirements</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>School Year <span class="required">*</span></label>
-                  <select id="dlYear">
-                    <option value="2026-2027">2026–2027</option>
-                    <option value="2025-2026">2025–2026</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Deadline Date <span class="required">*</span></label>
-                  <input type="date" id="dlDate" />
-                </div>
-                <div class="form-group">
-                  <label>Applies To</label>
-                  <select id="dlLevel">
-                    <option value="all">All Levels</option>
-                    <option value="kindergarten">Kindergarten</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="junior">Junior High</option>
-                    <option value="senior">Senior High</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-ghost" id="cancelDeadline"><i class="fas fa-times"></i> Cancel</button>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Deadline</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="dash-card">
-          <div id="deadlineMgmtList" class="deadline-list-wrap"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: REPORTS -->
-    <div class="dash-page" id="page-reports">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Reports &amp; Analytics</h1>
-            <p class="page-subtitle">Submission statistics across all schools</p>
-          </div>
-          <button class="btn btn-primary" id="exportReportBtn"><i class="fas fa-download"></i> Export CSV</button>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-card admin-stat-card" data-color="blue">
-            <div class="stat-card-icon blue"><i class="fas fa-calendar-check"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="rptThisMonth">0</span>
-              <span class="stat-label">This Month</span>
-            </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-calendar-check"></i></div>
-          </div>
-          <div class="stat-card admin-stat-card" data-color="green">
-            <div class="stat-card-icon green"><i class="fas fa-percentage"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="rptApprovalRate">0%</span>
-              <span class="stat-label">Approval Rate</span>
-            </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-percentage"></i></div>
-          </div>
-          <div class="stat-card admin-stat-card" data-color="amber">
-            <div class="stat-card-icon amber"><i class="fas fa-stopwatch"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num">2.4 days</span>
-              <span class="stat-label">Avg. Review Time</span>
-            </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-stopwatch"></i></div>
-          </div>
-          <div class="stat-card admin-stat-card" data-color="red">
-            <div class="stat-card-icon red"><i class="fas fa-undo"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="rptReturned">0</span>
-              <span class="stat-label">Returned</span>
-            </div>
-            <div class="stat-card-bg-icon"><i class="fas fa-undo"></i></div>
-          </div>
-        </div>
-        <div class="dash-two-col">
-          <div class="dash-card">
-            <div class="dash-card-header"><h3><i class="fas fa-chart-bar"></i> Submissions by Document Type</h3></div>
-            <div class="report-bars" id="reportBars"></div>
-          </div>
-          <div class="dash-card">
-            <div class="dash-card-header"><h3><i class="fas fa-building"></i> Submissions by School</h3></div>
-            <div class="report-bars" id="reportBySchool"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: AUDIT LOG -->
-    <div class="dash-page" id="page-audit">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Audit Log</h1>
-            <p class="page-subtitle">Timestamped record of all portal actions</p>
-          </div>
-          <button class="btn btn-outline" id="exportAuditBtn"><i class="fas fa-download"></i> Export CSV</button>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-header">
-            <div class="table-filters">
-              <div class="filter-search-wrap">
-                <i class="fas fa-search filter-search-icon"></i>
-                <input type="text" id="auditSearch" placeholder="Search audit log..." class="filter-input filter-input-search" />
-              </div>
-              <select id="auditActionFilter" class="filter-select">
-                <option value="">All Actions</option>
-                <option value="submit">Submit</option>
-                <option value="approve">Approve</option>
-                <option value="return">Return</option>
-                <option value="resub">Resubmit</option>
-                <option value="login">Login</option>
-              </select>
-            </div>
-          </div>
-          <div id="auditLogList" class="audit-log-wrap"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: NOTICES -->
-    <div class="dash-page" id="page-notices">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Division Notices</h1>
-            <p class="page-subtitle">Post announcements visible to all registered schools</p>
-          </div>
-          <button class="btn btn-primary" id="addNoticeBtn"><i class="fas fa-plus"></i> Add Notice</button>
-        </div>
-        <div class="stats-grid" style="margin-bottom:14px">
-          <div class="stat-card admin-stat-card" data-color="blue">
-            <div class="stat-card-icon blue"><i class="fas fa-users"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="noticeAudience">0</span>
-              <span class="stat-label">Audience Size</span>
-            </div>
-          </div>
-          <div class="stat-card admin-stat-card" data-color="green">
-            <div class="stat-card-icon green"><i class="fas fa-eye"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="noticeViewedSchools">0</span>
-              <span class="stat-label">Viewed Schools</span>
-            </div>
-          </div>
-          <div class="stat-card admin-stat-card" data-color="amber">
-            <div class="stat-card-icon amber"><i class="fas fa-chart-line"></i></div>
-            <div class="stat-card-body">
-              <span class="stat-num" id="noticeViewRate">0%</span>
-              <span class="stat-label">View Rate</span>
-            </div>
-          </div>
-        </div>
-        <div class="dash-card" style="margin-bottom:14px">
-          <div class="dash-card-header"><h3><i class="fas fa-chart-area"></i> 7-Day View Trend</h3></div>
-          <div id="noticeTrend" class="report-bars"></div>
-        </div>
-        <div class="dash-card form-card" id="noticeFormCard" hidden>
-          <div class="form-card-header">
-            <h3><i class="fas fa-paper-plane"></i> New Notice</h3>
-          </div>
-          <div class="form-card-body">
-            <form id="noticeForm">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Title <span class="required">*</span></label>
-                  <input type="text" id="noticeTitle" placeholder="Notice title" />
-                </div>
-                <div class="form-group">
-                  <label>Type</label>
-                  <select id="noticeType">
-                    <option value="info">Information</option>
-                    <option value="warning">Warning</option>
-                    <option value="success">Announcement</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Target Level</label>
-                  <select id="noticeTargetLevel">
-                    <option value="all">All Levels</option>
-                    <option value="kindergarten">Kindergarten</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="junior">Junior High</option>
-                    <option value="senior">Senior High</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Target School (optional)</label>
-                <select id="noticeTargetSchool">
-                  <option value="">All Schools (for selected level)</option>
-                </select>
-              </div>
-              <div class="form-group full-width">
-                <label>Message <span class="required">*</span></label>
-                <textarea id="noticeMessage" rows="3" placeholder="Notice content..."></textarea>
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-ghost" id="cancelNotice"><i class="fas fa-times"></i> Cancel</button>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post Notice</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="notices-list" id="adminNoticesList"></div>
-      </div>
-    </div>
-
-    <!-- PAGE: VALIDATION RULES -->
-    <div class="dash-page" id="page-validation">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Validation Rules</h1>
-            <p class="page-subtitle">Control data quality checks for school submissions</p>
-          </div>
-        </div>
-        <div class="dash-card">
-          <div id="validationRulesList" class="audit-log-wrap"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE: SETTINGS -->
-    <div class="dash-page" id="page-settings">
-      <div class="dash-content">
-        <div class="page-header">
-          <div class="page-header-text">
-            <h1>Settings</h1>
-            <p class="page-subtitle">Manage your admin account</p>
-          </div>
-        </div>
-        <div class="profile-grid">
-          <div class="profile-card">
-            <div class="profile-avatar-wrap">
-              <div class="profile-avatar admin-avatar-lg"><i class="fas fa-user-shield"></i></div>
-            </div>
-            <h3 id="settingsAdminName">Administrator</h3>
-            <span class="profile-level-badge admin-level-badge" id="settingsDivision">Division Office</span>
-            <p class="profile-role-note"><i class="fas fa-shield-alt"></i> Division Administrator</p>
-          </div>
-          <div class="profile-form-card">
-            <div class="profile-section">
-              <h3><i class="fas fa-id-card"></i> Account Information</h3>
-              <form id="adminProfileForm">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="adminFullName" placeholder="Full name" />
-                  </div>
-                  <div class="form-group">
-                    <label>Position</label>
-                    <input type="text" id="adminPosition" placeholder="e.g. Education Program Supervisor" />
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="adminEmail" placeholder="admin@deped.gov.ph" />
-                  </div>
-                  <div class="form-group">
-                    <label>Contact Number</label>
-                    <input type="tel" id="adminPhone" placeholder="09XX-XXX-XXXX" />
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
-                </div>
-              </form>
-            </div>
-            <div class="profile-divider"></div>
-            <div class="profile-section">
-              <h3><i class="fas fa-lock"></i> Change Password</h3>
-              <form id="adminPwForm">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Current Password</label>
-                    <input type="password" id="adminCurrPw" placeholder="Enter current password" />
-                  </div>
-                  <div class="form-group">
-                    <label>New Password</label>
-                    <input type="password" id="adminNewPw" placeholder="Enter new password" />
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-outline"><i class="fas fa-key"></i> Update Password</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end dash-main -->
-
-  <!-- REVIEW MODAL -->
-  <div class="modal-overlay" id="reviewModal" hidden>
-    <div class="modal review-modal">
-      <div class="modal-header">
-        <h2><i class="fas fa-file-alt"></i> Review Submission</h2>
-        <button class="modal-close-btn" id="reviewModalClose" aria-label="Close"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="review-details" id="reviewDetails"></div>
-      <div class="review-thread" style="margin:16px 0;padding:14px;background:var(--bg,#f8fafc);border-radius:10px;border:1px solid var(--border,#e2e8f0)">
-        <h4 style="margin:0 0 10px;font-size:0.95rem"><i class="fas fa-comments"></i> Discussion thread</h4>
-        <div id="reviewCommentsList" style="max-height:220px;overflow-y:auto;font-size:0.86rem;margin-bottom:10px"></div>
-        <label class="label-hint" style="display:block;margin-bottom:4px">Add a note for the school (appears in portal + email context for returns)</label>
-        <textarea id="reviewNewComment" rows="2" placeholder="e.g. Page 4 needs a signature..."></textarea>
-        <button type="button" class="btn btn-sm btn-primary" id="reviewPostCommentBtn" style="margin-top:8px"><i class="fas fa-paper-plane"></i> Post note</button>
-      </div>
-      <div class="review-actions">
-        <div class="form-group full-width">
-          <label>
-            Remarks / Feedback for School
-            <span class="label-hint">(required when returning)</span>
-          </label>
-          <textarea id="reviewRemarks" rows="3" placeholder="Add specific feedback so the school knows what to fix..."></textarea>
-          <span class="error-msg" id="reviewRemarksErr"></span>
-        </div>
-        <div class="review-btns">
-          <button class="btn btn-ghost" id="reviewModalClose2"><i class="fas fa-times"></i> Close</button>
-          <button class="btn btn-warning" id="returnBtn"><i class="fas fa-undo"></i> Return with Feedback</button>
-          <button class="btn btn-success" id="approveBtn"><i class="fas fa-check"></i> Approve</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BULK RETURN MODAL -->
-  <div class="modal-overlay" id="bulkReturnModal" hidden>
-    <div class="modal bulk-return-modal">
-      <div class="modal-header">
-        <h2><i class="fas fa-undo"></i> Return Selected Submissions</h2>
-        <button class="modal-close-btn" id="bulkReturnModalClose" aria-label="Close"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="form-group full-width" style="padding: 0 0 8px">
-        <label>Feedback / Reason <span class="required">*</span></label>
-        <textarea id="bulkReturnRemarks" rows="3" placeholder="Reason for returning these submissions..."></textarea>
-        <span class="error-msg" id="bulkReturnErr"></span>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-ghost" id="bulkReturnCancelBtn">Cancel</button>
-        <button class="btn btn-warning" id="bulkReturnConfirmBtn"><i class="fas fa-undo"></i> Confirm Return</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
-  <script src="../js/api.js?v=1.8.0"></script>
-  <script src="../js/admin-dashboard.js?v=1.8.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
 </body>
+
 </html>

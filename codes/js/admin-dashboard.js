@@ -110,7 +110,8 @@ async function renderDashboardCharts() {
         datasets: [{
           label: 'Submissions',
           data: labels.length ? counts : [0],
-          backgroundColor: 'rgba(59, 130, 246, 0.7)',
+          backgroundColor: '#3b82f6',
+          borderRadius: 4
         }],
       },
       options: {
@@ -129,7 +130,8 @@ async function renderDashboardCharts() {
         labels: ['Approved', 'Pending review', 'Returned'],
         datasets: [{
           data: [sc.approved || 0, sc.pending || 0, sc.returned || 0],
-          backgroundColor: ['#22c55e', '#eab308', '#ef4444'],
+          backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+          borderWidth: 0
         }],
       },
       options: {
