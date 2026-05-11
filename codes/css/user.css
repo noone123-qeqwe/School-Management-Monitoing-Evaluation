@@ -11,40 +11,45 @@
    ============================================================================= */
 
 :root {
-  --primary: #1e3a5f;
-  --primary-600: #1a3455;
-  --primary-700: #152d4a;
-  --accent: #d4a017;
-  --accent-light: #fef3c7;
-  --success: #16a34a;
-  --danger: #dc2626;
-  --warning: #d97706;
-  --info: #2563eb;
+  /* Government Enterprise Color System */
+  --primary: #112e51;
+  --primary-600: #0a1f3f;
+  --primary-700: #051124;
+  --accent: #dca331; /* Official Gold */
+  --accent-light: #fcf1d8;
+  --action: #005ea2; /* High-contrast Action Blue */
+  --action-hover: #00457c;
+  --success: #00a91c;
+  --danger: #d54309;
+  --warning: #ffbe2e;
+  --info: #00bde3;
   --violet: #7c3aed;
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --gradient-primary: var(--action); /* Flattened for accessibility */
 
-  --bg: #f8fafc;
-  --bg-secondary: #f1f5f9;
+  --bg: #f4f6f9; /* Neutral gray-blue for less eye strain */
+  --bg-secondary: #eef0f3;
   --surface: #ffffff;
   --white: #ffffff;
 
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
+  --text: #1b1b1b; /* WCAG AAA contrast */
+  --text-muted: #565c65;
+  --text-light: #767676;
 
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
+  --border: #dfe1e2;
+  --border-strong: #adadad;
+  --focus-ring: #2491ff;
 
   --radius-xs: 8px;
   --radius-sm: 10px;
   --radius: 14px;
   --radius-lg: 18px;
 
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 8px 28px rgba(37, 99, 235, .22);
+  /* Grounded, structured shadows for enterprise feel */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-glow: var(--shadow);
 
   --space-sm: 8px;
   --space-md: 12px;
@@ -109,15 +114,15 @@ textarea {
 }
 
 .btn-primary {
-  background: var(--gradient-primary);
+  background: var(--action);
   color: #fff;
-  box-shadow: var(--shadow-glow);
+  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(30, 58, 95, .28);
-  filter: brightness(1.08);
+  background: var(--action-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-outline {
@@ -138,8 +143,9 @@ textarea {
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(5, 82, 204, 0.2);
+  outline: 4px solid var(--focus-ring);
   outline-offset: 2px;
+  border-color: var(--action);
 }
 
 .header {
@@ -496,8 +502,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.1);
+  border-color: var(--action);
+  box-shadow: 0 0 0 4px rgba(36, 145, 255, 0.2);
 }
 
 textarea {
@@ -1047,7 +1053,8 @@ textarea {
 }
 
 .dash-table tbody tr:hover {
-  background: #f8fbff;
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--action);
 }
 
 .dash-table tbody tr:focus-within {
@@ -1413,7 +1420,7 @@ textarea:focus-visible {
 }
 
 .topbar-notif:hover {
-  background: var(--bg);
+  background: var(--bg-secondary);
   color: var(--primary);
 }
 
@@ -2034,12 +2041,12 @@ tr:last-child td {
 }
 
 .dash-table th {
-  background: var(--bg);
+  background: var(--primary);
   padding: var(--space-md) var(--space-lg);
   text-align: left;
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--white);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--border);
@@ -2054,11 +2061,11 @@ tr:last-child td {
 }
 
 .dash-table tr:last-child td {
-  border-bottom: none;
+  border-bottom: 1px solid var(--border);
 }
 
 .dash-table tr:hover td {
-  background: var(--primary-lighter);
+  background: var(--bg-secondary);
 }
 
 /* ===== TABLE FILTERS ===== */
@@ -2083,8 +2090,8 @@ tr:last-child td {
 }
 
 .filter-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(5, 82, 204, 0.1);
+  border-color: var(--action);
+  box-shadow: 0 0 0 4px rgba(36, 145, 255, 0.2);
 }
 
 .filter-select {
@@ -2101,8 +2108,8 @@ tr:last-child td {
 }
 
 .filter-select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(5, 82, 204, 0.1);
+  border-color: var(--action);
+  box-shadow: 0 0 0 4px rgba(36, 145, 255, 0.2);
 }
 
 /* ===== STATUS BADGES ===== */
@@ -4435,6 +4442,23 @@ tr:last-child td {
   .topbar-date {
     display: none !important;
   }
+}
+
+/* ===== OFFICIAL GOVERNMENT BANNER ===== */
+.official-gov-banner {
+  background: #111111;
+  color: #ffffff;
+  font-size: 0.75rem;
+  padding: 6px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.gov-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.9;
 }
 
 

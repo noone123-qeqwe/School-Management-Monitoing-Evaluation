@@ -110,8 +110,10 @@ async function renderDashboardCharts() {
         datasets: [{
           label: 'Submissions',
           data: labels.length ? counts : [0],
-          backgroundColor: '#3b82f6',
-          borderRadius: 4
+          backgroundColor: '#005ea2', /* Official Action Blue */
+          borderRadius: 2,
+          borderWidth: 1,
+          borderColor: '#00457c'
         }],
       },
       options: {
@@ -130,8 +132,9 @@ async function renderDashboardCharts() {
         labels: ['Approved', 'Pending review', 'Returned'],
         datasets: [{
           data: [sc.approved || 0, sc.pending || 0, sc.returned || 0],
-          backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-          borderWidth: 0
+          backgroundColor: ['#00a91c', '#ffbe2e', '#d54309'], /* Accessible status colors */
+          borderWidth: 2,
+          borderColor: '#ffffff'
         }],
       },
       options: {
@@ -155,10 +158,10 @@ async function renderDashboardCharts() {
         datasets: [{
           label: 'Submissions / week',
           data: wLabels.length ? wCounts : [0],
-          borderColor: '#6366f1',
-          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          borderColor: '#112e51', /* Deep Navy */
+          backgroundColor: 'rgba(17, 46, 81, 0.12)',
           fill: true,
-          tension: 0.35,
+          tension: 0.1, /* Straighter lines for a more formal aesthetic */
         }],
       },
       options: {
