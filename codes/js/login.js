@@ -4,7 +4,6 @@
  */
 (function () {
   'use strict';
-  console.log('[DEBUG] login.js loaded');
 
   const $ = (id) => document.getElementById(id);
 
@@ -14,10 +13,8 @@
   window.clearErrors = clearErrors;
 
   function showStep(step) {
-    console.log('[DEBUG] showStep called with:', step);
     ['stepRole', 'stepStaff', 'stepAdmin', 'stepRegister'].forEach((id) => {
       const el = $(id);
-      console.log('[DEBUG] Processing', id, 'element:', el, 'hidden will be:', id !== step);
       if (el) el.hidden = id !== step;
     });
   }
@@ -104,18 +101,13 @@
     // ── Force hide splash screen to ensure clicks work ──
     const splash = document.getElementById('splashHero');
     if (splash && !splash.classList.contains('hidden')) {
-      console.log('[DEBUG] Force hiding splash screen');
       splash.classList.add('hidden');
       splash.style.display = 'none';
     }
 
     // ── Step navigation buttons ──
-    console.log('[DEBUG] Attaching roleSchool listener, element:', $('roleSchool'));
-    console.log('[DEBUG] Attaching roleAdmin listener, element:', $('roleAdmin'));
-    console.log('[DEBUG] Splash screen hidden:', splash ? splash.classList.contains('hidden') : 'no splash');
-
-    $('roleSchool')?.addEventListener('click', () => { console.log('[DEBUG] School Staff clicked'); clearErrors(); showStep('stepStaff'); });
-    $('roleAdmin')?.addEventListener('click', () => { console.log('[DEBUG] Division Admin clicked'); clearErrors(); showStep('stepAdmin'); });
+    $('roleSchool')?.addEventListener('click', () => { clearErrors(); showStep('stepStaff'); });
+    $('roleAdmin')?.addEventListener('click', () => { clearErrors(); showStep('stepAdmin'); });
     $('backFromStaff')?.addEventListener('click', () => { clearErrors(); showStep('stepRole'); });
     $('backFromAdmin')?.addEventListener('click', () => { clearErrors(); showStep('stepRole'); });
     $('backFromRegister')?.addEventListener('click', () => { clearErrors(); showStep('stepStaff'); });
@@ -287,7 +279,6 @@
     if (params.get('reason') === 'timeout' && typeof API !== 'undefined' && API.showToast) {
       setTimeout(() => API.showToast('You have been logged out due to inactivity.', 'info'), 300);
     }
-    console.log('[DEBUG] init() completed');
   }
 
   // Boot
