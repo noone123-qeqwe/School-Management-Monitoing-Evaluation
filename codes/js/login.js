@@ -144,6 +144,10 @@
         ok = false;
         if ($('schoolEmailErr')) $('schoolEmailErr').textContent = 'Email is required.';
         $('schoolEmail')?.classList.add('invalid');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        ok = false;
+        if ($('schoolEmailErr')) $('schoolEmailErr').textContent = 'Please enter a valid email address.';
+        $('schoolEmail')?.classList.add('invalid');
       }
       if (!password) {
         ok = false;
@@ -232,13 +236,38 @@
         if (inputId && $(inputId)) $(inputId).classList.add('invalid');
       };
 
-      if (!firstName) setErr('regFirstNameErr', 'First name is required.', 'regFirstName');
-      if (!lastName) setErr('regLastNameErr', 'Last name is required.', 'regLastName');
+      // Match frontend validation strictly to backend requirements
+      const nameRegex = /^[a-zA-ZÀ-ÿ\s'\-\.]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+      if (!firstName) {
+        setErr('regFirstNameErr', 'First name is required.', 'regFirstName');
+      } else if (!nameRegex.test(firstName)) {
+        setErr('regFirstNameErr', 'First name contains invalid characters.', 'regFirstName');
+      }
+
+      if (!lastName) {
+        setErr('regLastNameErr', 'Last name is required.', 'regLastName');
+      } else if (!nameRegex.test(lastName)) {
+        setErr('regLastNameErr', 'Last name contains invalid characters.', 'regLastName');
+      }
+
       if (!position) setErr('regPositionErr', 'Please select your position.', 'regPosition');
-      if (!email) setErr('regEmailErr', 'Email is required.', 'regEmail');
-      if (password.length < 8) setErr('regPasswordErr', 'At least 8 characters.', 'regPassword');
+
+      if (!email) {
+        setErr('regEmailErr', 'Email is required.', 'regEmail');
+      } else if (!emailRegex.test(email)) {
+        setErr('regEmailErr', 'Please enter a valid email address.', 'regEmail');
+      }
+
+      if (password.length < 8) {
+        setErr('regPasswordErr', 'At least 8 characters required.', 'regPassword');
+      } else if (password.length > 128) {
+        setErr('regPasswordErr', 'Password is too long.', 'regPassword');
+      }
+
       if (password !== confirm) setErr('regConfirmErr', 'Passwords do not match.', 'regConfirm');
-      if (!terms) setErr('regTermsErr', 'You must accept the terms.');
+      if (!terms) setErr('regTermsErr', 'You must accept the terms to continue.');
       if (!ok) return;
 
       const formEl = $('registerForm');
@@ -271,7 +300,7 @@
     });
 
     // Execute background auth check last so it doesn't freeze the UI while the Render server wakes up
-    if (typeof API !== 'undefined' && API.auth && API.auth.getToken()) {
+    if (typeof API !== 'undefined' && API.auth && API.auth.isLoggedIn()) {
       API.auth.verifySession().then((verified) => {
         if (verified) window.location.href = verified.role === 'staff' ? '/html/school-dashboard.html' : '/html/admin-dashboard.html';
       });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,10 +9,13 @@
   <meta name="description" content="Sign in to the SMME Portal to submit documents to the Division Office." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/login.css?v=7.0.0" />
 </head>
+
 <body class="auth-body">
 
   <!-- SPLASH SCREEN -->
@@ -77,7 +81,7 @@
           <p class="auth-sub">Choose your account type to continue</p>
           <div class="auth-divider">Sign in as</div>
           <div class="role-list">
-            <button type="button" class="role-btn" id="roleSchool">
+            <button type="button" class="role-btn" id="roleSchool" onclick="clearErrors(); showStep('stepStaff')">
               <div class="role-btn-icon staff"><i class="fas fa-user-tie"></i></div>
               <div class="role-btn-text">
                 <strong>School Staff</strong>
@@ -85,7 +89,7 @@
               </div>
               <i class="fas fa-chevron-right role-btn-arrow"></i>
             </button>
-            <button type="button" class="role-btn" id="roleAdmin">
+            <button type="button" class="role-btn" id="roleAdmin" onclick="clearErrors(); showStep('stepAdmin')">
               <div class="role-btn-icon admin"><i class="fas fa-user-shield"></i></div>
               <div class="role-btn-text">
                 <strong>Division Admin</strong>
@@ -107,7 +111,8 @@
               <label class="field-label" for="schoolEmail">Email Address <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-envelope field-icon"></i>
-                <input type="email" id="schoolEmail" class="field-input" placeholder="yourname@school.edu.ph" autocomplete="username" />
+                <input type="email" id="schoolEmail" class="field-input" placeholder="yourname@school.edu.ph"
+                  autocomplete="username" />
               </div>
               <span class="field-error" id="schoolEmailErr"></span>
             </div>
@@ -115,8 +120,10 @@
               <label class="field-label" for="schoolPassword">Password <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="schoolPassword" class="field-input" placeholder="Enter your password" autocomplete="current-password" />
-                <button type="button" class="field-eye" data-target="schoolPassword" aria-label="Toggle password"><i class="fas fa-eye"></i></button>
+                <input type="password" id="schoolPassword" class="field-input" placeholder="Enter your password"
+                  autocomplete="current-password" />
+                <button type="button" class="field-eye" data-target="schoolPassword" aria-label="Toggle password"><i
+                    class="fas fa-eye"></i></button>
               </div>
               <span class="field-error" id="schoolPasswordErr"></span>
             </div>
@@ -138,7 +145,8 @@
               <label class="field-label" for="adminUsername">Username <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-user field-icon"></i>
-                <input type="text" id="adminUsername" class="field-input" placeholder="Enter admin username" autocomplete="username" />
+                <input type="text" id="adminUsername" class="field-input" placeholder="Enter admin username"
+                  autocomplete="username" />
               </div>
               <span class="field-error" id="adminUsernameErr"></span>
             </div>
@@ -146,8 +154,10 @@
               <label class="field-label" for="adminPassword">Password <span class="req">*</span></label>
               <div class="field-wrap">
                 <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="adminPassword" class="field-input" placeholder="Enter your password" autocomplete="current-password" />
-                <button type="button" class="field-eye" data-target="adminPassword" aria-label="Toggle password"><i class="fas fa-eye"></i></button>
+                <input type="password" id="adminPassword" class="field-input" placeholder="Enter your password"
+                  autocomplete="current-password" />
+                <button type="button" class="field-eye" data-target="adminPassword" aria-label="Toggle password"><i
+                    class="fas fa-eye"></i></button>
               </div>
               <span class="field-error" id="adminPasswordErr"></span>
             </div>
@@ -159,7 +169,8 @@
 
         <!-- ═══ VIEW 3: Registration (SEPARATE from login) ═══ -->
         <div class="auth-step" id="stepRegister" hidden>
-          <button type="button" class="auth-back" id="backFromRegister"><i class="fas fa-arrow-left"></i> Back to Sign In</button>
+          <button type="button" class="auth-back" id="backFromRegister"><i class="fas fa-arrow-left"></i> Back to Sign
+            In</button>
           <div class="auth-badge staff-badge"><i class="fas fa-user-plus"></i> Staff Registration</div>
           <h2 class="auth-title">Create Account</h2>
           <p class="auth-sub">Register to submit documents on behalf of your school</p>
@@ -215,7 +226,8 @@
                 <div class="field-wrap">
                   <i class="fas fa-lock field-icon"></i>
                   <input type="password" id="regPassword" class="field-input" placeholder="At least 8 characters" />
-                  <button type="button" class="field-eye" data-target="regPassword" aria-label="Toggle password"><i class="fas fa-eye"></i></button>
+                  <button type="button" class="field-eye" data-target="regPassword" aria-label="Toggle password"><i
+                      class="fas fa-eye"></i></button>
                 </div>
                 <div class="pw-strength" id="pwStrength" hidden>
                   <div class="pw-strength-bars">
@@ -233,7 +245,8 @@
                 <div class="field-wrap">
                   <i class="fas fa-lock field-icon"></i>
                   <input type="password" id="regConfirm" class="field-input" placeholder="Re-enter password" />
-                  <button type="button" class="field-eye" data-target="regConfirm" aria-label="Toggle password"><i class="fas fa-eye"></i></button>
+                  <button type="button" class="field-eye" data-target="regConfirm" aria-label="Toggle password"><i
+                      class="fas fa-eye"></i></button>
                 </div>
                 <span class="field-error" id="regConfirmErr"></span>
               </div>
@@ -276,4 +289,5 @@
     }, 4000);
   </script>
 </body>
+
 </html>
