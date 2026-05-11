@@ -139,7 +139,7 @@ function buildPicker(groupId, selectId, errId) {
     if (!filtered.length) {
       list.innerHTML = `<li class="sp-empty"><i class="fas fa-search"></i> No schools found.</li>`;
     } else {
-      list.innerHTML = filtered.slice(0, 12).map(s =>
+      list.innerHTML = filtered.map(s =>
         `<li class="sp-option" data-id="${s.id}" data-name="${escHtml(s.name)}">
           <span class="sp-option-name">${escHtml(s.name)}</span>
           <span class="sp-option-level">${levelLabel(s.level)}</span>
