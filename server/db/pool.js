@@ -69,7 +69,16 @@ const db = {
   staff: [
     {
       id: 1, school_id: 12, first_name: 'Maria', last_name: 'Santos',
-      position: 'School Registrar', email: 'maria.santos@greenmeadows.edu.ph', // Domain updated to match school ID 12
+      position: 'School Registrar', email: 'maria.santos@adventist.edu.ph',
+      password: STAFF_HASH, status: 'approved', phone: null,
+      created_at: new Date().toISOString(),
+      school_name: 'Green Meadows Tiny Tots Inc.',
+      school_level: 'kindergarten', school_code: 'SCH-012',
+      division: 'Division of Masbate',
+    },
+    {
+      id: 2, school_id: 12, first_name: 'Jose', last_name: 'Reyes',
+      position: 'School Principal', email: 'jose.reyes@adventist.edu.ph',
       password: STAFF_HASH, status: 'approved', phone: null,
       created_at: new Date().toISOString(),
       school_name: 'Green Meadows Tiny Tots Inc.',
@@ -91,7 +100,7 @@ const db = {
   ],
 };
 
-const counters = { staff: 2, submissions: 1 };
+const counters = { staff: 3, submissions: 1 };
 const nextId = (table) => counters[table]++;
 
 function schoolFields(schoolId) {
