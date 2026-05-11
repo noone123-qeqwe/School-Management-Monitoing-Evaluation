@@ -220,6 +220,8 @@ app.get('*', (req, res, next) => {
    GLOBAL ERROR HANDLER — never leak stack traces
 ══════════════════════════════════════════════════════ */
 app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+
   // Log full error server-side
   console.error(`[${new Date().toISOString()}] ${req.method} ${req.path} — ${err.message}`);
 
@@ -290,3 +292,17 @@ app.listen(PORT, async () => {
     console.error('❌ Database connection FAILED:', err.message);
   }
 });
+
+/* ══════════════════════════════════════════════════════
+   GRACEFUL SHUTDOWN
+══════════════════════════════════════════════════════ */
+function gracefulShutdown() {
+  console.log('\n🛑 Received kill signal, shutting down gracefully...');
+  const pool = require('./db/pool');
+  pool.end().then(() => {
+    console.log('✅ PostgreSQL pool closed.');
+    process.exit(0);
+  });
+}
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);

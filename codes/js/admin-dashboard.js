@@ -357,14 +357,14 @@ function updateBulkBar() {
 document.getElementById('bulkApproveBtn').addEventListener('click', async () => {
   if (!selectedRefs.length) return;
   const btn = document.getElementById('bulkApproveBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
   try {
     await Promise.all(selectedRefs.map(ref => API.submissions.review(ref, 'approve', '')));
     API.showToast(`${selectedRefs.length} submission(s) approved.`, 'success');
     selectedRefs = []; updateBulkBar();
     loadAllSubmissions(); loadAdminDashboard();
   } catch (err) { API.showToast(`Bulk approve failed: ${err.message}`, 'error'); }
-  finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve Selected'; }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve Selected'; } }
 });
 
 document.getElementById('bulkReturnBtn').addEventListener('click', () => {
@@ -379,7 +379,7 @@ document.getElementById('bulkReturnConfirmBtn').addEventListener('click', async 
   if (!remarks) { document.getElementById('bulkReturnErr').textContent = 'Please provide a reason.'; return; }
 
   const btn = document.getElementById('bulkReturnConfirmBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
   try {
     await Promise.all(selectedRefs.map(ref => API.submissions.review(ref, 'return', remarks)));
     document.getElementById('bulkReturnModal').setAttribute('hidden', '');
@@ -387,7 +387,7 @@ document.getElementById('bulkReturnConfirmBtn').addEventListener('click', async 
     selectedRefs = []; updateBulkBar();
     loadAllSubmissions(); loadAdminDashboard();
   } catch (err) { API.showToast(`Bulk return failed: ${err.message}`, 'error'); }
-  finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-undo"></i> Confirm Return'; }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-undo"></i> Confirm Return'; } }
 });
 
 document.getElementById('bulkClearBtn').addEventListener('click', () => {
@@ -471,7 +471,7 @@ document.getElementById('reviewPostCommentBtn')?.addEventListener('click', async
 document.getElementById('approveBtn').addEventListener('click', async () => {
   if (!currentReviewRef) return;
   const btn = document.getElementById('approveBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
   try {
     const remarks = document.getElementById('reviewRemarks').value.trim();
     await API.submissions.review(currentReviewRef, 'approve', remarks);
@@ -479,7 +479,7 @@ document.getElementById('approveBtn').addEventListener('click', async () => {
     API.showToast(`${currentReviewRef} approved.`, 'success');
     loadAllSubmissions(); loadAdminDashboard();
   } catch (err) { API.showToast(`Approve failed: ${err.message}`, 'error'); }
-  finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve'; }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve'; } }
 });
 
 document.getElementById('returnBtn').addEventListener('click', async () => {
@@ -487,14 +487,14 @@ document.getElementById('returnBtn').addEventListener('click', async () => {
   const remarks = document.getElementById('reviewRemarks').value.trim();
   if (!remarks) { document.getElementById('reviewRemarksErr').textContent = 'Feedback is required when returning a submission.'; return; }
   const btn = document.getElementById('returnBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
   try {
     await API.submissions.review(currentReviewRef, 'return', remarks);
     closeReviewModal();
     API.showToast(`${currentReviewRef} returned with feedback.`, 'success');
     loadAllSubmissions(); loadAdminDashboard();
   } catch (err) { API.showToast(`Return failed: ${err.message}`, 'error'); }
-  finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-undo"></i> Return with Feedback'; }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-undo"></i> Return with Feedback'; } }
 });
 
 /* ===== SCHOOLS ===== */

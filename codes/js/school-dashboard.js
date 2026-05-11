@@ -645,8 +645,10 @@ document.getElementById('dashSubmitForm').addEventListener('submit', async e => 
   if (!valid) return;
 
   const btn = document.getElementById('dSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  }
 
   try {
     const form = new FormData();
@@ -658,8 +660,10 @@ document.getElementById('dashSubmitForm').addEventListener('submit', async e => 
 
     const { ref } = await API.submissions.submit(form);
 
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    }
 
     // Clear draft
     localStorage.removeItem(draftKey());
@@ -670,8 +674,10 @@ document.getElementById('dashSubmitForm').addEventListener('submit', async e => 
     document.getElementById('dashSubmitForm').reset();
     dFiles = []; renderDFileList();
   } catch (err) {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    }
     API.showToast('Submission failed: ' + err.message, 'error');
   }
 });
@@ -733,13 +739,17 @@ document.getElementById('dTrackBtn').addEventListener('click', async () => {
   const result = document.getElementById('dTrackResult');
   if (!ref) { API.showToast('Please enter a reference number.', 'error'); return; }
 
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+  }
 
   try {
     const s = await API.submissions.get(ref);
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    }
 
     const statusLabels = { review: 'Under Review', approved: 'Approved', returned: 'Returned', received: 'Received' };
     document.getElementById('dTrackRef').textContent = s.ref;
@@ -784,8 +794,10 @@ document.getElementById('dTrackBtn').addEventListener('click', async () => {
       loadTrackComments(s.ref);
     }
   } catch (err) {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    }
     API.showToast(err.message === 'Submission not found.' ? 'Reference number not found.' : err.message, 'error');
     result.setAttribute('hidden', '');
     currentTrackRef = null;
@@ -865,7 +877,7 @@ document.getElementById('resubSubmitBtn').addEventListener('click', async () => 
   fileErr.textContent = '';
 
   const btn = document.getElementById('resubSubmitBtn');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...'; }
 
   try {
     // Get original submission details to copy doc type / year
@@ -879,7 +891,7 @@ document.getElementById('resubSubmitBtn').addEventListener('click', async () => 
     resubFiles.forEach(f => form.append('files', f));
 
     const { ref: newRef } = await API.submissions.submit(form);
-    btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit';
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
     document.getElementById('resubmitModal').setAttribute('hidden', '');
     resubRef = null; resubFiles = [];
     API.showToast('Resubmitted successfully. New ref: ' + newRef, 'success');
@@ -887,7 +899,7 @@ document.getElementById('resubSubmitBtn').addEventListener('click', async () => 
     loadSubmissions('mine');
     loadSubmissions('all');
   } catch (err) {
-    btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit';
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
     API.showToast('Resubmit failed: ' + err.message, 'error');
   }
 });

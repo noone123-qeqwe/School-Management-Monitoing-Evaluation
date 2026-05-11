@@ -89,7 +89,7 @@ router.patch('/me/password', requireStaff, async (req, res) => {
   try {
     const result = await pool.query('SELECT password FROM staff WHERE id=$1', [req.user.id]);
     if (!result.rows.length) return res.status(404).json({ error: 'User not found.' });
-    const match = await bcrypt.compare(currentPassword, result.rows[0].password);
+    const match = await bcrypt.compare(currentPassword, result.rows[0].password || '');
     if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
     const hash = await bcrypt.hash(newPassword, 10);
     await pool.query('UPDATE staff SET password=$1 WHERE id=$2', [hash, req.user.id]);

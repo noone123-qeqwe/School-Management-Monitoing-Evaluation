@@ -130,9 +130,9 @@ class MockPool {
     }
 
     if (q.includes('FROM ADMINS') && q.startsWith('SELECT')) {
-      const identifier = params[0];
+      const identifier = String(params[0] || '').toLowerCase();
       const row = db.admins.find(a =>
-        a.username === identifier || a.email === identifier
+        (a.username || '').toLowerCase() === identifier || (a.email || '').toLowerCase() === identifier
       );
       return { rows: row ? [row] : [] };
     }
@@ -162,7 +162,7 @@ class MockPool {
       if (q.startsWith('INSERT')) {
         const [schoolId, firstName, lastName, position, email, password, status] = params;
         const newStaff = {
-          id: nextId('staff'), school_id: parseInt(schoolId, 10),
+          id: nextId('staff'), school_id: schoolId ? parseInt(schoolId, 10) : null,
           first_name: firstName, last_name: lastName, position,
           email: (email || '').toLowerCase(), password,
           status: status || 'pending', phone: null,

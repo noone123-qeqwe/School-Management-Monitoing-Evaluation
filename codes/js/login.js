@@ -95,10 +95,12 @@
     }
 
     // Redirect if already logged in
-    if (typeof API !== 'undefined' && API.auth && API.auth.isLoggedIn()) {
-      const u = API.auth.getUser();
-      if (u && u.role === 'staff') { window.location.href = '/html/school-dashboard.html'; return; }
-      if (u && u.role === 'admin') { window.location.href = '/html/admin-dashboard.html'; return; }
+    if (typeof API !== 'undefined' && API.auth && API.auth.getToken()) {
+      const verified = await API.auth.verifySession();
+      if (verified) {
+        if (verified.role === 'staff') { window.location.href = '/html/school-dashboard.html'; return; }
+        if (verified.role === 'admin') { window.location.href = '/html/admin-dashboard.html'; return; }
+      }
     }
 
     if (params.get('reason') === 'timeout') {
@@ -257,7 +259,7 @@
           API.showToast('Account created! Awaiting Division Office approval.', 'success');
         }
         showStep('stepStaff');
-        formEl.reset();
+        formEl?.reset();
         const pwBox = $('pwStrength');
         if (pwBox) pwBox.hidden = true;
       } catch (err) {

@@ -66,7 +66,7 @@ router.post('/staff/login', async (req, res) => {
               sc.school_code, sc.division
        FROM staff s
        LEFT JOIN schools sc ON sc.id = s.school_id
-       WHERE s.email = $1
+       WHERE LOWER(s.email) = $1
        ORDER BY CASE s.status WHEN 'approved' THEN 0 WHEN 'pending' THEN 1 ELSE 2 END
        LIMIT 1`,
       [email]
@@ -161,12 +161,8 @@ router.post('/staff/register', async (req, res) => {
         return res.status(400).json({ error: 'Invalid school selected.' });
     }
 
-    // Check for duplicate email (globally if no school, or per-school if provided)
-    const existsQuery = schoolId
-      ? 'SELECT id FROM staff WHERE email=$1 AND school_id=$2'
-      : 'SELECT id FROM staff WHERE email=$1';
-    const existsParams = schoolId ? [email, schoolId] : [email];
-    const exists = await pool.query(existsQuery, existsParams);
+    // Check for duplicate email globally to prevent login ambiguity since school dropdown was removed
+    const exists = await pool.query('SELECT id FROM staff WHERE LOWER(email)=$1', [email]);
     if (exists.rows.length)
       return res.status(409).json({ error: 'An account with this email already exists.' });
 
@@ -189,7 +185,7 @@ router.post('/staff/register', async (req, res) => {
    POST /api/auth/admin/login
 ───────────────────────────────────────────── */
 router.post('/admin/login', async (req, res) => {
-  const username = sanitize(req.body.username || '');
+  const username = sanitize(req.body.username || '').toLowerCase();
   const password = req.body.password;
 
   if (!username || !password)
@@ -200,7 +196,7 @@ router.post('/admin/login', async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT id, username, full_name, division, password FROM admins WHERE username=$1 OR email=$1',
+      'SELECT id, username, full_name, division, password FROM admins WHERE LOWER(username)=$1 OR LOWER(email)=$1',
       [username]
     );
     const admin = result.rows[0];
