@@ -799,8 +799,10 @@ body.auth-body {
 
 .field-icon {
   position: absolute;
-  left: 14px;
-  color: var(--text-3);
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
   font-size: 0.84rem;
   pointer-events: none;
   z-index: 1;
@@ -813,17 +815,17 @@ body.auth-body {
 
 .field-input {
   width: 100%;
-  min-height: 44px;
-  padding: 0 var(--s2) 0 44px;
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
+  height: 56px;
+  padding: 0 18px 0 48px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
+  font-size: 15px;
   font-weight: 400;
-  color: var(--text);
-  background: var(--white);
+  color: #fff;
   outline: none;
-  transition: all 0.2s ease-in-out;
+  transition: .25s ease;
 }
 
 .field-input::placeholder {
@@ -836,15 +838,8 @@ body.auth-body {
 }
 
 .field-input:focus {
-  border-color: var(--navy-3);
-  box-shadow: var(--focus-ring);
-  background: #fafbff;
-}
-
-.field-input.invalid {
-  border-color: var(--red);
-  background: var(--red-light);
-  box-shadow: 0 0 0 3px var(--red-ring);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, .18);
 }
 
 .field-select {
@@ -854,10 +849,12 @@ body.auth-body {
 
 .field-eye {
   position: absolute;
-  right: 10px;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--text-3);
+  color: #94a3b8;
   font-size: 0.82rem;
   padding: 8px;
   cursor: pointer;
@@ -884,6 +881,25 @@ body.auth-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s2);
+}
+
+/* ── NEW AUTH OPTIONS ── */
+.auth-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 0 20px;
+}
+
+.remember-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.forgot-link {
+  color: #60a5fa;
+  text-decoration: none;
 }
 
 /* ── SCHOOL PICKER ── */
@@ -1061,12 +1077,12 @@ body.auth-body {
 
 .auth-btn {
   width: 100%;
-  min-height: 48px;
+  height: 56px;
   padding: 0 var(--s3);
   border: none;
-  border-radius: var(--r-md);
+  border-radius: 18px;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.92rem;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
