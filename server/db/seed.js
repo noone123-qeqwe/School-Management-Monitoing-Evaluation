@@ -126,8 +126,7 @@ async function seed() {
     }
     // 3. Demo staff (dev / explicit opt-in only)
     if (!isProd || allowDemo) {
-      const { rows } = await client.query(`SELECT id FROM schools WHERE school_code = 'SCH-012'`);
-      if (rows.length > 0) {
+      const { rows } = await client.query(`SELECT id FROM schools WHERE school_code = 'SCH-001'`); if (rows.length > 0) {
         const sid = rows[0].id;
         const hash = await bcrypt.hash(demoStaffPw, 12);
         for (const [first, last, position, email] of [
