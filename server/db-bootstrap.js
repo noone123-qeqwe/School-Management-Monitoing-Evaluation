@@ -460,13 +460,13 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const fs = require('fs');
 const STATIC_ROOT_CANDIDATES = [
-  path.join(__dirname, '../public'),
   path.join(__dirname, '../codes'),
+  path.join(__dirname, '../public'),
   path.join(__dirname, '../../codes'),
   path.join(__dirname, '../../Files/codes'),
 ];
 // FIX 4 — pick the first candidate that actually exists on disk
-const STATIC_ROOT = STATIC_ROOT_CANDIDATES.find(p => { try { return fs.existsSync(p); } catch { return false; } })
+const STATIC_ROOT = STATIC_ROOT_CANDIDATES.find(p => { try { return fs.existsSync(path.join(p, 'index.html')); } catch { return false; } })
   || path.join(__dirname, '../codes'); // safe fallback (express.static handles missing gracefully)
 const LANDING_PAGE = path.join(STATIC_ROOT, 'index.html');
 const ASSET_RE = /\.(html|js|css|png|jpe?g|gif|ico|svg|woff2?|ttf|eot|map)$/i;
@@ -560,7 +560,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/pages/:page', (req, res) => res.redirect(301, `/html/${req.params.page}`));
-app.use(express.static(STATIC_ROOT, { maxAge: '1d', etag: true }));
+app.use(express.static(STATIC_ROOT, { maxAge: isProd ? '1d' : 0, etag: true }));
 app.get('/', (req, res, next) => res.sendFile(LANDING_PAGE, err => { if (err) next(err); }));
 
 // ── SPA fallback ──────────────────────────────────────────────────────────────

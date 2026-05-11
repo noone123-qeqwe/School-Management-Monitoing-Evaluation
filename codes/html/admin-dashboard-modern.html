@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – SMME Portal</title>
+  <link rel="stylesheet" href="../css/modern-dashboard.css?v=2.0.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="../assets/smmelogo.jpg" alt="SMME Logo" />
+        <span>SMME</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle" title="Collapse sidebar">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" style="background: var(--accent-500);">
+        <i class="fas fa-user-shield"></i>
+      </div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarAdminName">Administrator</div>
+        <div class="sidebar-user-role" id="sidebarDivision">Division Office</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Main</div>
+      <a href="#" class="sidebar-link active" data-page="dashboard">
+        <span class="sidebar-link-icon"><i class="fas fa-th-large"></i></span>
+        <span class="sidebar-link-text">Dashboard</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="submissions">
+        <span class="sidebar-link-icon"><i class="fas fa-inbox"></i></span>
+        <span class="sidebar-link-text">All Submissions</span>
+        <span class="sidebar-badge" id="pendingBadge">5</span>
+      </a>
+
+      <div class="sidebar-section">Management</div>
+      <a href="#" class="sidebar-link" data-page="schools">
+        <span class="sidebar-link-icon"><i class="fas fa-school"></i></span>
+        <span class="sidebar-link-text">Registered Schools</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="staff">
+        <span class="sidebar-link-icon"><i class="fas fa-users"></i></span>
+        <span class="sidebar-link-text">Staff Accounts</span>
+        <span class="sidebar-badge" id="staffPendingBadge">2</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="deadlines">
+        <span class="sidebar-link-icon"><i class="fas fa-calendar-alt"></i></span>
+        <span class="sidebar-link-text">Deadlines</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="notices">
+        <span class="sidebar-link-icon"><i class="fas fa-bell"></i></span>
+        <span class="sidebar-link-text">Notices</span>
+      </a>
+
+      <div class="sidebar-section">Analytics</div>
+      <a href="#" class="sidebar-link" data-page="reports">
+        <span class="sidebar-link-icon"><i class="fas fa-chart-bar"></i></span>
+        <span class="sidebar-link-text">Reports</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="audit">
+        <span class="sidebar-link-icon"><i class="fas fa-history"></i></span>
+        <span class="sidebar-link-text">Audit Log</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="validation">
+        <span class="sidebar-link-icon"><i class="fas fa-shield-check"></i></span>
+        <span class="sidebar-link-text">Validation Rules</span>
+      </a>
+
+      <div class="sidebar-section">Account</div>
+      <a href="#" class="sidebar-link" data-page="settings">
+        <span class="sidebar-link-icon"><i class="fas fa-cog"></i></span>
+        <span class="sidebar-link-text">Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="search-bar" style="width: 320px;">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="search-input" id="globalSearch" placeholder="Search schools, submissions, staff..." />
+          <button class="search-clear"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-date" style="display: flex; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: 0.875rem;">
+          <i class="fas fa-calendar-alt"></i>
+          <span id="currentDate">May 11, 2026</span>
+        </div>
+        <div style="width: 1px; height: 24px; background: var(--border-default);"></div>
+        <div class="header-user">
+          <div class="sidebar-avatar" style="width: 36px; height: 36px; background: var(--accent-500);">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <div class="header-user-name" id="headerAdminName">Administrator</div>
+            <div class="header-user-role">Division Admin</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main class="main-content">
+      <!-- Page: Dashboard -->
+      <div class="dash-page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="adminWelcome">Admin Dashboard</h1>
+            <p class="page-subtitle" id="adminDivisionLabel">Division of Masbate</p>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid-4">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-blue">
+              <i class="fas fa-inbox"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statTotalSubs">156</div>
+              <div class="stat-label">Total Submissions</div>
+              <div class="stat-change stat-change-positive">
+                <i class="fas fa-arrow-up"></i> 23% this month
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-amber">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statPending">23</div>
+              <div class="stat-label">Pending Review</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-green">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statApproved">118</div>
+              <div class="stat-label">Approved</div>
+              <div class="stat-change stat-change-positive">
+                <i class="fas fa-arrow-up"></i> 89% rate
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-purple">
+              <i class="fas fa-school"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statSchools">38</div>
+              <div class="stat-label">Registered Schools</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="card" style="margin-top: var(--space-6);">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-chart-line" style="color: var(--primary-500);"></i>
+              Submission Analytics
+            </div>
+            <div style="display: flex; gap: var(--space-2);">
+              <button class="btn btn-sm btn-secondary active">7 Days</button>
+              <button class="btn btn-sm btn-ghost">30 Days</button>
+              <button class="btn btn-sm btn-ghost">Year</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
+              <div style="min-height: 300px; background: var(--gray-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                <div class="empty-state empty-state-compact">
+                  <div class="empty-state-icon">
+                    <i class="fas fa-chart-bar"></i>
+                  </div>
+                  <p class="empty-state-description">Charts will appear here when data is loaded.</p>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); flex: 1;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">By Status</div>
+                  <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
+                        <span style="color: var(--text-secondary);">Approved</span>
+                        <span style="font-weight: 600;">76%</span>
+                      </div>
+                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                        <div style="width: 76%; height: 100%; background: var(--success-500); border-radius: var(--radius-full);"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
+                        <span style="color: var(--text-secondary);">Under Review</span>
+                        <span style="font-weight: 600;">15%</span>
+                      </div>
+                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                        <div style="width: 15%; height: 100%; background: var(--warning-500); border-radius: var(--radius-full);"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
+                        <span style="color: var(--text-secondary);">Returned</span>
+                        <span style="font-weight: 600;">9%</span>
+                      </div>
+                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                        <div style="width: 9%; height: 100%; background: var(--danger-500); border-radius: var(--radius-full);"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column: Pending & Schools -->
+        <div class="grid-2" style="margin-top: var(--space-6);">
+          <!-- Pending Review -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-clock" style="color: var(--warning-500);"></i>
+                Pending Review
+              </div>
+              <button class="btn btn-sm btn-ghost" onclick="switchPage('submissions')">
+                View All <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+              </button>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Reference</th>
+                    <th>School</th>
+                    <th>Document</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="pendingTableBody">
+                  <tr>
+                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00156</span></td>
+                    <td>Adventist Elementary School</td>
+                    <td>Enrollment Report</td>
+                    <td style="color: var(--text-muted); font-size: 0.8125rem;">Today</td>
+                    <td><button class="btn btn-sm btn-primary">Review</button></td>
+                  </tr>
+                  <tr>
+                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00155</span></td>
+                    <td>Burias College, Inc.</td>
+                    <td>Financial Reports</td>
+                    <td style="color: var(--text-muted); font-size: 0.8125rem;">Yesterday</td>
+                    <td><button class="btn btn-sm btn-primary">Review</button></td>
+                  </tr>
+                  <tr>
+                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00154</span></td>
+                    <td>Masbate Colleges Inc.</td>
+                    <td>Faculty Credentials</td>
+                    <td style="color: var(--text-muted); font-size: 0.8125rem;">2 days ago</td>
+                    <td><button class="btn btn-sm btn-primary">Review</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Schools by Level -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-chart-pie" style="color: var(--primary-500);"></i>
+                Schools by Level
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></span>
+                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Kindergarten</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">5</span>
+                  </div>
+                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                    <div style="width: 13%; height: 100%; background: #f59e0b; border-radius: var(--radius-full);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6;"></span>
+                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Elementary</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">16</span>
+                  </div>
+                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                    <div style="width: 42%; height: 100%; background: #3b82f6; border-radius: var(--radius-full);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #8b5cf6;"></span>
+                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Junior High</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">10</span>
+                  </div>
+                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                    <div style="width: 26%; height: 100%; background: #8b5cf6; border-radius: var(--radius-full);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></span>
+                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Senior High</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">7</span>
+                  </div>
+                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                    <div style="width: 18%; height: 100%; background: #10b981; border-radius: var(--radius-full);"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-default); text-align: center; font-size: 0.8125rem; color: var(--text-muted);">
+                Total: 38 registered private schools
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card" style="margin-top: var(--space-6);">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-history" style="color: var(--primary-500);"></i>
+              Recent Activity
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="activityList" style="display: flex; flex-direction: column; gap: var(--space-3);">
+              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--success-100); color: var(--success-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="fas fa-check"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>Submission approved</strong> — Enrollment Report from Adventist Elementary School
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">2 minutes ago</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--info-100); color: var(--info-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="fas fa-user-plus"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>New staff registered</strong> — Maria Santos from Adventist Elementary School
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">15 minutes ago</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--warning-100); color: var(--warning-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="fas fa-undo"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: var(--text-primary);">
+                    <strong>Document returned</strong> — Financial Reports from Burias College, Inc.
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">1 hour ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: All Submissions -->
+      <div class="dash-page" id="page-submissions">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">All Submissions</h1>
+            <p class="page-subtitle">Review and manage documents from all schools</p>
+          </div>
+          <div style="display: flex; gap: var(--space-3);">
+            <button class="btn btn-secondary" id="exportAdminBtn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; flex: 1;">
+              <div class="search-bar" style="width: 280px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="adminSearch" placeholder="Search by school, reference, document..." />
+                <button class="search-clear"><i class="fas fa-times"></i></button>
+              </div>
+              <select class="form-select" id="adminStatusFilter" style="width: 160px;">
+                <option value="">All Status</option>
+                <option value="received">Received</option>
+                <option value="review">Under Review</option>
+                <option value="approved">Approved</option>
+                <option value="returned">Returned</option>
+              </select>
+              <select class="form-select" id="adminLevelFilter" style="width: 160px;">
+                <option value="">All Levels</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="elementary">Elementary</option>
+                <option value="junior">Junior High</option>
+                <option value="senior">Senior High</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll"></th>
+                  <th>Reference No.</th>
+                  <th>School</th>
+                  <th>Level</th>
+                  <th>Document Type</th>
+                  <th>School Year</th>
+                  <th>Submitted By</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminSubmissionsBody">
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00156</span></td>
+                  <td>Adventist Elementary School</td>
+                  <td><span class="badge badge-info">Elementary</span></td>
+                  <td>Enrollment Report</td>
+                  <td>2026-2027</td>
+                  <td>Maria Santos</td>
+                  <td style="color: var(--text-muted); font-size: 0.8125rem;">Today</td>
+                  <td><span class="status-pill status-pill-review">Under Review</span></td>
+                  <td><button class="btn btn-sm btn-primary">Review</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Schools -->
+      <div class="dash-page" id="page-schools">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Registered Schools</h1>
+            <p class="page-subtitle">All private schools registered under this division</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div style="display: flex; gap: var(--space-3);">
+              <div class="search-bar" style="width: 280px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="schoolSearch" placeholder="Search schools..." />
+              </div>
+              <select class="form-select" id="schoolLevelFilter" style="width: 160px;">
+                <option value="">All Levels</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="elementary">Elementary</option>
+                <option value="junior">Junior High</option>
+                <option value="senior">Senior High</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="schoolsGrid" class="grid-2">
+              <!-- Schools loaded dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Staff Accounts -->
+      <div class="dash-page" id="page-staff">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Staff Accounts</h1>
+            <p class="page-subtitle">Manage school staff who can submit documents</p>
+          </div>
+        </div>
+
+        <!-- Pending Approvals -->
+        <div class="card" id="pendingStaffCard" style="margin-bottom: var(--space-6);">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-user-clock" style="color: var(--warning-500);"></i>
+              Pending Approval
+            </div>
+          </div>
+          <div class="card-body" id="pendingStaffList">
+            <!-- Pending staff loaded dynamically -->
+          </div>
+        </div>
+
+        <!-- All Staff -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-users" style="color: var(--primary-500);"></i>
+              All Staff
+            </div>
+            <div style="display: flex; gap: var(--space-3);">
+              <div class="search-bar" style="width: 240px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="staffSearch" placeholder="Search staff..." />
+              </div>
+            </div>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>School</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="allStaffBody">
+                <!-- Staff loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Deadlines -->
+      <div class="dash-page" id="page-deadlines">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Submission Deadlines</h1>
+            <p class="page-subtitle">Set and manage deadlines visible to all schools</p>
+          </div>
+          <button class="btn btn-primary" id="addDeadlineBtn">
+            <i class="fas fa-plus"></i> Add Deadline
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-body" id="deadlineMgmtList">
+            <!-- Deadlines loaded dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Notices -->
+      <div class="dash-page" id="page-notices">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Division Notices</h1>
+            <p class="page-subtitle">Post announcements visible to all registered schools</p>
+          </div>
+          <button class="btn btn-primary" id="addNoticeBtn">
+            <i class="fas fa-plus"></i> Add Notice
+          </button>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: var(--space-6);">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-blue">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">38</div>
+              <div class="stat-label">Audience Size</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-green">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">32</div>
+              <div class="stat-label">Viewed Schools</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-amber">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">84%</div>
+              <div class="stat-label">View Rate</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="noticeFormCard" hidden>
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-paper-plane" style="color: var(--primary-500);"></i>
+              New Notice
+            </div>
+          </div>
+          <div class="card-body">
+            <form id="noticeForm">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                <div class="form-group">
+                  <label class="form-label form-label-required">Title</label>
+                  <input type="text" class="form-input" id="noticeTitle" placeholder="Notice title" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Type</label>
+                  <select class="form-select" id="noticeType">
+                    <option value="info">Information</option>
+                    <option value="warning">Warning</option>
+                    <option value="success">Announcement</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Level</label>
+                  <select class="form-select" id="noticeTargetLevel">
+                    <option value="all">All Levels</option>
+                    <option value="kindergarten">Kindergarten</option>
+                    <option value="elementary">Elementary</option>
+                    <option value="junior">Junior High</option>
+                    <option value="senior">Senior High</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: var(--space-4);">
+                <label class="form-label form-label-required">Message</label>
+                <textarea class="form-textarea" id="noticeMessage" rows="3" placeholder="Notice content..."></textarea>
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <button type="button" class="btn btn-ghost" id="cancelNotice">Cancel</button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i> Post Notice
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body" id="adminNoticesList">
+            <!-- Notices loaded dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Settings -->
+      <div class="dash-page" id="page-settings">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Manage your admin account</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card" style="text-align: center; padding: var(--space-8);">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--accent-500); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto var(--space-4);">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1);" id="settingsAdminName">Administrator</h3>
+            <span class="badge badge-warning" id="settingsDivision">Division of Masbate</span>
+            <p style="color: var(--text-secondary); margin-top: var(--space-3); font-size: 0.875rem;">
+              <i class="fas fa-shield-alt"></i> Division Administrator
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-id-card" style="color: var(--primary-500);"></i>
+                Account Information
+              </div>
+            </div>
+            <div class="card-body">
+              <form id="adminProfileForm">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="adminFullName" placeholder="Full name" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Position</label>
+                    <input type="text" class="form-input" id="adminPosition" placeholder="e.g. Education Program Supervisor" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="adminEmail" placeholder="admin@deped.gov.ph" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Contact Number</label>
+                    <input type="tel" class="form-input" id="adminPhone" placeholder="09XX-XXX-XXXX" />
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer">
+              <h4 style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">
+                <i class="fas fa-lock" style="color: var(--primary-500);"></i> Change Password
+              </h4>
+              <form id="adminPwForm">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-input" id="adminCurrPw" placeholder="Enter current password" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" id="adminNewPw" placeholder="Enter new password" />
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-secondary">
+                    <i class="fas fa-key"></i> Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Review Modal -->
+  <div class="modal-overlay" id="reviewModal" hidden>
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-title-icon"><i class="fas fa-file-alt"></i></div>
+          <span>Review Submission</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
+          <div>
+            <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">Document Details</div>
+              <table style="width: 100%; font-size: 0.875rem;">
+                <tr>
+                  <td style="padding: var(--space-2) 0; color: var(--text-muted); width: 120px;">Reference</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500; font-family: monospace;" id="reviewRef">SMME-2026-00156</td>
+                </tr>
+                <tr>
+                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Type</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewType">Enrollment Report</td>
+                </tr>
+                <tr>
+                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">School</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewSchool">Adventist Elementary School</td>
+                </tr>
+                <tr>
+                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Submitted By</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewStaff">Maria Santos</td>
+                </tr>
+                <tr>
+                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Date</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewDate">May 11, 2026</td>
+                </tr>
+              </table>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Feedback / Remarks</label>
+              <textarea class="form-textarea" id="reviewFeedback" rows="4" placeholder="Enter your feedback or remarks for the school..."></textarea>
+            </div>
+          </div>
+          <div>
+            <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">Attached Files</div>
+              <div id="reviewFiles" style="display: flex; flex-direction: column; gap: var(--space-2);">
+                <div style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); background: white; border-radius: var(--radius-md);">
+                  <i class="fas fa-file-pdf" style="color: var(--danger-500);"></i>
+                  <span style="font-size: 0.8125rem; flex: 1;">enrollment_report.pdf</span>
+                  <button class="btn btn-sm btn-ghost"><i class="fas fa-download"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('reviewModal')">Cancel</button>
+        <button class="btn btn-danger" id="reviewReturnBtn">
+          <i class="fas fa-undo"></i> Return
+        </button>
+        <button class="btn btn-success" id="reviewApproveBtn">
+          <i class="fas fa-check"></i> Approve
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/api.js?v=2.0.0"></script>
+  <script src="../js/modern-ui.js?v=2.0.0"></script>
+  <script src="../js/admin-dashboard.js?v=2.0.0"></script>
+  <script>
+    // Page switching functionality
+    function switchPage(pageName) {
+      document.querySelectorAll('.dash-page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.classList.remove('active');
+      });
+
+      const targetPage = document.getElementById('page-' + pageName);
+      const targetLink = document.querySelector(`[data-page="${pageName}"]`);
+
+      if (targetPage) {
+        targetPage.classList.add('active');
+        targetPage.classList.add('fade-in');
+      }
+      if (targetLink) {
+        targetLink.classList.add('active');
+      }
+
+      const titles = {
+        'dashboard': 'Admin Dashboard',
+        'submissions': 'All Submissions',
+        'schools': 'Registered Schools',
+        'staff': 'Staff Accounts',
+        'deadlines': 'Deadlines',
+        'notices': 'Division Notices',
+        'reports': 'Reports',
+        'audit': 'Audit Log',
+        'validation': 'Validation Rules',
+        'settings': 'Settings'
+      };
+
+      document.title = (titles[pageName] || 'Dashboard') + ' – SMME Portal';
+    }
+
+    // Modal handling
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+          modal.hidden = true;
+        }, 300);
+      }
+    }
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.hidden = false;
+        requestAnimationFrame(() => {
+          modal.classList.add('active');
+        });
+      }
+    }
+
+    // Initialize ModernUI
+    document.addEventListener('DOMContentLoaded', () => {
+      ModernUI.init();
+
+      // Initialize sidebar toggle
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+        });
+
+        // Restore sidebar state
+        if (localStorage.getItem('sidebar-collapsed') === 'true') {
+          sidebar.classList.add('collapsed');
+        }
+      }
+
+      // Mobile menu toggle
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', () => {
+          sidebar.classList.add('active');
+          sidebarOverlay.classList.add('active');
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', () => {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+
+      // Initialize page navigation
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const page = link.getAttribute('data-page');
+          if (page) {
+            switchPage(page);
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+          }
+        });
+      });
+
+      // Update current date
+      const dateElement = document.getElementById('currentDate');
+      if (dateElement) {
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        dateElement.textContent = new Date().toLocaleDateString('en-US', options);
+      }
+    });
+  </script>
+</body>
+</html>

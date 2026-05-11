@@ -34,6 +34,7 @@
 
   <!-- MAIN AUTH LAYOUT -->
   <div class="auth-layout" id="authLayout">
+    <div id="debug-banner" style="position: fixed; top: 0; left: 0; right: 0; background: #ff0000; color: white; padding: 5px; z-index: 10000; font-size: 12px; text-align: center;">JS Loading...</div>
 
     <!-- LEFT HERO PANEL -->
     <div class="auth-hero">
@@ -256,6 +257,15 @@
 
   <script src="../js/api.js?v=7.0.0"></script>
   <script src="../js/login.js?v=7.0.0"></script>
+  <script>
+    (function() {
+      var banner = document.getElementById('debug-banner');
+      if (banner) {
+        banner.textContent = 'JS Loaded OK - Click buttons to test';
+        banner.style.background = '#00aa00';
+      }
+    })();
+  </script>
   <script>
     // Splash screen auto-dismiss
     window.addEventListener('load', function () {

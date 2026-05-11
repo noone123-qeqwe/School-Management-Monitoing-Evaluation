@@ -157,14 +157,14 @@ app.get('/pages/:page', (req, res) => {
 });
 
 const STATIC_ROOT_CANDIDATES = [
-  path.join(__dirname, '../public'), // Added to search for public folder
   path.join(__dirname, '../codes'),
+  path.join(__dirname, '../public'),
   path.join(__dirname, '../../codes'),
   path.join(__dirname, '../../Files/codes'),
 ];
 const STATIC_ROOT = STATIC_ROOT_CANDIDATES.find(p => {
   try {
-    return require('fs').existsSync(p);
+    return require('fs').existsSync(path.join(p, 'index.html'));
   } catch {
     return false;
   }
@@ -179,7 +179,7 @@ const LANDING_PAGE = STATIC_ROOT ? path.join(STATIC_ROOT, 'index.html') : null;
 
 if (STATIC_ROOT) {
   app.use(express.static(STATIC_ROOT, {
-    maxAge: '1d',
+    maxAge: isProd ? '1d' : 0,
     etag: true,
   }));
 }
@@ -272,7 +272,7 @@ app.listen(PORT, async () => {
       }
     } else {
       console.log('Tables found:', tableNames.join(', '));
-      
+
       if (isProd) {
         console.log('Production mode: automatic seed update disabled.');
         return;

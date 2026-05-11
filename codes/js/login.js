@@ -4,13 +4,20 @@
  */
 (function () {
   'use strict';
+  console.log('[DEBUG] login.js loaded');
 
   const $ = (id) => document.getElementById(id);
 
   /* ── Step navigation ── */
+  // Expose globally so inline HTML handlers like onclick="showStep('stepStaff')" will work
+  window.showStep = showStep;
+  window.clearErrors = clearErrors;
+
   function showStep(step) {
+    console.log('[DEBUG] showStep called with:', step);
     ['stepRole', 'stepStaff', 'stepAdmin', 'stepRegister'].forEach((id) => {
       const el = $(id);
+      console.log('[DEBUG] Processing', id, 'element:', el, 'hidden will be:', id !== step);
       if (el) el.hidden = id !== step;
     });
   }
@@ -94,24 +101,11 @@
       window.history.replaceState({}, '', '/html/login.html');
     }
 
-    // Redirect if already logged in
-    if (typeof API !== 'undefined' && API.auth && API.auth.getToken()) {
-      const verified = await API.auth.verifySession();
-      if (verified) {
-        if (verified.role === 'staff') { window.location.href = '/html/school-dashboard.html'; return; }
-        if (verified.role === 'admin') { window.location.href = '/html/admin-dashboard.html'; return; }
-      }
-    }
-
-    if (params.get('reason') === 'timeout') {
-      if (typeof API !== 'undefined' && API.showToast) {
-        setTimeout(() => API.showToast('You have been logged out due to inactivity.', 'info'), 300);
-      }
-    }
-
     // ── Step navigation buttons ──
-    $('roleSchool')?.addEventListener('click', () => { clearErrors(); showStep('stepStaff'); });
-    $('roleAdmin')?.addEventListener('click', () => { clearErrors(); showStep('stepAdmin'); });
+    console.log('[DEBUG] Attaching roleSchool listener, element:', $('roleSchool'));
+    console.log('[DEBUG] Attaching roleAdmin listener, element:', $('roleAdmin'));
+    $('roleSchool')?.addEventListener('click', () => { console.log('[DEBUG] School Staff clicked'); clearErrors(); showStep('stepStaff'); });
+    $('roleAdmin')?.addEventListener('click', () => { console.log('[DEBUG] Division Admin clicked'); clearErrors(); showStep('stepAdmin'); });
     $('backFromStaff')?.addEventListener('click', () => { clearErrors(); showStep('stepRole'); });
     $('backFromAdmin')?.addEventListener('click', () => { clearErrors(); showStep('stepRole'); });
     $('backFromRegister')?.addEventListener('click', () => { clearErrors(); showStep('stepStaff'); });
@@ -273,6 +267,17 @@
         }
       }
     });
+
+    // Execute background auth check last so it doesn't freeze the UI while the Render server wakes up
+    if (typeof API !== 'undefined' && API.auth && API.auth.getToken()) {
+      API.auth.verifySession().then((verified) => {
+        if (verified) window.location.href = verified.role === 'staff' ? '/html/school-dashboard.html' : '/html/admin-dashboard.html';
+      });
+    }
+    if (params.get('reason') === 'timeout' && typeof API !== 'undefined' && API.showToast) {
+      setTimeout(() => API.showToast('You have been logged out due to inactivity.', 'info'), 300);
+    }
+    console.log('[DEBUG] init() completed');
   }
 
   // Boot
