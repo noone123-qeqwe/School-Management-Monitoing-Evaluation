@@ -1,8 +1,8 @@
-const express  = require('express');
-const multer   = require('multer');
-const path     = require('path');
-const fs       = require('fs');
-const pool     = require('../db/pool');
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const pool = require('../db/pool');
 const { requireAuth, requireAdmin, requireStaff } = require('../middleware/auth');
 const { notifyStaffSubmissionReturned } = require('../services/emailTriggers');
 
@@ -14,7 +14,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
-  filename:    (req, file, cb) => {
+  filename: (req, file, cb) => {
     const safe = Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
     cb(null, safe);
   },
@@ -47,11 +47,11 @@ function cleanupUploadedFiles(files) {
   if (!Array.isArray(files)) return;
   files.forEach((file) => {
     if (!file || !file.path) return;
-    try {
-      if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
-    } catch (err) {
-      console.error('Failed to cleanup orphaned upload:', err.message);
-    }
+    fs.unlink(file.path, (err) => {
+      if (err && err.code !== 'ENOENT') {
+        console.error('Failed to cleanup orphaned upload:', err.message);
+      }
+    });
   });
 }
 
@@ -65,7 +65,7 @@ function sanitizeDownloadName(name) {
 /* ── Reference number generator ── */
 function genRef() {
   const year = new Date().getFullYear();
-  const num  = String(Math.floor(Math.random() * 90000) + 10000);
+  const num = String(Math.floor(Math.random() * 90000) + 10000);
   return `SMME-${year}-${num}`;
 }
 
@@ -221,7 +221,7 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'received',$9,$10)
        RETURNING *`,
       [ref, req.user.schoolId, req.user.id, docType, schoolYear, subject,
-       remarks || null, req.files.length, originalRef || null, isRevision]
+        remarks || null, req.files.length, originalRef || null, isRevision]
     );
     const sub = result.rows[0];
 
@@ -455,9 +455,9 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
     // Notify the school
     await notify(client, {
       schoolId: sub.school_id,
-      type:     action === 'approve' ? 'success' : 'warning',
-      title:    action === 'approve' ? 'Submission Approved' : 'Submission Returned',
-      message:  action === 'approve'
+      type: action === 'approve' ? 'success' : 'warning',
+      title: action === 'approve' ? 'Submission Approved' : 'Submission Returned',
+      message: action === 'approve'
         ? `Your submission ${req.params.ref} has been approved by the Division Office.`
         : `Your submission ${req.params.ref} was returned. Feedback: ${feedback}`,
       ref: req.params.ref,
@@ -478,12 +478,12 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
     }
 
     await audit(client, {
-      action:   action === 'approve' ? 'approve' : 'return',
-      ref:      req.params.ref,
+      action: action === 'approve' ? 'approve' : 'return',
+      ref: req.params.ref,
       schoolId: sub.school_id,
-      adminId:  req.user.id,
-      docType:  sub.doc_type,
-      remarks:  feedback || null,
+      adminId: req.user.id,
+      docType: sub.doc_type,
+      remarks: feedback || null,
     });
 
     await client.query('COMMIT');
@@ -516,12 +516,16 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
    GET /api/submissions/:ref/files/:fileId  – download file
 ───────────────────────────────────────────── */
 router.get('/:ref/files/:fileId', requireAuth, async (req, res) => {
+  if (isNaN(parseInt(req.params.fileId, 10))) {
+    return res.status(400).json({ error: 'Invalid file ID.' });
+  }
+
   try {
     const fileResult = await pool.query(
       `SELECT sf.*, s.school_id FROM submission_files sf
        JOIN submissions s ON s.id = sf.submission_id
        WHERE sf.id=$1 AND s.ref=$2`,
-      [req.params.fileId, req.params.ref]
+      [parseInt(req.params.fileId, 10), req.params.ref]
     );
     if (!fileResult.rows.length) return res.status(404).json({ error: 'File not found.' });
     const file = fileResult.rows[0];
@@ -529,7 +533,7 @@ router.get('/:ref/files/:fileId', requireAuth, async (req, res) => {
     if (req.user.role === 'staff' && file.school_id !== req.user.schoolId)
       return res.status(403).json({ error: 'Access denied.' });
 
-    const filePath = path.join(uploadDir, file.stored_name);
+    const filePath = path.join(uploadDir, path.basename(file.stored_name));
     if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found on server.' });
 
     const safeFileName = sanitizeDownloadName(file.original_name);

@@ -91,11 +91,11 @@ async function seed() {
       WHERE id NOT IN (
         SELECT MIN(id) FROM schools GROUP BY school_code
       );
-    `).catch(() => { });
+    `).catch((err) => { console.warn('   ⚠️   Warning during duplicate school cleanup:', err.message); });
     // Ensure unique constraint exists
     await client.query(`
       ALTER TABLE schools ADD CONSTRAINT IF NOT EXISTS schools_school_code_key UNIQUE (school_code);
-    `).catch(() => { });
+    `).catch((err) => { console.warn('   ⚠️   Warning adding unique constraint:', err.message); });
 
     // 1. Schools
     console.log('   Seeding schools…');

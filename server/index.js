@@ -37,7 +37,7 @@ app.use(helmet({
       fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com'],
       imgSrc: ["'self'", 'data:', 'blob:'],
       connectSrc: ["'self'"],
-      frameSrc: ["'self'"], // Changed from 'none' to allow PDF previews
+      frameSrc: ["'self'", "blob:"], // Changed from 'none' to allow PDF previews
       objectSrc: ["'self'"],
       upgradeInsecureRequests: isProd ? [] : null,
     },
@@ -194,6 +194,13 @@ app.get('/', (req, res, next) => {
   res.sendFile(LANDING_PAGE, (err) => {
     if (err) next(err);
   });
+});
+
+/* ══════════════════════════════════════════════════════
+   CATCH-ALL FOR UNDEFINED API ROUTES
+══════════════════════════════════════════════════════ */
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found.' });
 });
 
 /* ══════════════════════════════════════════════════════

@@ -38,7 +38,7 @@ function resetInactivityTimer() {
     }, 15 * 60 * 1000); // 15 minutes
   }
 }
-['mousemove', 'keydown', 'scroll', 'click'].forEach(evt =>
+['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(evt =>
   document.addEventListener(evt, resetInactivityTimer, { passive: true })
 );
 

@@ -484,7 +484,7 @@ app.use(helmet({
       fontSrc: ["'self'", 'fonts.gstatic.com', 'cdnjs.cloudflare.com'],
       imgSrc: ["'self'", 'data:', 'blob:'],
       connectSrc: ["'self'"],
-      frameSrc: ["'none'"],
+      frameSrc: ["'self'", "blob:"],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: isProd ? [] : null,
     },
@@ -567,6 +567,11 @@ app.get('/', (req, res, next) => res.sendFile(LANDING_PAGE, err => { if (err) ne
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/') || ASSET_RE.test(req.path)) return next();
   res.sendFile(LANDING_PAGE, err => { if (err) next(err); });
+});
+
+// ── Catch-all for undefined API routes ────────────────────────────────────────
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found.' });
 });
 
 // ── Global error handler ──────────────────────────────────────────────────────
