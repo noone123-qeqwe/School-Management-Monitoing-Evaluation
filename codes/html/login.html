@@ -78,7 +78,7 @@
           <p class="auth-sub">Choose your account type to continue</p>
           <div class="auth-divider">Sign in as</div>
           <div class="role-list">
-            <button type="button" class="role-btn" id="roleSchool">
+            <button type="button" class="role-btn" id="roleSchool" onclick="if(window.showStep){console.log('[DEBUG] Inline click School'); window.clearErrors(); window.showStep('stepStaff');}else{console.log('[ERROR] showStep not available');}">
               <div class="role-btn-icon staff"><i class="fas fa-user-tie"></i></div>
               <div class="role-btn-text">
                 <strong>School Staff</strong>
@@ -86,7 +86,7 @@
               </div>
               <i class="fas fa-chevron-right role-btn-arrow"></i>
             </button>
-            <button type="button" class="role-btn" id="roleAdmin">
+            <button type="button" class="role-btn" id="roleAdmin" onclick="if(window.showStep){console.log('[DEBUG] Inline click Admin'); window.clearErrors(); window.showStep('stepAdmin');}else{console.log('[ERROR] showStep not available');}">
               <div class="role-btn-icon admin"><i class="fas fa-user-shield"></i></div>
               <div class="role-btn-text">
                 <strong>Division Admin</strong>

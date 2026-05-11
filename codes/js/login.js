@@ -101,9 +101,19 @@
       window.history.replaceState({}, '', '/html/login.html');
     }
 
+    // ── Force hide splash screen to ensure clicks work ──
+    const splash = document.getElementById('splashHero');
+    if (splash && !splash.classList.contains('hidden')) {
+      console.log('[DEBUG] Force hiding splash screen');
+      splash.classList.add('hidden');
+      splash.style.display = 'none';
+    }
+
     // ── Step navigation buttons ──
     console.log('[DEBUG] Attaching roleSchool listener, element:', $('roleSchool'));
     console.log('[DEBUG] Attaching roleAdmin listener, element:', $('roleAdmin'));
+    console.log('[DEBUG] Splash screen hidden:', splash ? splash.classList.contains('hidden') : 'no splash');
+
     $('roleSchool')?.addEventListener('click', () => { console.log('[DEBUG] School Staff clicked'); clearErrors(); showStep('stepStaff'); });
     $('roleAdmin')?.addEventListener('click', () => { console.log('[DEBUG] Division Admin clicked'); clearErrors(); showStep('stepAdmin'); });
     $('backFromStaff')?.addEventListener('click', () => { clearErrors(); showStep('stepRole'); });

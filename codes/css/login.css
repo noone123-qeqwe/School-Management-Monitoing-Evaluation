@@ -67,11 +67,24 @@ button, input, select, textarea { font: inherit; }
     linear-gradient(135deg, #0b1d3b, #152d4a);
   color: #fff;
   transition: opacity .55s ease, visibility .55s ease;
+  /* CSS fallback: auto-hide after 5 seconds if JS fails */
+  animation: splash-auto-hide 0.01s ease 5s forwards;
+}
+
+@keyframes splash-auto-hide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    display: none;
+  }
 }
 .splash-hero.hidden {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+  pointer-events: none !important;
+  display: none !important;
+  animation: none;
 }
 
 .splash-blur-bg {
@@ -313,6 +326,8 @@ button, input, select, textarea { font: inherit; }
   background: linear-gradient(160deg, #f0f4f8, #e8edf4);
   padding: 40px;
   overflow-y: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .auth-card {
@@ -324,6 +339,7 @@ button, input, select, textarea { font: inherit; }
   padding: 40px 36px;
   box-shadow: var(--auth-shadow);
   position: relative;
+  z-index: 20;
 }
 
 /* ── Card logo (role step only) ── */
@@ -380,6 +396,8 @@ button, input, select, textarea { font: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+  z-index: 30;
 }
 
 .role-btn {
@@ -394,6 +412,8 @@ button, input, select, textarea { font: inherit; }
   transition: var(--auth-transition);
   text-align: left;
   width: 100%;
+  position: relative;
+  z-index: 40;
 }
 .role-btn:hover {
   border-color: var(--auth-navy-light);
