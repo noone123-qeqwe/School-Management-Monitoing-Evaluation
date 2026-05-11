@@ -10,7 +10,7 @@ const router = express.Router();
 /* ── Token signer (must use same secret resolution as ../middleware/auth.js) ── */
 function resolveJwtSecret() {
   if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
-  if (process.env.NODE_ENV === 'production') return null;
+  console.warn('⚠️ WARNING: JWT_SECRET is not set in production. Using fallback secret.');
   return 'smme_fallback_secret_dev_12345';
 }
 

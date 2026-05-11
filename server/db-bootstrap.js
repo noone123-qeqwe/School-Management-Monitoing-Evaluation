@@ -532,7 +532,13 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use('/api/auth/staff/login', authLimiter);
 app.use('/api/auth/admin/login', authLimiter);
 app.use('/api/auth/staff/register', authLimiter);
-app.use('/api/submissions', (req, res, next) => req.method === 'POST' ? uploadLimiter(req, res, next) : next());
+app.use('/api/submissions', (req, res, next) => {
+  // Only apply the strict 20/hr upload limiter to the actual file submission endpoint, not smart validations or comments
+  if (req.method === 'POST' && (req.path === '/' || req.path === '')) {
+    return uploadLimiter(req, res, next);
+  }
+  next();
+});
 
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
@@ -587,11 +593,6 @@ async function onServerStart() {
     await pool.query('SELECT 1');
     console.log('✅  Database connection successful.');
 
-    if (isProd) {
-      console.log('ℹ️   Production mode: automatic migrate/seed disabled.');
-      return;
-    }
-
     const { exec } = require('child_process');
     const { promisify } = require('util');
     const execAsync = promisify(exec);
@@ -616,6 +617,11 @@ async function onServerStart() {
     }
 
     console.log('    Tables found :', tableNames.join(', '));
+
+    if (isProd) {
+      console.log('ℹ️   Production mode: automatic seed update disabled.');
+      return;
+    }
 
     // Re-seed if schools list is outdated
     try {

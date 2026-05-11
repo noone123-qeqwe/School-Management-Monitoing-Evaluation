@@ -251,11 +251,6 @@ app.listen(PORT, async () => {
     await pool.query('SELECT 1');
     console.log('✅ Database connection successful');
 
-    if (isProd) {
-      console.log('Production mode: automatic migrate/seed disabled.');
-      return;
-    }
-
     // FIX 7 — use async exec so the event loop is never blocked during startup
     const { exec } = require('child_process');
     const { promisify } = require('util');
@@ -277,6 +272,11 @@ app.listen(PORT, async () => {
       }
     } else {
       console.log('Tables found:', tableNames.join(', '));
+      
+      if (isProd) {
+        console.log('Production mode: automatic seed update disabled.');
+        return;
+      }
       try {
         const { rows } = await pool.query('SELECT COUNT(*) FROM schools');
         if (parseInt(rows[0].count) < 38) {
