@@ -163,6 +163,24 @@
           </div>
         </div>
 
+        <!-- VISUAL ANALYTICS (Chart.js) -->
+        <div class="dash-card" id="adminChartsWrap" style="margin-bottom:18px">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-chart-line"></i> Visual analytics</h3>
+          </div>
+          <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;padding:8px 0 4px">
+            <div style="min-height:280px;position:relative">
+              <canvas id="chartBySchool"></canvas>
+            </div>
+            <div style="min-height:280px;position:relative">
+              <canvas id="chartStatusPie"></canvas>
+            </div>
+          </div>
+          <div style="min-height:240px;position:relative;padding-top:8px;border-top:1px solid var(--border, #e2e8f0);margin-top:8px">
+            <canvas id="chartVolumeLine"></canvas>
+          </div>
+        </div>
+
         <!-- TWO COLUMN -->
         <div class="dash-two-col">
           <div class="dash-card">
@@ -711,6 +729,13 @@
         <button class="modal-close-btn" id="reviewModalClose" aria-label="Close"><i class="fas fa-times"></i></button>
       </div>
       <div class="review-details" id="reviewDetails"></div>
+      <div class="review-thread" style="margin:16px 0;padding:14px;background:var(--bg,#f8fafc);border-radius:10px;border:1px solid var(--border,#e2e8f0)">
+        <h4 style="margin:0 0 10px;font-size:0.95rem"><i class="fas fa-comments"></i> Discussion thread</h4>
+        <div id="reviewCommentsList" style="max-height:220px;overflow-y:auto;font-size:0.86rem;margin-bottom:10px"></div>
+        <label class="label-hint" style="display:block;margin-bottom:4px">Add a note for the school (appears in portal + email context for returns)</label>
+        <textarea id="reviewNewComment" rows="2" placeholder="e.g. Page 4 needs a signature..."></textarea>
+        <button type="button" class="btn btn-sm btn-primary" id="reviewPostCommentBtn" style="margin-top:8px"><i class="fas fa-paper-plane"></i> Post note</button>
+      </div>
       <div class="review-actions">
         <div class="form-group full-width">
           <label>
@@ -748,7 +773,8 @@
     </div>
   </div>
 
-  <script src="../js/api.js?v=1.5.1"></script>
-  <script src="../js/admin-dashboard.js?v=1.5.1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
+  <script src="../js/api.js?v=1.8.0"></script>
+  <script src="../js/admin-dashboard.js?v=1.8.0"></script>
 </body>
 </html>

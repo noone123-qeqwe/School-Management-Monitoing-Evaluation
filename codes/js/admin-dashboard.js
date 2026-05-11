@@ -87,6 +87,109 @@ function renderError(container, message, retryJs) {
   `;
 }
 
+let chartBySchoolInst = null;
+let chartStatusInst = null;
+let chartVolumeInst = null;
+
+async function renderDashboardCharts() {
+  if (typeof Chart === 'undefined') return;
+  const barEl = document.getElementById('chartBySchool');
+  const pieEl = document.getElementById('chartStatusPie');
+  const lineEl = document.getElementById('chartVolumeLine');
+  if (!barEl || !pieEl || !lineEl) return;
+  try {
+    const data = await API.admin.dashboardCharts();
+    const rows = data.submissionsBySchool || [];
+    const labels = rows.map((r) => r.school_name);
+    const counts = rows.map((r) => r.cnt);
+    if (chartBySchoolInst) chartBySchoolInst.destroy();
+    chartBySchoolInst = new Chart(barEl, {
+      type: 'bar',
+      data: {
+        labels: labels.length ? labels : ['No submissions yet'],
+        datasets: [{
+          label: 'Submissions',
+          data: labels.length ? counts : [0],
+          backgroundColor: 'rgba(59, 130, 246, 0.7)',
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, title: { display: true, text: 'Submissions per school (top 15)' } },
+        scales: { x: { ticks: { maxRotation: 40, autoSkip: true, maxTicksLimit: 12 } } },
+      },
+    });
+
+    const sc = data.statusCounts || { approved: 0, pending: 0, returned: 0 };
+    if (chartStatusInst) chartStatusInst.destroy();
+    chartStatusInst = new Chart(pieEl, {
+      type: 'doughnut',
+      data: {
+        labels: ['Approved', 'Pending review', 'Returned'],
+        datasets: [{
+          data: [sc.approved || 0, sc.pending || 0, sc.returned || 0],
+          backgroundColor: ['#22c55e', '#eab308', '#ef4444'],
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Status distribution' } },
+      },
+    });
+
+    const vol = data.volumeByWeek || [];
+    const wLabels = vol.map((w) => {
+      const d = new Date(w.week_start);
+      return d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric' });
+    });
+    const wCounts = vol.map((w) => w.cnt);
+    if (chartVolumeInst) chartVolumeInst.destroy();
+    chartVolumeInst = new Chart(lineEl, {
+      type: 'line',
+      data: {
+        labels: wLabels.length ? wLabels : ['—'],
+        datasets: [{
+          label: 'Submissions / week',
+          data: wLabels.length ? wCounts : [0],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          fill: true,
+          tension: 0.35,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { title: { display: true, text: 'Volume by week (last 8 weeks)' } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+      },
+    });
+  } catch (err) {
+    console.error('[charts]', err);
+  }
+}
+
+async function loadReviewThread(ref) {
+  const list = document.getElementById('reviewCommentsList');
+  if (!list) return;
+  try {
+    const rows = await API.submissions.listComments(ref);
+    list.innerHTML = rows.length
+      ? rows.map((c) => `
+        <div style="border-bottom:1px solid var(--border,#e2e8f0);padding:8px 0">
+          <strong>${API.escapeHtml(c.author_name || c.author_role)}</strong>
+          <span style="color:var(--text-muted);font-size:0.75rem;margin-left:6px">${new Date(c.created_at).toLocaleString('en-PH')}</span>
+          <p style="margin:6px 0 0;white-space:pre-wrap">${API.escapeHtml(c.body)}</p>
+        </div>
+      `).join('')
+      : '<p style="color:var(--text-muted);margin:0">No notes in the thread yet.</p>';
+  } catch {
+    list.innerHTML = '<p style="color:var(--danger)">Could not load discussion.</p>';
+  }
+}
+
 /* ===== DASHBOARD ===== */
 async function loadAdminDashboard() {
   try {
@@ -128,6 +231,7 @@ async function loadAdminDashboard() {
 
     // Activity
     renderActivity(subs.slice(0, 8));
+    await renderDashboardCharts();
   } catch (err) {
     API.showToast(`Failed to load dashboard: ${err.message}`, 'error');
     renderError(document.getElementById('pendingTableBody')?.closest('.table-wrap'), 'Unable to load dashboard pending table.', 'loadAdminDashboard()');
@@ -326,10 +430,18 @@ async function openReview(ref) {
     document.getElementById('reviewRemarks').value = s.feedback || '';
     document.getElementById('reviewRemarksErr').textContent = '';
     document.getElementById('reviewModal').removeAttribute('hidden');
+    await loadReviewThread(ref);
   } catch (err) { API.showToast(`Failed to load submission: ${err.message}`, 'error'); }
 }
 
-function closeReviewModal() { document.getElementById('reviewModal').setAttribute('hidden', ''); currentReviewRef = null; }
+function closeReviewModal() {
+  document.getElementById('reviewModal').setAttribute('hidden', '');
+  currentReviewRef = null;
+  const cl = document.getElementById('reviewCommentsList');
+  if (cl) cl.innerHTML = '';
+  const nc = document.getElementById('reviewNewComment');
+  if (nc) nc.value = '';
+}
 
 async function downloadFile(ref, fileId, filename) {
   try {
@@ -340,6 +452,19 @@ async function downloadFile(ref, fileId, filename) {
 }
 document.getElementById('reviewModalClose').addEventListener('click',  closeReviewModal);
 document.getElementById('reviewModalClose2').addEventListener('click', closeReviewModal);
+
+document.getElementById('reviewPostCommentBtn')?.addEventListener('click', async () => {
+  if (!currentReviewRef) return;
+  const t = document.getElementById('reviewNewComment');
+  const body = (t && t.value || '').trim();
+  if (!body) { API.showToast('Write a note first.', 'error'); return; }
+  try {
+    await API.submissions.postComment(currentReviewRef, body);
+    if (t) t.value = '';
+    await loadReviewThread(currentReviewRef);
+    API.showToast('Note posted.', 'success');
+  } catch (e) { API.showToast(e.message || 'Failed to post note.', 'error'); }
+});
 
 document.getElementById('approveBtn').addEventListener('click', async () => {
   if (!currentReviewRef) return;

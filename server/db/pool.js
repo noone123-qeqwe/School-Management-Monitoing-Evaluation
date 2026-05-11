@@ -86,7 +86,7 @@ const db = {
       division: 'Division of Masbate',
     },
   ],
-  submissions: [], submission_files: [],
+  submissions: [], submission_files: [], submission_comments: [],
   notifications: [], audit_log: [],
   notices: [
     { id: 1, type: 'info', title: 'Deadline Reminder', message: 'Enrollment reports for SY 2026–2027 must be submitted by June 15, 2026.', created_at: new Date().toISOString() },
@@ -211,7 +211,15 @@ class MockPool {
     if (q.includes('NOTICES')) {
       if (q.startsWith('SELECT')) return { rows: db.notices };
       if (q.startsWith('INSERT')) {
-        const n = { id: Date.now(), type: params[0], title: params[1], message: params[2], created_at: new Date().toISOString() };
+        const n = {
+          id: Date.now(),
+          type: params[0],
+          title: params[1],
+          message: params[2],
+          target_level: params[3],
+          target_school_id: params[4],
+          created_at: new Date().toISOString(),
+        };
         db.notices.unshift(n);
         return { rows: [n] };
       }
@@ -227,6 +235,29 @@ class MockPool {
         return { rows: [d] };
       }
       if (q.startsWith('DELETE')) { db.deadlines = db.deadlines.filter(d => String(d.id) !== String(params[0])); return { rows: [] }; }
+    }
+
+    // ── SUBMISSION COMMENTS ───────────────────────────────────────────────────
+    if (q.includes('SUBMISSION_COMMENTS')) {
+      if (q.startsWith('INSERT')) {
+        const submissionId = params[0];
+        const id = Date.now();
+        const body = params[params.length - 1];
+        db.submission_comments.push({
+          id,
+          submission_id: submissionId,
+          author_role: 'staff',
+          body,
+          created_at: new Date().toISOString(),
+          author_name: 'Mock User',
+        });
+        return { rows: [{ id }] };
+      }
+      if (q.startsWith('SELECT') && params.length) {
+        const sid = params[0];
+        return { rows: db.submission_comments.filter((c) => String(c.submission_id) === String(sid)) };
+      }
+      if (q.startsWith('SELECT')) return { rows: db.submission_comments };
     }
 
     // ── AUDIT LOG ─────────────────────────────────────────────────────────────

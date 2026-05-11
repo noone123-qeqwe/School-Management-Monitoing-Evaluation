@@ -4,6 +4,7 @@ const path     = require('path');
 const fs       = require('fs');
 const pool     = require('../db/pool');
 const { requireAuth, requireAdmin, requireStaff } = require('../middleware/auth');
+const { notifyStaffSubmissionReturned } = require('../services/emailTriggers');
 
 const router = express.Router();
 
@@ -303,6 +304,88 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 /* ─────────────────────────────────────────────
+   GET /api/submissions/:ref/comments — discussion thread
+   POST /api/submissions/:ref/comments — admin or school staff note
+   (Must be registered before GET /:ref.)
+───────────────────────────────────────────── */
+router.get('/:ref/comments', requireAuth, async (req, res) => {
+  try {
+    const subResult = await pool.query(
+      'SELECT id, school_id FROM submissions WHERE ref=$1',
+      [req.params.ref]
+    );
+    if (!subResult.rows.length) return res.status(404).json({ error: 'Submission not found.' });
+    const sub = subResult.rows[0];
+    if (req.user.role === 'staff' && sub.school_id !== req.user.schoolId)
+      return res.status(403).json({ error: 'Access denied.' });
+
+    const result = await pool.query(
+      `SELECT c.id, c.author_role, c.body, c.created_at,
+              CASE WHEN c.author_role = 'admin' THEN ad.full_name
+                   ELSE trim(coalesce(st.first_name,'') || ' ' || coalesce(st.last_name,'')) END AS author_name
+       FROM submission_comments c
+       LEFT JOIN admins ad ON ad.id = c.author_admin_id
+       LEFT JOIN staff st ON st.id = c.author_staff_id
+       WHERE c.submission_id = $1
+       ORDER BY c.created_at ASC`,
+      [sub.id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+router.post('/:ref/comments', requireAuth, async (req, res) => {
+  const body = String(req.body.body || '').trim();
+  if (!body || body.length > 4000)
+    return res.status(400).json({ error: 'Comment is required (max 4000 characters).' });
+  try {
+    const subResult = await pool.query(
+      'SELECT id, school_id FROM submissions WHERE ref=$1',
+      [req.params.ref]
+    );
+    if (!subResult.rows.length) return res.status(404).json({ error: 'Submission not found.' });
+    const sub = subResult.rows[0];
+
+    let ins;
+    if (req.user.role === 'staff') {
+      if (sub.school_id !== req.user.schoolId)
+        return res.status(403).json({ error: 'Access denied.' });
+      ins = await pool.query(
+        `INSERT INTO submission_comments (submission_id, author_role, author_staff_id, body)
+         VALUES ($1,'staff',$2,$3) RETURNING id`,
+        [sub.id, req.user.id, body]
+      );
+    } else if (req.user.role === 'admin') {
+      ins = await pool.query(
+        `INSERT INTO submission_comments (submission_id, author_role, author_admin_id, body)
+         VALUES ($1,'admin',$2,$3) RETURNING id`,
+        [sub.id, req.user.id, body]
+      );
+    } else {
+      return res.status(403).json({ error: 'Access denied.' });
+    }
+
+    const row = await pool.query(
+      `SELECT c.id, c.author_role, c.body, c.created_at,
+              CASE WHEN c.author_role = 'admin' THEN ad.full_name
+                   ELSE trim(coalesce(st.first_name,'') || ' ' || coalesce(st.last_name,'')) END AS author_name
+       FROM submission_comments c
+       LEFT JOIN admins ad ON ad.id = c.author_admin_id
+       LEFT JOIN staff st ON st.id = c.author_staff_id
+       WHERE c.id = $1`,
+      [ins.rows[0].id]
+    );
+    res.status(201).json(row.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+/* ─────────────────────────────────────────────
    GET /api/submissions/:ref  – single submission
 ───────────────────────────────────────────── */
 router.get('/:ref', requireAuth, async (req, res) => {
@@ -380,6 +463,20 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
       ref: req.params.ref,
     });
 
+    if (action === 'return' && feedback) {
+      await client.query(
+        `INSERT INTO submission_comments (submission_id, author_role, author_admin_id, body)
+         VALUES ($1,'admin',$2,$3)`,
+        [sub.id, req.user.id, feedback]
+      );
+    } else if (action === 'approve' && feedback && String(feedback).trim()) {
+      await client.query(
+        `INSERT INTO submission_comments (submission_id, author_role, author_admin_id, body)
+         VALUES ($1,'admin',$2,$3)`,
+        [sub.id, req.user.id, String(feedback).trim()]
+      );
+    }
+
     await audit(client, {
       action:   action === 'approve' ? 'approve' : 'return',
       ref:      req.params.ref,
@@ -390,6 +487,21 @@ router.patch('/:ref/review', requireAdmin, async (req, res) => {
     });
 
     await client.query('COMMIT');
+
+    if (action === 'return') {
+      const sc = await pool.query('SELECT name FROM schools WHERE id=$1', [sub.school_id]);
+      const schoolName = sc.rows[0]?.name;
+      setImmediate(() => {
+        notifyStaffSubmissionReturned({
+          ref: req.params.ref,
+          docType: sub.doc_type,
+          feedback,
+          schoolId: sub.school_id,
+          schoolName,
+        }).catch((e) => console.error('[email] submission returned:', e.message));
+      });
+    }
+
     res.json({ message: `Submission ${newStatus}.` });
   } catch (err) {
     await client.query('ROLLBACK');

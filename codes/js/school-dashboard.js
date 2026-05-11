@@ -63,6 +63,58 @@ populateStaffDashboard();
   bootstrapStaffDashboard();
 })();
 
+/* ===== DEADLINE CALENDAR (FullCalendar) ===== */
+let deadlineCalendar = null;
+let currentTrackRef = null;
+
+function initDeadlineCalendar() {
+  if (deadlineCalendar) return;
+  const FC = typeof window !== 'undefined' ? window.FullCalendar : null;
+  const CalendarCtor = FC && FC.Calendar;
+  if (!CalendarCtor) return;
+  const el = document.getElementById('deadlineCalendar');
+  if (!el) return;
+  try {
+    deadlineCalendar = new CalendarCtor(el, {
+      initialView: 'dayGridMonth',
+      height: 'auto',
+      headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+      events: (info, successCallback, failureCallback) => {
+        const token = sessionStorage.getItem('smme_token');
+        const s = (info.startStr || '').slice(0, 10);
+        const e = (info.endStr || '').slice(0, 10);
+        fetch('/api/staff/calendar-events?start=' + encodeURIComponent(s) + '&end=' + encodeURIComponent(e), {
+          headers: token ? { Authorization: 'Bearer ' + token } : {},
+        })
+          .then((r) => { if (!r.ok) throw new Error('Bad response'); return r.json(); })
+          .then((d) => successCallback(d.events || []))
+          .catch(() => failureCallback(new Error('Calendar load failed')));
+      },
+    });
+    deadlineCalendar.render();
+  } catch (err) {
+    console.error('[calendar]', err);
+  }
+}
+
+async function loadTrackComments(ref) {
+  const list = document.getElementById('dTrackCommentsList');
+  if (!list) return;
+  try {
+    const rows = await API.submissions.listComments(ref);
+    list.innerHTML = rows.length
+      ? rows.map((c) =>
+        '<div style="border-bottom:1px solid var(--border,#e2e8f0);padding:8px 0">' +
+        '<strong>' + API.escapeHtml(c.author_name || c.author_role) + '</strong> ' +
+        '<span style="color:var(--text-muted);font-size:.72rem">' + new Date(c.created_at).toLocaleString('en-PH') + '</span>' +
+        '<p style="margin:4px 0 0;white-space:pre-wrap">' + API.escapeHtml(c.body) + '</p></div>'
+      ).join('')
+      : '<p style="color:var(--text-muted)">No messages yet.</p>';
+  } catch {
+    list.innerHTML = '<p style="color:var(--text-muted)">Could not load discussion.</p>';
+  }
+}
+
 /* ===== SIDEBAR TOGGLE ===== */
 const sidebar = document.getElementById('sidebar');
 const topbarMenu = document.getElementById('topbarMenu');
@@ -90,7 +142,10 @@ function switchPage(pageId) {
   if (pageId === 'submissions') loadSubmissions('all');
   if (pageId === 'mine') loadSubmissions('mine');
   if (pageId === 'compliance') loadCompliance();
-  if (pageId === 'deadlines') loadDeadlines();
+  if (pageId === 'deadlines') {
+    initDeadlineCalendar();
+    loadDeadlines();
+  }
 }
 document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); switchPage(link.dataset.page); });
@@ -713,14 +768,40 @@ document.getElementById('dTrackBtn').addEventListener('click', async () => {
         '<span>' + (step.done ? new Date(s.submitted_at).toLocaleDateString('en-PH') : step.active ? 'In progress' : 'Pending') + '</span></div></div>';
     }).join('');
     result.removeAttribute('hidden');
+    currentTrackRef = s.ref;
+    const threadEl = document.getElementById('dTrackThread');
+    if (threadEl) {
+      threadEl.style.display = 'block';
+      const ta = document.getElementById('dTrackNewComment');
+      if (ta) ta.value = '';
+      loadTrackComments(s.ref);
+    }
   } catch (err) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-search"></i> Track';
     API.showToast(err.message === 'Submission not found.' ? 'Reference number not found.' : err.message, 'error');
     result.setAttribute('hidden', '');
+    currentTrackRef = null;
+    const threadEl = document.getElementById('dTrackThread');
+    if (threadEl) threadEl.style.display = 'none';
   }
 });
 document.getElementById('dTrackInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('dTrackBtn').click(); });
+
+document.getElementById('dTrackPostCommentBtn').addEventListener('click', async () => {
+  if (!currentTrackRef) return;
+  const ta = document.getElementById('dTrackNewComment');
+  const body = (ta && ta.value || '').trim();
+  if (!body) { API.showToast('Write a reply first.', 'error'); return; }
+  try {
+    await API.submissions.postComment(currentTrackRef, body);
+    if (ta) ta.value = '';
+    await loadTrackComments(currentTrackRef);
+    API.showToast('Reply posted.', 'success');
+  } catch (e) {
+    API.showToast(e.message || 'Failed to post.', 'error');
+  }
+});
 
 /* ===== RESUBMIT MODAL ===== */
 let resubRef = null;

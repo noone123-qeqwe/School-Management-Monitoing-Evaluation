@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const pool = require('../db/pool');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
+const { notifyStaffUrgentNotice } = require('../services/emailTriggers');
 
 const router = express.Router();
 
@@ -29,6 +30,51 @@ router.get('/schools', requireAdmin, async (req, res) => {
 /* ─────────────────────────────────────────────
    GET /api/admin/stats
 ───────────────────────────────────────────── */
+router.get('/dashboard-charts', requireAdmin, async (req, res) => {
+  if (process.env.MOCK_DB === 'true') {
+    return res.json({
+      submissionsBySchool: [],
+      statusCounts: { approved: 0, pending: 0, returned: 0 },
+      volumeByWeek: [],
+    });
+  }
+  try {
+    const [bySchool, statusRow, volume] = await Promise.all([
+      pool.query(
+        `SELECT sc.name AS school_name, COUNT(s.id)::int AS cnt
+         FROM submissions s
+         JOIN schools sc ON sc.id = s.school_id
+         GROUP BY sc.id, sc.name
+         ORDER BY cnt DESC
+         LIMIT 15`
+      ),
+      pool.query(
+        `SELECT
+           COUNT(*) FILTER (WHERE status = 'approved')::int AS approved,
+           COUNT(*) FILTER (WHERE status IN ('received','review'))::int AS pending,
+           COUNT(*) FILTER (WHERE status = 'returned')::int AS returned
+         FROM submissions`
+      ),
+      pool.query(
+        `SELECT (date_trunc('week', submitted_at AT TIME ZONE 'UTC'))::date AS week_start,
+                COUNT(*)::int AS cnt
+         FROM submissions
+         WHERE submitted_at >= NOW() - INTERVAL '8 weeks'
+         GROUP BY 1
+         ORDER BY 1 ASC`
+      ),
+    ]);
+    res.json({
+      submissionsBySchool: bySchool.rows,
+      statusCounts: statusRow.rows[0] || { approved: 0, pending: 0, returned: 0 },
+      volumeByWeek: volume.rows,
+    });
+  } catch (err) {
+    console.error('[dashboard-charts]', err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 router.get('/stats', requireAdmin, async (req, res) => {
   try {
     const [total, pending, approved, returned, schools, staff] = await Promise.all([
@@ -132,12 +178,24 @@ router.post('/notices', requireAdmin, async (req, res) => {
   if (!title || !message) return res.status(400).json({ error: 'Title and message are required.' });
   try {
     const normalizedLevel = targetLevel || 'all';
+    const noticeType = type || 'info';
     const result = await pool.query(
       `INSERT INTO notices (type, title, message, target_level, target_school_id, created_by)
        VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
-      [type || 'info', title, message, normalizedLevel, targetSchoolId || null, req.user.id]
+      [noticeType, title, message, normalizedLevel, targetSchoolId || null, req.user.id]
     );
-    res.status(201).json(result.rows[0]);
+    const notice = result.rows[0];
+    res.status(201).json(notice);
+    if (noticeType === 'warning') {
+      setImmediate(() => {
+        notifyStaffUrgentNotice({
+          title,
+          message,
+          targetSchoolId: notice.target_school_id,
+          targetLevel: notice.target_level,
+        }).catch((e) => console.error('[email] urgent notice:', e.message));
+      });
+    }
   } catch (err) { res.status(500).json({ error: 'Server error.' }); }
 });
 

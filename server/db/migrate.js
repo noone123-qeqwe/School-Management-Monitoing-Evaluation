@@ -212,6 +212,20 @@ async function migrate() {
     `);
     console.log('   ✅  validation_rules');
 
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS submission_comments (
+        id                SERIAL PRIMARY KEY,
+        submission_id     INTEGER NOT NULL REFERENCES submissions(id) ON DELETE CASCADE,
+        author_role       TEXT NOT NULL,
+        author_staff_id   INTEGER REFERENCES staff(id),
+        author_admin_id   INTEGER REFERENCES admins(id),
+        body              TEXT NOT NULL,
+        created_at        TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_submission_comments_sub ON submission_comments(submission_id);`);
+    console.log('   ✅  submission_comments');
+
     console.log('\n🎉  Migrations complete!\n');
   } catch (err) {
     console.error('\n❌  Migration failed:', err.message);

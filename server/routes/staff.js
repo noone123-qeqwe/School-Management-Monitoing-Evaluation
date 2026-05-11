@@ -155,4 +155,67 @@ router.get('/tasks-summary', requireStaff, async (req, res) => {
   }
 });
 
+/* ─────────────────────────────────────────────
+   GET /api/staff/calendar-events — FullCalendar feed (deadlines + submissions)
+───────────────────────────────────────────── */
+router.get('/calendar-events', requireStaff, async (req, res) => {
+  const start = String(req.query.start || '').slice(0, 10);
+  const end = String(req.query.end || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end))
+    return res.status(400).json({ error: 'Valid start and end date query params (YYYY-MM-DD) are required.' });
+  try {
+    const schoolRes = await pool.query('SELECT level FROM schools WHERE id=$1', [req.user.schoolId]);
+    const level = schoolRes.rows[0]?.level || '';
+
+    const [dlRes, subRes] = await Promise.all([
+      pool.query(
+        `SELECT doc_type, school_year, deadline, level
+         FROM deadlines
+         WHERE (level = 'all' OR level = $1)
+           AND deadline >= $2::date AND deadline <= $3::date
+         ORDER BY deadline ASC`,
+        [level, start, end]
+      ),
+      pool.query(
+        `SELECT ref, doc_type, status, submitted_at::date AS sub_day
+         FROM submissions
+         WHERE school_id = $1
+           AND submitted_at::date >= $2::date AND submitted_at::date <= $3::date`,
+        [req.user.schoolId, start, end]
+      ),
+    ]);
+
+    const events = [];
+    for (const row of dlRes.rows) {
+      const d = row.deadline instanceof Date ? row.deadline.toISOString().slice(0, 10) : String(row.deadline).slice(0, 10);
+      events.push({
+        title: `Due: ${row.doc_type} (SY ${row.school_year})`,
+        start: d,
+        allDay: true,
+        backgroundColor: '#2563eb',
+        borderColor: '#1e40af',
+        textColor: '#ffffff',
+        extendedProps: { kind: 'deadline' },
+      });
+    }
+    for (const row of subRes.rows) {
+      const day = row.sub_day instanceof Date ? row.sub_day.toISOString().slice(0, 10) : String(row.sub_day).slice(0, 10);
+      const color = row.status === 'returned' ? '#dc2626' : row.status === 'approved' ? '#16a34a' : '#64748b';
+      events.push({
+        title: `${row.ref} — ${row.doc_type}`,
+        start: day,
+        allDay: true,
+        backgroundColor: color,
+        borderColor: color,
+        textColor: '#ffffff',
+        extendedProps: { kind: 'submission', ref: row.ref, status: row.status },
+      });
+    }
+    res.json({ events });
+  } catch (err) {
+    console.error('[calendar-events]', err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 module.exports = router;

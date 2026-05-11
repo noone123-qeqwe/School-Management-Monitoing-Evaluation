@@ -138,6 +138,14 @@ const API = (() => {
       return patch('/submissions/' + ref + '/review', { action, feedback });
     },
 
+    async listComments(ref) {
+      return get('/submissions/' + encodeURIComponent(ref) + '/comments');
+    },
+
+    async postComment(ref, body) {
+      return post('/submissions/' + encodeURIComponent(ref) + '/comments', { body });
+    },
+
     /**
      * Download a submission file securely using the Authorization header.
      * The token is never exposed in the URL, browser history, or server logs.
@@ -186,6 +194,10 @@ const API = (() => {
     async updateProfile(data)      { return patch('/staff/me', data); },
     async changePassword(data)     { return patch('/staff/me/password', data); },
     async tasksSummary()           { return get('/staff/tasks-summary'); },
+    async calendarEvents(start, end) {
+      const qs = new URLSearchParams({ start, end }).toString();
+      return get('/staff/calendar-events?' + qs);
+    },
   };
 
   /* ══════════════════════════════════════════
@@ -193,6 +205,7 @@ const API = (() => {
   ══════════════════════════════════════════ */
   const admin = {
     async stats()                  { return get('/admin/stats'); },
+    async dashboardCharts()        { return get('/admin/dashboard-charts'); },
     async schools()                { return get('/admin/schools'); },
     async audit(params = {}) {
       const qs = new URLSearchParams(params).toString();
