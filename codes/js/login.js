@@ -1,7 +1,6 @@
 'use strict';
 /**
- * SMME Portal — Login Page Controller
- * Handles role selection, staff login, admin login, and registration.
+ * SMME Portal — Login Page Controller (fixed)
  */
 
 /* ═══════════════════════════════════════════
@@ -11,7 +10,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splashHero');
   const layout = document.getElementById('authLayout');
 
-  // Hide splash after 2 seconds, reveal layout
   setTimeout(() => {
     if (splash) {
       splash.style.opacity = '0';
@@ -20,28 +18,25 @@ window.addEventListener('DOMContentLoaded', () => {
     if (layout) layout.classList.add('layout-in');
   }, 2000);
 
-  // Load schools for staff login dropdown
   loadSchools();
 
-  // Check if redirected after logout
   const params = new URLSearchParams(window.location.search);
   if (params.get('logout') === '1') {
     showToast('You have been logged out.', 'info');
   }
 
-  // If already logged in, redirect to appropriate dashboard
+  // If already logged in, redirect
   const user = API.auth.getUser();
   if (user && API.auth.isLoggedIn()) {
-    if (user.role === 'admin') {
-      window.location.href = '/html/admin-dashboard.html';
-    } else if (user.role === 'staff') {
-      window.location.href = '/html/school-dashboard.html';
-    }
+    if (user.role === 'admin') window.location.href = '/html/admin-dashboard.html';
+    else if (user.role === 'staff') window.location.href = '/html/school-dashboard.html';
   }
 });
 
 /* ═══════════════════════════════════════════
    STEP MANAGEMENT
+   IDs must match login.html exactly:
+     stepRole | stepStaff | stepAdmin | stepRegister
 ═══════════════════════════════════════════ */
 function showStep(stepId) {
   document.querySelectorAll('.auth-step').forEach(s => s.setAttribute('hidden', ''));
@@ -49,123 +44,145 @@ function showStep(stepId) {
   if (el) el.removeAttribute('hidden');
 }
 
-// Role selection buttons
-const roleStaffBtn = document.getElementById('roleStaff');
+// Role selection buttons — IDs from login.html: roleSchool, roleAdmin
+const roleSchoolBtn = document.getElementById('roleSchool');
 const roleAdminBtn = document.getElementById('roleAdmin');
 
-if (roleStaffBtn) {
-  roleStaffBtn.addEventListener('click', () => showStep('stepStaffLogin'));
-}
-if (roleAdminBtn) {
-  roleAdminBtn.addEventListener('click', () => showStep('stepAdminLogin'));
-}
+if (roleSchoolBtn) roleSchoolBtn.addEventListener('click', () => showStep('stepStaff'));
+if (roleAdminBtn) roleAdminBtn.addEventListener('click', () => showStep('stepAdmin'));
 
 // Back buttons
-document.querySelectorAll('.auth-back').forEach(btn => {
-  btn.addEventListener('click', () => showStep('stepRole'));
+document.getElementById('backFromStaff')?.addEventListener('click', () => showStep('stepRole'));
+document.getElementById('backFromAdmin')?.addEventListener('click', () => showStep('stepRole'));
+document.getElementById('backFromRegister')?.addEventListener('click', () => showStep('stepStaff'));
+
+// "Create an account" link inside staff step — id="registerLink"
+document.getElementById('registerLink')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  showStep('stepRegister');
 });
 
-// "Register" link from staff login
-const goRegisterBtn = document.getElementById('goRegister');
-if (goRegisterBtn) {
-  goRegisterBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    showStep('stepRegister');
-  });
-}
-
-// "Sign in" link from register
-const goLoginBtn = document.getElementById('goLogin');
-if (goLoginBtn) {
-  goLoginBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    showStep('stepStaffLogin');
-  });
-}
-
 /* ═══════════════════════════════════════════
-   SCHOOL PICKER (Staff Login + Register)
+   SCHOOL PICKER (dropdown for staff login + register)
+   login.html uses: <select id="staffSchool"> and <select id="regSchool">
+   Both are hidden; we build a custom search picker on top of them.
 ═══════════════════════════════════════════ */
 let allSchools = [];
 
 async function loadSchools() {
   try {
     allSchools = await API.auth.getSchools();
-    // Populate register school select if present
-    const regSchool = document.getElementById('regSchoolId');
-    if (regSchool) {
-      regSchool.innerHTML = '<option value="">Select your school…</option>' +
-        allSchools.map(s =>
-          `<option value="${s.id}">${escHtml(s.name)} (${levelLabel(s.level)})</option>`
-        ).join('');
-    }
+    buildPicker('staffSchoolGroup', 'staffSchool', 'staffSchoolErr');
+    buildPicker('regSchoolGroup', 'regSchool', 'regSchoolErr');
+    // Also fill the real selects for form submission fallback
+    populateSelect('staffSchool');
+    populateSelect('regSchool');
   } catch (err) {
     console.error('Failed to load schools:', err.message);
   }
 }
 
-// School search picker for staff login
-const schoolPickerInput = document.getElementById('loginSchoolInput');
-const schoolPickerList = document.getElementById('schoolPickerList');
-const schoolPickerClear = document.getElementById('schoolPickerClear');
-const schoolPickerField = document.getElementById('schoolPickerField');
-let selectedSchoolId = '';
-
-if (schoolPickerInput) {
-  schoolPickerInput.addEventListener('input', () => {
-    const q = schoolPickerInput.value.toLowerCase().trim();
-    selectedSchoolId = '';
-    renderSchoolPicker(q);
-  });
-
-  schoolPickerInput.addEventListener('focus', () => {
-    schoolPickerField.classList.add('focused');
-    renderSchoolPicker(schoolPickerInput.value.toLowerCase().trim());
-  });
-
-  schoolPickerInput.addEventListener('blur', () => {
-    schoolPickerField.classList.remove('focused');
-    // Delay to allow click on option
-    setTimeout(() => {
-      if (schoolPickerList) schoolPickerList.style.display = 'none';
-    }, 200);
-  });
+function populateSelect(selectId) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  sel.innerHTML = '<option value="">-- Select your school --</option>' +
+    allSchools.map(s =>
+      `<option value="${s.id}">${escHtml(s.name)} (${levelLabel(s.level)})</option>`
+    ).join('');
 }
 
-if (schoolPickerClear) {
-  schoolPickerClear.addEventListener('click', () => {
-    selectedSchoolId = '';
-    if (schoolPickerInput) schoolPickerInput.value = '';
-    if (schoolPickerList) schoolPickerList.style.display = 'none';
-    schoolPickerField.classList.remove('invalid');
-  });
-}
+/**
+ * Build a search-picker UI inside `groupId`, replacing the hidden select.
+ * Keeps the real <select> in sync so form validation works.
+ */
+function buildPicker(groupId, selectId, errId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
 
-function renderSchoolPicker(query) {
-  if (!schoolPickerList) return;
-  const filtered = query
-    ? allSchools.filter(s => s.name.toLowerCase().includes(query) || s.school_code.toLowerCase().includes(query))
-    : allSchools;
+  // Remove any previously injected picker
+  group.querySelectorAll('.sp-wrap').forEach(el => el.remove());
 
-  if (!filtered.length) {
-    schoolPickerList.innerHTML = `<li class="sp-empty"><i class="fas fa-search"></i>No schools found.</li>`;
-  } else {
-    schoolPickerList.innerHTML = filtered.slice(0, 12).map(s => `
-      <li class="sp-option" data-id="${s.id}" data-name="${escHtml(s.name)}">
-        <span class="sp-option-name">${escHtml(s.name)}</span>
-        <span class="sp-option-level">${levelLabel(s.level)}</span>
-      </li>
-    `).join('');
-    schoolPickerList.querySelectorAll('.sp-option').forEach(opt => {
-      opt.addEventListener('mousedown', () => {
-        selectedSchoolId = opt.dataset.id;
-        if (schoolPickerInput) schoolPickerInput.value = opt.dataset.name;
-        schoolPickerList.style.display = 'none';
-        schoolPickerField.classList.remove('invalid');
+  const wrap = document.createElement('div');
+  wrap.className = 'school-picker sp-wrap';
+
+  const field = document.createElement('div');
+  field.className = 'school-picker-field';
+
+  const iconEl = document.createElement('i');
+  iconEl.className = 'fas fa-school school-picker-icon';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'school-picker-input';
+  input.placeholder = 'Search your school…';
+  input.autocomplete = 'off';
+
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'school-picker-clear';
+  clearBtn.innerHTML = '&times;';
+  clearBtn.style.display = 'none';
+
+  const list = document.createElement('ul');
+  list.className = 'school-picker-list';
+  list.style.display = 'none';
+
+  field.append(iconEl, input, clearBtn);
+  wrap.append(field, list);
+  group.appendChild(wrap);
+
+  function render(query) {
+    const q = (query || '').toLowerCase();
+    const filtered = q
+      ? allSchools.filter(s => s.name.toLowerCase().includes(q) || (s.school_code || '').toLowerCase().includes(q))
+      : allSchools;
+    if (!filtered.length) {
+      list.innerHTML = `<li class="sp-empty"><i class="fas fa-search"></i> No schools found.</li>`;
+    } else {
+      list.innerHTML = filtered.slice(0, 12).map(s =>
+        `<li class="sp-option" data-id="${s.id}" data-name="${escHtml(s.name)}">
+          <span class="sp-option-name">${escHtml(s.name)}</span>
+          <span class="sp-option-level">${levelLabel(s.level)}</span>
+        </li>`
+      ).join('');
+      list.querySelectorAll('.sp-option').forEach(opt => {
+        opt.addEventListener('mousedown', () => {
+          input.value = opt.dataset.name;
+          setSelect(selectId, opt.dataset.id);
+          list.style.display = 'none';
+          field.classList.remove('invalid');
+          clearBtn.style.display = 'inline-flex';
+          clearErr(errId);
+        });
       });
-    });
+    }
+    list.style.display = 'block';
   }
-  schoolPickerList.style.display = 'block';
+
+  input.addEventListener('input', () => { render(input.value); setSelect(selectId, ''); });
+  input.addEventListener('focus', () => { field.classList.add('focused'); render(input.value); });
+  input.addEventListener('blur', () => {
+    field.classList.remove('focused');
+    setTimeout(() => { list.style.display = 'none'; }, 200);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    setSelect(selectId, '');
+    list.style.display = 'none';
+    clearBtn.style.display = 'none';
+    field.classList.remove('invalid');
+  });
+}
+
+function setSelect(selectId, value) {
+  const sel = document.getElementById(selectId);
+  if (sel) sel.value = value;
+}
+
+function getSelectValue(selectId) {
+  const sel = document.getElementById(selectId);
+  return sel ? sel.value : '';
 }
 
 /* ═══════════════════════════════════════════
@@ -179,20 +196,19 @@ document.querySelectorAll('.field-eye').forEach(btn => {
     const isText = input.type === 'text';
     input.type = isText ? 'password' : 'text';
     const icon = btn.querySelector('i');
-    if (icon) {
-      icon.className = isText ? 'fas fa-eye' : 'fas fa-eye-slash';
-    }
+    if (icon) icon.className = isText ? 'fas fa-eye' : 'fas fa-eye-slash';
   });
 });
 
 /* ═══════════════════════════════════════════
    PASSWORD STRENGTH METER (Register)
 ═══════════════════════════════════════════ */
-const regPassword = document.getElementById('regPassword');
-if (regPassword) {
-  regPassword.addEventListener('input', () => {
-    const pw = regPassword.value;
-    const score = getPasswordScore(pw);
+const regPasswordInput = document.getElementById('regPassword');
+if (regPasswordInput) {
+  regPasswordInput.addEventListener('input', () => {
+    const score = getPasswordScore(regPasswordInput.value);
+    const strengthWrap = document.getElementById('pwStrength');
+    if (strengthWrap) strengthWrap.removeAttribute('hidden');
     updateStrengthMeter(score);
   });
 }
@@ -210,7 +226,7 @@ function getPasswordScore(pw) {
 
 function updateStrengthMeter(score) {
   const bars = document.querySelectorAll('.pw-bar');
-  const label = document.querySelector('.pw-strength-label');
+  const label = document.getElementById('pwStrengthLabel');
   const levels = ['', 'weak', 'fair', 'good', 'strong'];
   const names = ['', 'Weak', 'Fair', 'Good', 'Strong'];
   bars.forEach((bar, i) => {
@@ -224,110 +240,116 @@ function updateStrengthMeter(score) {
 }
 
 /* ═══════════════════════════════════════════
-   STAFF LOGIN
+   STAFF LOGIN  — form id="schoolLoginForm"
 ═══════════════════════════════════════════ */
-const staffLoginForm = document.getElementById('staffLoginForm');
-if (staffLoginForm) {
-  staffLoginForm.addEventListener('submit', async (e) => {
+const schoolLoginForm = document.getElementById('schoolLoginForm');
+if (schoolLoginForm) {
+  schoolLoginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    clearAlert('staffLoginAlert');
+    clearInlineErrors(['schoolEmailErr', 'schoolPasswordErr', 'staffSchoolErr']);
 
-    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-    const password = document.getElementById('loginPassword').value;
+    const schoolId = getSelectValue('staffSchool');
+    const email = document.getElementById('schoolEmail').value.trim().toLowerCase();
+    const password = document.getElementById('schoolPassword').value;
 
-    // Validate school selection
-    if (!selectedSchoolId) {
-      schoolPickerField.classList.add('invalid');
-      showAlert('staffLoginAlert', 'Please select your school from the list.');
-      return;
+    let valid = true;
+    if (!schoolId) {
+      setErr('staffSchoolErr', 'Please select your school.');
+      document.querySelector('#staffSchoolGroup .school-picker-field')?.classList.add('invalid');
+      valid = false;
     }
+    if (!email) { setErr('schoolEmailErr', 'Email is required.'); valid = false; }
+    if (!password) { setErr('schoolPasswordErr', 'Password is required.'); valid = false; }
+    if (!valid) return;
 
-    const btn = document.getElementById('staffLoginBtn');
-    setLoading(btn, true, 'Signing in…');
+    const btn = document.getElementById('schoolLoginBtn');
+    setLoading(btn, true);
 
     try {
-      const user = await API.auth.loginStaff(selectedSchoolId, email, password);
+      await API.auth.loginStaff(schoolId, email, password);
       showToast('Login successful!', 'success');
-      setTimeout(() => {
-        window.location.href = '/html/school-dashboard.html';
-      }, 500);
+      setTimeout(() => { window.location.href = '/html/school-dashboard.html'; }, 500);
     } catch (err) {
-      showAlert('staffLoginAlert', err.message || 'Invalid credentials. Please try again.');
-      setLoading(btn, false, '<i class="fas fa-sign-in-alt"></i> Sign In');
+      showToast(err.message || 'Invalid credentials. Please try again.', 'error');
+      setLoading(btn, false);
     }
   });
 }
 
 /* ═══════════════════════════════════════════
-   ADMIN LOGIN
+   ADMIN LOGIN  — form id="adminLoginForm"
 ═══════════════════════════════════════════ */
 const adminLoginForm = document.getElementById('adminLoginForm');
 if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    clearAlert('adminLoginAlert');
+    clearInlineErrors(['adminUsernameErr', 'adminPasswordErr']);
 
     const username = document.getElementById('adminUsername').value.trim();
     const password = document.getElementById('adminPassword').value;
 
-    if (!username || !password) {
-      showAlert('adminLoginAlert', 'Username and password are required.');
-      return;
-    }
+    let valid = true;
+    if (!username) { setErr('adminUsernameErr', 'Username is required.'); valid = false; }
+    if (!password) { setErr('adminPasswordErr', 'Password is required.'); valid = false; }
+    if (!valid) return;
 
     const btn = document.getElementById('adminLoginBtn');
-    setLoading(btn, true, 'Signing in…');
+    setLoading(btn, true);
 
     try {
       const user = await API.auth.loginAdmin(username, password);
       showToast('Welcome, ' + user.name + '!', 'success');
-      setTimeout(() => {
-        window.location.href = '/html/admin-dashboard.html';
-      }, 500);
+      setTimeout(() => { window.location.href = '/html/admin-dashboard.html'; }, 500);
     } catch (err) {
-      showAlert('adminLoginAlert', err.message || 'Invalid credentials. Please try again.');
-      setLoading(btn, false, '<i class="fas fa-shield-alt"></i> Admin Sign In');
+      showToast(err.message || 'Invalid credentials. Please try again.', 'error');
+      setLoading(btn, false);
     }
   });
 }
 
 /* ═══════════════════════════════════════════
-   STAFF REGISTRATION
+   STAFF REGISTRATION  — form id="registerForm"
 ═══════════════════════════════════════════ */
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    clearAlert('registerAlert');
+    clearInlineErrors([
+      'regFirstNameErr', 'regLastNameErr', 'regPositionErr',
+      'regSchoolErr', 'regEmailErr', 'regPasswordErr', 'regConfirmErr', 'regTermsErr'
+    ]);
 
     const firstName = document.getElementById('regFirstName').value.trim();
     const lastName = document.getElementById('regLastName').value.trim();
     const position = document.getElementById('regPosition').value;
-    const schoolId = document.getElementById('regSchoolId').value;
+    const schoolId = getSelectValue('regSchool');
     const email = document.getElementById('regEmail').value.trim().toLowerCase();
     const password = document.getElementById('regPassword').value;
-    const confirm = document.getElementById('regConfirmPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
     const terms = document.getElementById('regTerms')?.checked;
 
-    // Validations
-    if (!firstName || !lastName) { showAlert('registerAlert', 'Please enter your full name.'); return; }
-    if (!position) { showAlert('registerAlert', 'Please select your position.'); return; }
-    if (!schoolId) { showAlert('registerAlert', 'Please select your school.'); return; }
-    if (!email) { showAlert('registerAlert', 'Please enter your email address.'); return; }
-    if (password.length < 8) { showAlert('registerAlert', 'Password must be at least 8 characters.'); return; }
-    if (password !== confirm) { showAlert('registerAlert', 'Passwords do not match.'); return; }
-    if (!terms) { showAlert('registerAlert', 'Please accept the terms and conditions.'); return; }
+    let valid = true;
+    if (!firstName) { setErr('regFirstNameErr', 'First name is required.'); valid = false; }
+    if (!lastName) { setErr('regLastNameErr', 'Last name is required.'); valid = false; }
+    if (!position) { setErr('regPositionErr', 'Please select your position.'); valid = false; }
+    if (!schoolId) { setErr('regSchoolErr', 'Please select your school.'); valid = false; }
+    if (!email) { setErr('regEmailErr', 'Email is required.'); valid = false; }
+    if (password.length < 8) { setErr('regPasswordErr', 'Password must be at least 8 characters.'); valid = false; }
+    if (password !== confirm) { setErr('regConfirmErr', 'Passwords do not match.'); valid = false; }
+    if (!terms) { setErr('regTermsErr', 'You must accept the terms.'); valid = false; }
+    if (!valid) return;
 
-    const btn = document.getElementById('registerBtn');
-    setLoading(btn, true, 'Creating account…');
+    const btn = registerForm.querySelector('button[type="submit"]');
+    setLoading(btn, true);
 
     try {
       await API.auth.register({ firstName, lastName, position, schoolId, email, password });
-      // Show success step
-      showStep('stepRegisterSuccess');
+      showToast('Account created! Awaiting admin approval before you can log in.', 'success');
+      // Go back to staff login step
+      setTimeout(() => showStep('stepStaff'), 1800);
     } catch (err) {
-      showAlert('registerAlert', err.message || 'Registration failed. Please try again.');
-      setLoading(btn, false, '<i class="fas fa-user-plus"></i> Create Account');
+      showToast(err.message || 'Registration failed. Please try again.', 'error');
+      setLoading(btn, false);
     }
   });
 }
@@ -335,25 +357,29 @@ if (registerForm) {
 /* ═══════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════ */
-function showAlert(containerId, message) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${escHtml(message)}`;
-  el.removeAttribute('hidden');
+function setErr(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = msg;
 }
 
-function clearAlert(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  el.setAttribute('hidden', '');
+function clearErr(id) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = '';
 }
 
-function setLoading(btn, loading, html) {
+function clearInlineErrors(ids) {
+  ids.forEach(clearErr);
+}
+
+/**
+ * @param {HTMLButtonElement} btn
+ * @param {boolean} loading
+ */
+function setLoading(btn, loading) {
   if (!btn) return;
   btn.disabled = loading;
-  if (!loading) btn.innerHTML = html;
-  else btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + html;
+  const icon = loading ? 'fa-spinner fa-spin' : 'fa-arrow-right-to-bracket';
+  btn.innerHTML = `<i class="fas ${icon}"></i> ${loading ? 'Please wait…' : 'Sign In'}`;
 }
 
 function escHtml(str) {
@@ -367,11 +393,16 @@ function levelLabel(l) {
 }
 
 function showToast(message, type) {
-  const ex = document.querySelector('.toast'); if (ex) ex.remove();
+  const ex = document.querySelector('.toast');
+  if (ex) ex.remove();
   const t = document.createElement('div');
   t.className = `toast ${type || ''}`;
   const ic = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
   t.innerHTML = `<i class="fas ${ic}"></i> ${escHtml(message)}`;
   document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .4s'; setTimeout(() => t.remove(), 400); }, 4000);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transition = 'opacity .4s';
+    setTimeout(() => t.remove(), 400);
+  }, 4000);
 }
