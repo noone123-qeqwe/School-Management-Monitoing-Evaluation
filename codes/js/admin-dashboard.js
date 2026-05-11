@@ -110,6 +110,7 @@ async function renderDashboardCharts() {
         datasets: [{
           label: 'Submissions',
           data: labels.length ? counts : [0],
+
           backgroundColor: '#005ea2', /* Official Action Blue */
           borderRadius: 2,
           borderWidth: 1,
@@ -120,7 +121,10 @@ async function renderDashboardCharts() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false }, title: { display: true, text: 'Submissions per school (top 15)' } },
-        scales: { x: { ticks: { maxRotation: 40, autoSkip: true, maxTicksLimit: 12 } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxRotation: 40, autoSkip: true, maxTicksLimit: 12 } },
+          y: { border: { dash: [4, 4] }, grid: { color: 'rgba(0,0,0,0.05)' } }
+        },
       },
     });
 
@@ -168,7 +172,10 @@ async function renderDashboardCharts() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { title: { display: true, text: 'Volume by week (last 8 weeks)' } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { beginAtZero: true, border: { dash: [4, 4] }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { precision: 0 } }
+        },
       },
     });
   } catch (err) {

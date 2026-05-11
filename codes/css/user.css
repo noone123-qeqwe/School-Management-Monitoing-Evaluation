@@ -15,23 +15,28 @@
   --primary: #112e51;
   --primary-600: #0a1f3f;
   --primary-700: #051124;
-  --accent: #dca331; /* Official Gold */
+  --accent: #dca331;
+  /* Official Gold */
   --accent-light: #fcf1d8;
-  --action: #005ea2; /* High-contrast Action Blue */
+  --action: #005ea2;
+  /* High-contrast Action Blue */
   --action-hover: #00457c;
   --success: #00a91c;
   --danger: #d54309;
   --warning: #ffbe2e;
   --info: #00bde3;
   --violet: #7c3aed;
-  --gradient-primary: var(--action); /* Flattened for accessibility */
+  --gradient-primary: var(--action);
+  /* Flattened for accessibility */
 
-  --bg: #f4f6f9; /* Neutral gray-blue for less eye strain */
+  --bg: #f4f6f9;
+  /* Neutral gray-blue for less eye strain */
   --bg-secondary: #eef0f3;
   --surface: #ffffff;
   --white: #ffffff;
 
-  --text: #1b1b1b; /* WCAG AAA contrast */
+  --text: #1b1b1b;
+  /* WCAG AAA contrast */
   --text-muted: #565c65;
   --text-light: #767676;
 
@@ -42,13 +47,14 @@
   --radius-xs: 8px;
   --radius-sm: 10px;
   --radius: 14px;
-  --radius-lg: 18px;
+  --radius-lg: 12px;
+  /* Sharper, more enterprise corners */
 
-  /* Grounded, structured shadows for enterprise feel */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
-  --shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* Modern, crisp SaaS shadows layered for depth without glow */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.1), 0 1px 2px -1px rgba(15, 23, 42, 0.1);
+  --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
   --shadow-glow: var(--shadow);
 
   --space-sm: 8px;
@@ -121,7 +127,6 @@ textarea {
 
 .btn-primary:hover {
   background: var(--action-hover);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
 
@@ -254,9 +259,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   padding: 140px 0 60px;
-  background: linear-gradient(-45deg, #0b1d3b, #1e3a5f, #0f172a, #2c5282);
-  background-size: 400% 400%;
-  animation: aurora 20s ease infinite;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%);
 }
 
 .hero::before {
@@ -565,8 +568,10 @@ textarea {
   z-index: 1200;
   display: grid;
   place-items: center;
-  background: #0b1d3b;
+  background: var(--primary);
   color: #fff;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .intro-screen[hidden] {
@@ -1038,14 +1043,14 @@ textarea {
 }
 
 .btn:active {
-  transform: scale(0.96);
+  transform: scale(0.98);
 }
 
 .dash-card:hover,
 .stat-card:hover,
 .school-card:hover {
-  box-shadow: 0 10px 28px rgba(30, 58, 95, .1);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
 }
 
 .dash-table tbody tr {
@@ -1053,8 +1058,8 @@ textarea {
 }
 
 .dash-table tbody tr:hover {
-  background: var(--bg-secondary);
-  border-left: 3px solid var(--action);
+  background: #f8fafc;
+  border-left: 3px solid transparent;
 }
 
 .dash-table tbody tr:focus-within {
@@ -2041,14 +2046,14 @@ tr:last-child td {
 }
 
 .dash-table th {
-  background: var(--primary);
+  background: var(--primary-600);
   padding: var(--space-md) var(--space-lg);
   text-align: left;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 800;
   color: var(--white);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
@@ -2060,12 +2065,17 @@ tr:last-child td {
   vertical-align: middle;
 }
 
+.dash-table tbody tr:nth-child(even) td {
+  background: #fdfdfd;
+}
+
 .dash-table tr:last-child td {
   border-bottom: 1px solid var(--border);
 }
 
 .dash-table tr:hover td {
-  background: var(--bg-secondary);
+  background: #f4f7fb;
+  color: var(--primary);
 }
 
 /* ===== TABLE FILTERS ===== */
