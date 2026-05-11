@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>Sign In – SMME Portal</title>
+  <meta name="description" content="Sign in to the SMME Portal to submit documents to the Division Office." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../css/login.css?v=3.0.0" />
+  <link rel="stylesheet" href="../css/login.css?v=7.0.0" />
 </head>
 <body class="auth-body">
 
+  <!-- SPLASH SCREEN -->
   <div class="splash-hero" id="splashHero">
     <div class="splash-blur-bg"></div>
     <div class="splash-hero-content">
@@ -29,9 +32,15 @@
     </div>
   </div>
 
+  <!-- MAIN AUTH LAYOUT -->
   <div class="auth-layout" id="authLayout">
+
+    <!-- LEFT HERO PANEL -->
     <div class="auth-hero">
       <div class="hero-inner">
+        <a href="../index.html" class="hero-home-link">
+          <i class="fas fa-arrow-left"></i> Back to Homepage
+        </a>
         <div class="hero-logo">
           <img src="../assets/smmelogo.jpg" alt="SMME Logo" />
         </div>
@@ -55,9 +64,11 @@
       </div>
     </div>
 
+    <!-- RIGHT AUTH PANEL -->
     <div class="auth-panel">
       <div class="auth-card" id="authCard">
 
+        <!-- ═══ VIEW 1: Role Selection ═══ -->
         <div class="auth-step" id="stepRole">
           <div class="auth-card-logo">
             <img src="../assets/smmelogo.jpg" alt="SMME" />
@@ -85,23 +96,13 @@
           </div>
         </div>
 
+        <!-- ═══ VIEW 2A: Staff Login ═══ -->
         <div class="auth-step" id="stepStaff" hidden>
           <button type="button" class="auth-back" id="backFromStaff"><i class="fas fa-arrow-left"></i> Back</button>
           <div class="auth-badge staff-badge"><i class="fas fa-user-tie"></i> School Staff</div>
           <h2 class="auth-title">Staff Sign In</h2>
-          <p class="auth-sub">Select your school, then sign in with your staff credentials</p>
-
+          <p class="auth-sub">Sign in with your staff credentials</p>
           <form id="schoolLoginForm" novalidate>
-            <div class="field-group">
-              <label class="field-label" for="staffSchool">School <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-school field-icon"></i>
-                <select id="staffSchool" class="field-input field-select" autocomplete="organization">
-                  <option value="">-- Select your school --</option>
-                </select>
-              </div>
-              <span class="field-error" id="staffSchoolErr"></span>
-            </div>
             <div class="field-group">
               <label class="field-label" for="schoolEmail">Email Address <span class="req">*</span></label>
               <div class="field-wrap">
@@ -123,9 +124,10 @@
               <i class="fas fa-arrow-right-to-bracket"></i> Sign In
             </button>
           </form>
-          <p class="auth-link-row">New staff member? <a href="#" id="registerLink">Create an account</a></p>
+          <p class="auth-link-row">New staff member? <a href="#" id="goToRegister">Create an account</a></p>
         </div>
 
+        <!-- ═══ VIEW 2B: Admin Login ═══ -->
         <div class="auth-step" id="stepAdmin" hidden>
           <button type="button" class="auth-back" id="backFromAdmin"><i class="fas fa-arrow-left"></i> Back</button>
           <div class="auth-badge admin-badge"><i class="fas fa-user-shield"></i> Division Admin</div>
@@ -155,8 +157,9 @@
           </form>
         </div>
 
+        <!-- ═══ VIEW 3: Registration (SEPARATE from login) ═══ -->
         <div class="auth-step" id="stepRegister" hidden>
-          <button type="button" class="auth-back" id="backFromRegister"><i class="fas fa-arrow-left"></i> Back</button>
+          <button type="button" class="auth-back" id="backFromRegister"><i class="fas fa-arrow-left"></i> Back to Sign In</button>
           <div class="auth-badge staff-badge"><i class="fas fa-user-plus"></i> Staff Registration</div>
           <h2 class="auth-title">Create Account</h2>
           <p class="auth-sub">Register to submit documents on behalf of your school</p>
@@ -197,16 +200,6 @@
                 </select>
               </div>
               <span class="field-error" id="regPositionErr"></span>
-            </div>
-            <div class="field-group" id="regSchoolGroup">
-              <label class="field-label" for="regSchool">School <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-school field-icon"></i>
-                <select id="regSchool" class="field-input field-select">
-                  <option value="">-- Select your school --</option>
-                </select>
-              </div>
-              <span class="field-error" id="regSchoolErr"></span>
             </div>
             <div class="field-group">
               <label class="field-label" for="regEmail">Email Address <span class="req">*</span></label>
@@ -254,24 +247,33 @@
               <i class="fas fa-user-plus"></i> Create Account
             </button>
           </form>
+          <p class="auth-link-row">Already have an account? <a href="#" id="goToLogin">Sign in</a></p>
         </div>
 
       </div>
     </div>
   </div>
 
-  <script src="../js/api.js?v=3.0.0"></script>
-  <script src="../js/login.js?v=3.0.0"></script>
+  <script src="../js/api.js?v=7.0.0"></script>
+  <script src="../js/login.js?v=7.0.0"></script>
   <script>
+    // Splash screen auto-dismiss
     window.addEventListener('load', function () {
       setTimeout(function () {
         var s = document.getElementById('splashHero');
         if (!s) return;
-        s.style.opacity = '0';
-        s.style.pointerEvents = 'none';
-        setTimeout(function () { s.style.display = 'none'; }, 560);
+        s.classList.add('hidden');
+        setTimeout(function () { s.style.display = 'none'; }, 600);
       }, 1800);
     });
+    // Fallback: force-dismiss after 4s
+    setTimeout(function () {
+      var s = document.getElementById('splashHero');
+      if (s && !s.classList.contains('hidden')) {
+        s.classList.add('hidden');
+        setTimeout(function () { s.style.display = 'none'; }, 600);
+      }
+    }, 4000);
   </script>
 </body>
 </html>
