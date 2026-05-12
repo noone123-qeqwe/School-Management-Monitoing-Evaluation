@@ -9,29 +9,22 @@
   --sidebar-width: 280px;
   --sidebar-collapsed-width: 80px;
   --header-height: 72px;
-  --content-padding: var(--space-6);
+  --content-padding: var(--space-8);
+  
+  /* Glassmorphism Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: blur(16px);
+  
+  /* Radius Upgrades */
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
   
   /* Dashboard Specific */
-  --dashboard-bg: var(--bg-secondary);
-  --sidebar-bg: var(--gray-900);
-  --sidebar-hover: var(--gray-800);
-  --sidebar-active: var(--primary-600);
-  --sidebar-text: var(--gray-300);
-  --sidebar-text-active: var(--text-inverse);
-  
-  /* Stats Cards */
-  --stat-card-bg: var(--bg-surface);
-  --stat-card-border: var(--border-primary);
-  --stat-card-shadow: var(--shadow-sm);
-  --stat-card-hover-shadow: var(--shadow-xl);
-  
-  /* Charts */
-  --chart-grid: var(--border-primary);
-  --chart-axis: var(--text-tertiary);
-  --chart-line-primary: var(--primary-500);
-  --chart-line-secondary: var(--accent-500);
-  --chart-line-success: var(--success-500);
-  --chart-line-danger: var(--danger-500);
+  --dashboard-bg: #f8fafc;
+  --sidebar-bg: #0f172a;
+  --sidebar-hover: rgba(255,255,255,0.05);
+  --sidebar-active: #3b82f6;
 }
 
 /* =============================================================================
@@ -46,16 +39,18 @@
 /* Enterprise Sidebar */
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--border-primary);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  z-index: var(--z-fixed);
-  transition: all var(--transition-slow);
+  z-index: 1100;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
@@ -273,21 +268,27 @@
 
 /* Dashboard Header */
 .dashboard-header {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
-  margin: var(--space-4) var(--space-6);
-  padding: var(--space-3) var(--space-6);
+  margin: var(--space-4) var(--space-8);
+  padding: var(--space-3) var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: var(--header-height);
   position: sticky;
   top: var(--space-4);
-  z-index: var(--z-sticky);
-  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dashboard-header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06);
 }
 
 .dashboard-header-content {
@@ -340,11 +341,17 @@
    ENTERPRISE TABLES & DOCUMENT MANAGEMENT
    ============================================================================= */
 .data-table-container {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-primary);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.data-table-container:hover {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
 }
 
 .data-table-header {

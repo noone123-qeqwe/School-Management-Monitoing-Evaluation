@@ -1,0 +1,288 @@
+/* =============================================================================
+   PREMIUM SAAS DESIGN SYSTEM (v1.0)
+   Focused on Glassmorphism, Premium Typography, and Fluid Animations
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Premium Palette */
+  --p-primary: #0f172a;
+  --p-accent: #3b82f6;
+  --p-accent-glow: rgba(59, 130, 246, 0.5);
+  --p-gold: #d4a017;
+  --p-gold-glow: rgba(212, 160, 23, 0.3);
+  
+  /* Glassmorphism Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --glass-blur: blur(12px);
+
+  /* Spacing & Radius */
+  --p-radius: 24px;
+  --p-radius-sm: 16px;
+  --p-radius-lg: 32px;
+  --p-space: 32px;
+  
+  /* Shadows */
+  --p-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  --p-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --p-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Base Styles ── */
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+h1, h2, h3, h4, .logo-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── Glassmorphism Utility ── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--p-radius);
+  box-shadow: var(--glass-shadow);
+  transition: var(--p-transition);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--p-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Floating Navbar Effect ── */
+.premium-nav {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1200px, calc(100% - 48px));
+  z-index: 1000;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 100px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Premium Buttons ── */
+.btn-premium {
+  background: linear-gradient(135deg, var(--p-accent), #2563eb);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 14px 0 var(--p-accent-glow);
+  transition: var(--p-transition);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  filter: brightness(1.1);
+}
+
+/* ── Animated Background ── */
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 0% 0%, #f1f5f9 0%, #e2e8f0 100%);
+  overflow: hidden;
+}
+
+.bg-blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: var(--p-accent-glow);
+  filter: blur(80px);
+  border-radius: 50%;
+  animation: blobFloat 20s infinite alternate;
+}
+
+.bg-blob-2 {
+  bottom: -100px;
+  right: -100px;
+  background: var(--p-gold-glow);
+  animation-delay: -5s;
+}
+
+@keyframes blobFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, 100px) scale(1.1); }
+  66% { transform: translate(-100px, 50px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ── Interactive Hover Animations ── */
+.hover-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-reveal::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--p-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-reveal:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ── Smooth Page Transitions ── */
+.page-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dashboard Minimalist Design ── */
+.dash-card-mini {
+  padding: 24px;
+  background: white;
+  border-radius: var(--p-radius);
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  transition: var(--p-transition);
+}
+
+.dash-card-mini:hover {
+  border-color: #e2e8f0;
+  box-shadow: var(--p-shadow);
+}
+
+.stat-val-premium {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--p-primary);
+  letter-spacing: -0.02em;
+}
+
+/* ── Premium Float Cards ── */
+.premium-float-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  transition: var(--p-transition);
+}
+
+.premium-float-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.premium-float-icon {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, var(--p-accent), #2563eb);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  box-shadow: 0 8px 20px var(--p-accent-glow);
+}
+
+.premium-float-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--p-primary);
+  margin-bottom: 4px;
+}
+
+.premium-float-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ── Holographic & Modern Widget ── */
+.holographic-panel {
+  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+  border: 1px solid rgba(255,255,255,0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.modern-widget {
+  transition: var(--p-transition);
+}
+
+.modern-widget:hover {
+  border-color: var(--p-accent);
+}
+
+/* ── Custom Animations ── */
+@keyframes widgetFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating-doc { animation: widgetFloat 3s ease-in-out infinite; }
+.floating-chart { animation: widgetFloat 4s ease-in-out infinite; animation-delay: 1s; }
+
+.realtime-popup {
+  animation: p-pulse 2s infinite;
+}
+
+@keyframes p-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
