@@ -142,3 +142,24 @@ if (!prefersReducedMotion) {
     });
   });
 }
+
+/* ── Scroll Animation Observer (Fade In Elements) ── */
+if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+  const scrollObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // Only animate once
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  });
+
+  document.querySelectorAll('.card, .level-card, .contact-info, .contact-form').forEach(el => {
+    el.classList.add('animate-on-scroll');
+    scrollObserver.observe(el);
+  });
+}

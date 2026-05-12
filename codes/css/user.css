@@ -5474,3 +5474,88 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =============================================================================
+   MODERN SAAS & HOLOGRAPHIC EFFECTS
+   ============================================================================= */
+
+/* Floating Document Icons */
+.floating-doc {
+  animation: floatDocument 4s ease-in-out infinite;
+}
+@keyframes floatDocument {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+/* Cloud Synchronization Effects */
+.cloud-sync-icon {
+  animation: cloudSync 2.5s ease-in-out infinite;
+}
+@keyframes cloudSync {
+  0% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 8px var(--info-500)); }
+  100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* Secure Lock Icons */
+.secure-lock {
+  animation: secureLock 3s infinite;
+}
+@keyframes secureLock {
+  0%, 100% { transform: scale(1); color: inherit; filter: none; }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--success-500)); color: var(--success-500); }
+}
+
+/* Holographic Dashboard Panels */
+.holographic-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+.holographic-panel::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+  animation: holoSweep 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes holoSweep {
+  0% { transform: rotate(0deg) translateY(-100%); }
+  100% { transform: rotate(360deg) translateY(100%); }
+}
+
+/* Floating Analytics Charts */
+.floating-chart {
+  animation: floatChart 6s ease-in-out infinite;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-2xl);
+}
+@keyframes floatChart {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); box-shadow: 0 30px 50px rgba(15, 23, 42, 0.12); }
+}
+
+/* Modern Dashboard Widgets */
+.modern-widget {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modern-widget:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(30, 58, 95, 0.15);
+  z-index: 10;
+}
+
+/* Realtime Notification Popups */
+.realtime-popup {
+  animation: popupBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+@keyframes popupBounce {
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}

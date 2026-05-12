@@ -1,52 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SMME Portal - School Management Monitoring and Evaluation portal for private school document submissions." />
-
   <title>School Management Monitoring &amp; Evaluation</title>
-
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="/css/styles.css?v=3.1.0" />
-
-  <!-- Font Awesome Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="/css/styles.css?v=3.0.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
-  <!-- Skip link for keyboard users -->
-  <a href="#home" class="skip-link">Skip to main content</a>
-
-  <noscript>
-    <div class="noscript-banner">
-      This site works best with JavaScript enabled. Some features may be limited.
-    </div>
-  </noscript>
 
   <!-- ANIMATED INTRO SCREEN -->
-  <div class="intro-screen" id="introScreen" aria-hidden="true">
+  <div class="intro-screen" id="introScreen">
     <div class="intro-content">
       <div class="intro-logo">
-        <img
-          src="/assets/smmelogo.jpg"
-          alt="SMME Logo"
-          class="intro-logo-img"
-        />
+        <img src="/assets/smmelogo.jpg" alt="SMME" class="intro-logo-img" />
       </div>
-
       <h1 class="intro-title">SMME</h1>
       <p class="intro-subtitle">School Management Monitoring &amp; Evaluation</p>
-
-      <div class="intro-loader" aria-label="Loading">
+      <div class="intro-loader">
         <div class="loader-dot"></div>
         <div class="loader-dot"></div>
         <div class="loader-dot"></div>
@@ -57,568 +33,273 @@
   <!-- HEADER / NAV -->
   <header class="header">
     <div class="header-inner">
-      <a href="#home" class="logo" aria-label="SMME Home">
-        <img
-          src="/assets/smmelogo.jpg"
-          alt="SMME Logo"
-          class="logo-img"
-        />
-
-        <div class="logo-content">
+      <div class="logo">
+        <img src="/assets/smmelogo.jpg" alt="SMME Logo" class="logo-img" />
+        <div>
           <span class="logo-title">SMME</span>
           <span class="logo-sub">School Management Monitoring &amp; Evaluation</span>
         </div>
-      </a>
-
-      <nav class="nav" id="mainNav" aria-label="Main navigation">
+      </div>
+      <nav class="nav" id="mainNav">
         <a href="#home" class="nav-link active">Home</a>
         <a href="#about" class="nav-link">About</a>
-        <a href="#levels" class="nav-link">Levels</a>
         <a href="#contact" class="nav-link">Contact</a>
       </nav>
-
       <div class="header-actions">
-        <a href="/html/login.html" class="btn btn-primary">
-          <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-          Sign In
-        </a>
       </div>
-
-      <button
-        class="hamburger"
-        id="hamburger"
-        type="button"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-        aria-controls="mainNav"
-      >
-        <i class="fas fa-bars" aria-hidden="true"></i>
+      <button class="hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false"
+        aria-controls="mainNav">
+        <i class="fas fa-bars"></i>
       </button>
     </div>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="home">
-      <div class="hero-overlay" aria-hidden="true"></div>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>School Management<br /><span>Monitoring &amp; Evaluation</span></h1>
+      <p>A secure digital portal for private schools to submit documents, files, and applications directly to the
+        Division Office.</p>
+      <div class="hero-btns">
+        <a href="/html/login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In to Portal</a>
+        <a href="#about" class="btn btn-outline">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-badges">
+      <div class="badge"><i class="fas fa-child"></i><span>Kindergarten</span></div>
+      <div class="badge"><i class="fas fa-book-open"></i><span>Elementary</span></div>
+      <div class="badge"><i class="fas fa-graduation-cap"></i><span>Junior High</span></div>
+      <div class="badge"><i class="fas fa-university"></i><span>Senior High</span></div>
+    </div>
 
-      <div class="hero-content">
-        <h1>
-          School Management<br />
-          <span>Monitoring &amp; Evaluation</span>
-        </h1>
-
-        <p>
-          A secure digital portal for private schools to submit documents, files,
-          and applications directly to the Division Office.
-        </p>
-
-        <div class="hero-btns">
-          <a href="/html/login.html" class="btn btn-primary">
-            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-            Sign In to Portal
-          </a>
-
-          <a href="#about" class="btn btn-outline">
-            Learn More
-          </a>
+    <div class="premium-float-grid container">
+      <!-- 1. Secure Document Upload -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-cloud-upload-alt cloud-sync-icon"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Secure Document Upload</div>
+          <div class="premium-float-desc">Encrypted file transfers and safe storage.</div>
         </div>
-
-        <p class="hero-hint">
-          <i class="fas fa-circle-info" aria-hidden="true"></i>
-          Tip: Use your official school email to sign in.
-        </p>
       </div>
 
-      <div class="hero-badges" aria-label="School levels">
-        <div class="badge">
-          <i class="fas fa-child" aria-hidden="true"></i>
-          <span>Kindergarten</span>
-        </div>
-
-        <div class="badge">
-          <i class="fas fa-book-open" aria-hidden="true"></i>
-          <span>Elementary</span>
-        </div>
-
-        <div class="badge">
-          <i class="fas fa-graduation-cap" aria-hidden="true"></i>
-          <span>Junior High</span>
-        </div>
-
-        <div class="badge">
-          <i class="fas fa-university" aria-hidden="true"></i>
-          <span>Senior High</span>
+      <!-- 2. School Compliance Monitoring -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-shield-alt secure-lock"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Compliance Monitoring</div>
+          <div class="premium-float-desc">Real-time status of school requirements.</div>
         </div>
       </div>
-    </section>
 
-    <!-- ABOUT -->
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-header">
-          <h2>About the Portal</h2>
-          <p>
-            Streamlining document submission between private schools and the Division Office.
+      <!-- 3. Real-Time Notifications -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-bell realtime-popup"
+            style="animation-iteration-count: infinite; animation-duration: 3s;"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Real-Time Notifications</div>
+          <div class="premium-float-desc">Instant alerts on submissions and updates.</div>
+        </div>
+      </div>
+
+      <!-- 4. Approval Workflow -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-project-diagram" style="animation: pulse 2s infinite;"></i>
+        </div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Approval Workflow</div>
+          <div class="premium-float-desc">Streamlined processes for fast clearances.</div>
+        </div>
+      </div>
+
+      <!-- 5. Analytics Dashboard -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-chart-pie floating-chart"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Analytics Dashboard</div>
+          <div class="premium-float-desc">Visualized insights and performance metrics.</div>
+        </div>
+      </div>
+
+      <!-- 6. Messaging System -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-comments realtime-popup"
+            style="animation-iteration-count: infinite; animation-duration: 4s;"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Messaging System</div>
+          <div class="premium-float-desc">Direct communication with administrators.</div>
+        </div>
+      </div>
+
+      <!-- 7. School Reports -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-file-invoice floating-doc"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">School Reports</div>
+          <div class="premium-float-desc">Comprehensive data exports and summaries.</div>
+        </div>
+      </div>
+
+      <!-- 8. Evaluation Tracking -->
+      <div class="premium-float-card">
+        <div class="premium-float-icon"><i class="fas fa-tasks floating-doc" style="animation-delay: 1s"></i></div>
+        <div class="premium-float-content">
+          <div class="premium-float-title">Evaluation Tracking</div>
+          <div class="premium-float-desc">Monitor progress and historical evaluations.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>About the Portal</h2>
+        <p>Streamlining document submission between private schools and the Division Office</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card holographic-panel modern-widget">
+          <div class="card-icon"><i class="fas fa-shield-alt secure-lock"></i></div>
+          <h3>Secure Submission</h3>
+          <p>All documents are encrypted and transmitted securely to the Division Office. Only authorized personnel can
+            access submitted files.</p>
+        </div>
+        <div class="card holographic-panel modern-widget" style="animation-delay: 0.1s">
+          <div class="card-icon"><i class="fas fa-clock cloud-sync-icon"></i></div>
+          <h3>Real-Time Tracking</h3>
+          <p>Track the status of your submitted documents in real time — from submission to acknowledgment and
+            processing.</p>
+        </div>
+        <div class="card holographic-panel modern-widget" style="animation-delay: 0.2s">
+          <div class="card-icon"><i class="fas fa-file-alt floating-doc"></i></div>
+          <h3>Multiple File Types</h3>
+          <p>Submit Excel spreadsheets, Word documents, and PDF files. All standard school document formats are
+            supported.</p>
+        </div>
+        <div class="card holographic-panel modern-widget" style="animation-delay: 0.3s">
+          <div class="card-icon"><i class="fas fa-history" style="animation: pulse 2s infinite"></i></div>
+          <h3>Submission History</h3>
+          <p>Access a complete history of all your past submissions with timestamps, document types, and current status.
           </p>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="cards-grid">
-          <div class="card">
-            <div class="card-icon">
-              <i class="fas fa-shield-alt" aria-hidden="true"></i>
-            </div>
-
-            <h3>Secure Submission</h3>
-            <p>
-              Documents are transmitted securely and made accessible only to authorized personnel.
-            </p>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">
-              <i class="fas fa-clock" aria-hidden="true"></i>
-            </div>
-
-            <h3>Real-Time Tracking</h3>
-            <p>
-              Track the status of your submitted documents from submission to acknowledgment and processing.
-            </p>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">
-              <i class="fas fa-file-alt" aria-hidden="true"></i>
-            </div>
-
-            <h3>Multiple File Types</h3>
-            <p>
-              Submit Excel spreadsheets, Word documents, PDF files, and other standard school document formats.
-            </p>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">
-              <i class="fas fa-history" aria-hidden="true"></i>
-            </div>
-
-            <h3>Submission History</h3>
-            <p>
-              Access a complete history of previous submissions with timestamps, document types, and status updates.
-            </p>
-          </div>
+  <!-- SCHOOL LEVELS -->
+  <section class="section section-alt" id="levels">
+    <div class="container">
+      <div class="section-header">
+        <h2>School Levels Covered</h2>
+        <p>This portal serves all private school levels under the Division Office</p>
+      </div>
+      <div class="levels-grid">
+        <div class="level-card kinder">
+          <i class="fas fa-child"></i>
+          <h3>Kindergarten</h3>
+          <p>Private kindergarten schools can submit enrollment reports, curriculum documents, and compliance
+            requirements.</p>
+        </div>
+        <div class="level-card elementary">
+          <i class="fas fa-book-open"></i>
+          <h3>Elementary</h3>
+          <p>Elementary schools can submit academic reports, faculty credentials, and accreditation documents.</p>
+        </div>
+        <div class="level-card junior">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Junior High School</h3>
+          <p>Junior high schools can submit SHS readiness reports, learner profiles, and assessment data.</p>
+        </div>
+        <div class="level-card senior">
+          <i class="fas fa-university"></i>
+          <h3>Senior High School</h3>
+          <p>Senior high schools can submit strand offerings, TVL documents, and graduation requirements.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SCHOOL LEVELS -->
-    <section class="section section-alt" id="levels">
-      <div class="container">
-        <div class="section-header">
-          <h2>School Levels Covered</h2>
-          <p>
-            This portal serves all private school levels under the Division Office.
-          </p>
-        </div>
-
-        <div class="levels-grid">
-          <div class="level-card kinder">
-            <i class="fas fa-child" aria-hidden="true"></i>
-            <h3>Kindergarten</h3>
-            <p>
-              Private kindergarten schools can submit enrollment reports, curriculum documents,
-              and compliance requirements.
-            </p>
-          </div>
-
-          <div class="level-card elementary">
-            <i class="fas fa-book-open" aria-hidden="true"></i>
-            <h3>Elementary</h3>
-            <p>
-              Elementary schools can submit academic reports, faculty credentials,
-              and accreditation documents.
-            </p>
-          </div>
-
-          <div class="level-card junior">
-            <i class="fas fa-graduation-cap" aria-hidden="true"></i>
-            <h3>Junior High School</h3>
-            <p>
-              Junior high schools can submit learner profiles, assessment data,
-              and school compliance requirements.
-            </p>
-          </div>
-
-          <div class="level-card senior">
-            <i class="fas fa-university" aria-hidden="true"></i>
-            <h3>Senior High School</h3>
-            <p>
-              Senior high schools can submit strand offerings, TVL documents,
-              and graduation requirements.
-            </p>
-          </div>
-        </div>
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contact the Division Office</h2>
+        <p>Reach out to us for assistance with your submissions</p>
       </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="section-header">
-          <h2>Contact the Division Office</h2>
-          <p>
-            Reach out to us for assistance with your submissions.
-          </p>
-        </div>
-
-        <div class="contact-grid">
-          <div class="contact-info">
-            <div class="contact-item">
-              <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-              <div>
-                <strong>Address</strong>
-                <p>
-                  Division Office Rodeo Road<br />
-                  Brgy. Centro, Masbate City
-                </p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <i class="fas fa-phone" aria-hidden="true"></i>
-              <div>
-                <strong>Phone</strong>
-                <p>
-                  (02) 8XXX-XXXX<br />
-                  0917-XXX-XXXX
-                </p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <i class="fas fa-envelope" aria-hidden="true"></i>
-              <div>
-                <strong>Email</strong>
-                <p>
-                  smme@deped-division.gov.ph<br />
-                  privateschools@deped-division.gov.ph
-                </p>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <i class="fas fa-clock" aria-hidden="true"></i>
-              <div>
-                <strong>Office Hours</strong>
-                <p>
-                  Monday – Friday<br />
-                  8:00 AM – 5:00 PM
-                </p>
-              </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Address</strong>
+              <p>Division Office Rodeo Road <br />Brgy. Centro, Masbate City</p>
             </div>
           </div>
-
-          <form class="contact-form" id="contactForm" novalidate>
-            <div class="form-group">
-              <label for="cName">
-                Your Name <span class="required">*</span>
-              </label>
-
-              <input
-                type="text"
-                id="cName"
-                name="name"
-                placeholder="Full Name"
-                autocomplete="name"
-                required
-                aria-describedby="cNameError"
-              />
-
-              <div class="field-error" id="cNameError" role="alert"></div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <strong>Phone</strong>
+              <p>(02) 8XXX-XXXX<br />0917-XXX-XXXX</p>
             </div>
-
-            <div class="form-group">
-              <label for="cEmail">
-                Email Address <span class="required">*</span>
-              </label>
-
-              <input
-                type="email"
-                id="cEmail"
-                name="email"
-                placeholder="your@email.com"
-                autocomplete="email"
-                required
-                aria-describedby="cEmailError"
-              />
-
-              <div class="field-error" id="cEmailError" role="alert"></div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong>
+              <p>smme@deped-division.gov.ph<br />privateschools@deped-division.gov.ph</p>
             </div>
-
-            <div class="form-group">
-              <label for="cMessage">
-                Message <span class="required">*</span>
-              </label>
-
-              <textarea
-                id="cMessage"
-                name="message"
-                rows="5"
-                placeholder="How can we help you?"
-                required
-                aria-describedby="cMessageError"
-              ></textarea>
-
-              <div class="field-error" id="cMessageError" role="alert"></div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <strong>Office Hours</strong>
+              <p>Monday – Friday<br />8:00 AM – 5:00 PM</p>
             </div>
-
-            <div
-              class="form-banner"
-              id="contactBanner"
-              role="alert"
-              aria-live="polite"
-            ></div>
-
-            <button type="submit" class="btn btn-primary full-btn">
-              <i class="fas fa-paper-plane" aria-hidden="true"></i>
-              Send Message
-            </button>
-          </form>
+          </div>
         </div>
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="cName">Your Name <span class="required">*</span></label>
+            <input type="text" id="cName" placeholder="Full Name" required />
+          </div>
+          <div class="form-group">
+            <label for="cEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="cEmail" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="cMessage">Message <span class="required">*</span></label>
+            <textarea id="cMessage" rows="5" placeholder="How can we help you?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-btn"><i class="fas fa-paper-plane"></i> Send
+            Message</button>
+        </form>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <img
-          src="/assets/smmelogo.jpg"
-          alt="SMME Logo"
-          class="footer-logo-img"
-        />
-
+        <img src="/assets/smmelogo.jpg" alt="SMME Logo" class="footer-logo-img" />
         <div>
           <strong>SMME Portal</strong>
           <span>School Management Monitoring &amp; Evaluation</span>
         </div>
       </div>
-
       <div class="footer-links">
         <a href="#home">Home</a>
         <a href="#about">About</a>
-        <a href="#levels">Levels</a>
         <a href="#contact">Contact</a>
         <a href="/html/login.html">Login</a>
       </div>
-
-      <p class="footer-copy">
-        &copy; <span id="year"></span> Division Office – School Management Monitoring
-        &amp; Evaluation Portal. All rights reserved.
-      </p>
+      <p class="footer-copy">&copy; 2026 Division Office – School Management Monitoring &amp; Evaluation Portal. All
+        rights reserved.</p>
     </div>
   </footer>
 
-  <!-- PAGE SCRIPTS -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      /* =========================================================
-         INTRO ANIMATION FADE OUT
-         ========================================================= */
-      const introScreen = document.getElementById('introScreen');
-
-      if (introScreen) {
-        setTimeout(() => {
-          introScreen.classList.add('is-hiding');
-
-          setTimeout(() => {
-            introScreen.setAttribute('hidden', '');
-          }, 500);
-        }, 3000);
-      }
-
-      /* =========================================================
-         CURRENT YEAR
-         ========================================================= */
-      const yearEl = document.getElementById('year');
-
-      if (yearEl) {
-        yearEl.textContent = new Date().getFullYear();
-      }
-
-      /* =========================================================
-         MOBILE NAVIGATION
-         ========================================================= */
-      const hamburger = document.getElementById('hamburger');
-      const mainNav = document.getElementById('mainNav');
-
-      if (hamburger && mainNav) {
-        hamburger.addEventListener('click', () => {
-          const isOpen = mainNav.classList.toggle('open');
-
-          hamburger.setAttribute('aria-expanded', String(isOpen));
-
-          const icon = hamburger.querySelector('i');
-
-          if (icon) {
-            icon.classList.toggle('fa-bars', !isOpen);
-            icon.classList.toggle('fa-times', isOpen);
-          }
-        });
-
-        const navLinks = mainNav.querySelectorAll('.nav-link');
-
-        navLinks.forEach((link) => {
-          link.addEventListener('click', () => {
-            mainNav.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', 'false');
-
-            const icon = hamburger.querySelector('i');
-
-            if (icon) {
-              icon.classList.add('fa-bars');
-              icon.classList.remove('fa-times');
-            }
-          });
-        });
-      }
-
-      /* =========================================================
-         ACTIVE NAV ON SCROLL
-         ========================================================= */
-      const sections = document.querySelectorAll('main section[id]');
-      const navLinks = document.querySelectorAll('.nav-link');
-
-      function updateActiveNav() {
-        let currentSection = 'home';
-
-        sections.forEach((section) => {
-          const sectionTop = section.offsetTop - 140;
-
-          if (window.scrollY >= sectionTop) {
-            currentSection = section.getAttribute('id');
-          }
-        });
-
-        navLinks.forEach((link) => {
-          const href = link.getAttribute('href');
-
-          if (href === `#${currentSection}`) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-      }
-
-      window.addEventListener('scroll', updateActiveNav);
-      updateActiveNav();
-
-      /* =========================================================
-         CONTACT FORM VALIDATION
-         ========================================================= */
-      const contactForm = document.getElementById('contactForm');
-      const contactBanner = document.getElementById('contactBanner');
-
-      function setError(id, message) {
-        const errorEl = document.getElementById(id);
-
-        if (errorEl) {
-          errorEl.textContent = message || '';
-        }
-      }
-
-      function setInputInvalid(inputId, isInvalid) {
-        const input = document.getElementById(inputId);
-
-        if (input) {
-          input.setAttribute('aria-invalid', isInvalid ? 'true' : 'false');
-        }
-      }
-
-      function clearContactErrors() {
-        setError('cNameError', '');
-        setError('cEmailError', '');
-        setError('cMessageError', '');
-
-        setInputInvalid('cName', false);
-        setInputInvalid('cEmail', false);
-        setInputInvalid('cMessage', false);
-
-        if (contactBanner) {
-          contactBanner.textContent = '';
-        }
-      }
-
-      function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      }
-
-      if (contactForm) {
-        contactForm.addEventListener('submit', (event) => {
-          event.preventDefault();
-          clearContactErrors();
-
-          const nameInput = document.getElementById('cName');
-          const emailInput = document.getElementById('cEmail');
-          const messageInput = document.getElementById('cMessage');
-
-          const name = nameInput ? nameInput.value.trim() : '';
-          const email = emailInput ? emailInput.value.trim() : '';
-          const message = messageInput ? messageInput.value.trim() : '';
-
-          let isValid = true;
-
-          if (!name) {
-            setError('cNameError', 'Please enter your name.');
-            setInputInvalid('cName', true);
-            isValid = false;
-          }
-
-          if (!email) {
-            setError('cEmailError', 'Please enter your email address.');
-            setInputInvalid('cEmail', true);
-            isValid = false;
-          } else if (!isValidEmail(email)) {
-            setError('cEmailError', 'Please enter a valid email address.');
-            setInputInvalid('cEmail', true);
-            isValid = false;
-          }
-
-          if (!message) {
-            setError('cMessageError', 'Please enter your message.');
-            setInputInvalid('cMessage', true);
-            isValid = false;
-          }
-
-          if (!isValid) {
-            if (contactBanner) {
-              contactBanner.textContent = 'Please fix the highlighted fields.';
-            }
-
-            return;
-          }
-
-          const recipient = 'smme@deped-division.gov.ph';
-          const subject = encodeURIComponent(`SMME Portal Inquiry from ${name}`);
-          const body = encodeURIComponent(
-            `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-          );
-
-          window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-
-          if (contactBanner) {
-            contactBanner.textContent =
-              'Opening your email client. If it does not open, please email us directly.';
-          }
-
-          contactForm.reset();
-        });
-      }
-    });
-  </script>
-
-<script src="/js/app.js?v=1.5.1"></script>
+  <script src="/js/app.js?v=1.5.0"></script>
 </body>
+
 </html>
