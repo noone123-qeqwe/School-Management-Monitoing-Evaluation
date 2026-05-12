@@ -257,7 +257,7 @@ function renderActivity(subs) {
   if (!list) return;
   const colorMap = { approved: 'green', returned: 'red', received: 'blue', review: 'yellow' };
 
-  list.innerHTML = subs.map(s => {
+  list.innerHTML = subs.map((s, index) => {
     const color = colorMap[s.status] || 'blue';
     let text = '';
 
@@ -270,7 +270,7 @@ function renderActivity(subs) {
     }
 
     return `
-      <div class="activity-item">
+      <div class="activity-item activity-feed-item" style="animation-delay: ${index * 0.1}s">
         <div class="activity-dot ${color}"></div>
         <div class="activity-text">${text}</div>
         <div class="activity-time">${API.timeAgo(s.submitted_at)}</div>

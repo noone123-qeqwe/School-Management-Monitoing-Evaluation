@@ -273,16 +273,21 @@
 
 /* Dashboard Header */
 .dashboard-header {
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-primary);
-  padding: var(--space-4) var(--space-6);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-2xl);
+  margin: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--space-6);
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: var(--header-height);
   position: sticky;
-  top: 0;
+  top: var(--space-4);
   z-index: var(--z-sticky);
+  box-shadow: var(--shadow-md);
 }
 
 .dashboard-header-content {
@@ -315,6 +320,12 @@
 .dashboard-content {
   padding: var(--content-padding);
   flex: 1;
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Stats Grid */
@@ -1264,12 +1275,13 @@
 
 /* Stats Cards */
 .stat-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-primary);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
-  box-shadow: var(--stat-card-shadow);
-  transition: all var(--transition-base);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.04);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -1288,7 +1300,7 @@
 
 .stat-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--stat-card-hover-shadow);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), 0 0 20px rgba(59, 130, 246, 0.1);
   border-color: var(--primary-200);
 }
 
@@ -1315,7 +1327,12 @@
 }
 
 .stat-card:hover .stat-card-icon {
-  transform: scale(1.1);
+  animation: widgetFloat 2s ease-in-out infinite;
+}
+
+@keyframes widgetFloat {
+  0%, 100% { transform: translateY(0) scale(1.1); }
+  50% { transform: translateY(-5px) scale(1.1); }
 }
 
 .stat-card-icon.primary {
@@ -2308,6 +2325,111 @@
     width: calc(100vw - var(--space-8));
     max-width: 300px;
   }
+}
+
+/* =============================================================================
+   MODERN SAAS & HOLOGRAPHIC EFFECTS
+   ============================================================================= */
+
+/* Floating Document Icons */
+.floating-doc {
+  animation: floatDocument 4s ease-in-out infinite;
+}
+@keyframes floatDocument {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+/* Cloud Synchronization Effects */
+.cloud-sync-icon {
+  animation: cloudSync 2.5s ease-in-out infinite;
+}
+@keyframes cloudSync {
+  0% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 8px var(--info-500)); }
+  100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* Secure Lock Icons */
+.secure-lock {
+  animation: secureLock 3s infinite;
+}
+@keyframes secureLock {
+  0%, 100% { transform: scale(1); color: inherit; filter: none; }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--success-500)); color: var(--success-500); }
+}
+
+/* Data Transfer Animations */
+.data-transfer-line {
+  stroke-dasharray: 4 8;
+  animation: dataTransfer 1s linear infinite;
+}
+@keyframes dataTransfer {
+  0% { stroke-dashoffset: 24; opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0.5; }
+}
+
+/* Holographic Dashboard Panels */
+.holographic-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+.holographic-panel::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+  animation: holoSweep 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes holoSweep {
+  0% { transform: rotate(0deg) translateY(-100%); }
+  100% { transform: rotate(360deg) translateY(100%); }
+}
+
+/* Floating Analytics Charts */
+.floating-chart {
+  animation: floatChart 6s ease-in-out infinite;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-2xl);
+}
+@keyframes floatChart {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); box-shadow: 0 30px 50px rgba(15, 23, 42, 0.12); }
+}
+
+/* Modern Dashboard Widgets */
+.modern-widget {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modern-widget:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(30, 58, 95, 0.15);
+  z-index: 10;
+}
+
+/* Activity Feed Animations */
+.activity-feed-item {
+  animation: feedSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@keyframes feedSlideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Realtime Notification Popups */
+.realtime-popup {
+  animation: popupBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+@keyframes popupBounce {
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 /* =============================================================================

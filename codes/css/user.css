@@ -1375,16 +1375,20 @@ textarea:focus-visible {
 
 /* ===== TOP BAR ===== */
 .dash-topbar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  margin: 16px 24px;
   height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-xl);
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
   position: sticky;
-  top: 0;
+  top: 16px;
   z-index: 750;
 }
 
@@ -1568,17 +1572,12 @@ textarea:focus-visible {
 
 .dash-page.active {
   display: block;
-  animation: fadeIn 0.2s ease;
+  animation: pageSlideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+@keyframes pageSlideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .page-header {
@@ -1607,13 +1606,15 @@ textarea:focus-visible {
 }
 
 .stat-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
   padding: var(--space-xl);
   position: relative;
   overflow: hidden;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.04);
 }
 
 .stat-card::before {
@@ -1629,8 +1630,8 @@ textarea:focus-visible {
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), 0 0 20px rgba(0, 94, 162, 0.1);
   border-color: var(--primary);
 }
 
@@ -1645,6 +1646,16 @@ textarea:focus-visible {
   margin-bottom: var(--space-md);
   position: relative;
   z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+  animation: iconPulseFloat 2s ease-in-out infinite;
+}
+
+@keyframes iconPulseFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.05); }
 }
 
 .stat-label {
