@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign In – SMME Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="../css/styles.css?v=4.0.0" />
   <link rel="stylesheet" href="../css/user.css?v=1.0.0" />
   <link rel="stylesheet" href="../css/premium-design.css?v=1.0.0" />
@@ -14,7 +17,13 @@
 
   <style>
     /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --navy-950: #050e1d;
@@ -24,12 +33,12 @@
       --navy-600: #2c5282;
       --navy-500: #3a6ea8;
       --navy-100: #dde9f7;
-      --navy-50:  #eef4fb;
+      --navy-50: #eef4fb;
 
       --gold-500: #d4a017;
       --gold-400: #e0b83a;
       --gold-100: #fef6d9;
-      --gold-50:  #fffcf0;
+      --gold-50: #fffcf0;
 
       --slate-900: #0f172a;
       --slate-700: #334155;
@@ -37,30 +46,32 @@
       --slate-400: #94a3b8;
       --slate-200: #e2e8f0;
       --slate-100: #f1f5f9;
-      --slate-50:  #f8fafc;
+      --slate-50: #f8fafc;
 
-      --red-500:   #dc2626;
-      --red-50:    #fef2f2;
+      --red-500: #dc2626;
+      --red-50: #fef2f2;
       --green-600: #16a34a;
-      --green-50:  #f0fdf4;
+      --green-50: #f0fdf4;
 
-      --radius-sm:  8px;
-      --radius-md:  12px;
-      --radius-lg:  16px;
-      --radius-xl:  20px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
 
-      --shadow-sm:  0 1px 2px 0 rgba(0,0,0,.05);
-      --shadow-md:  0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
-      --shadow-lg:  0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
-      --shadow-xl:  0 20px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.06);
-      --shadow-focus-navy: 0 0 0 3px rgba(30,58,95,.22);
-      --shadow-focus-gold: 0 0 0 3px rgba(212,160,23,.25);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, .05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, .07), 0 2px 4px -2px rgba(0, 0, 0, .05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, .08), 0 4px 6px -4px rgba(0, 0, 0, .05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 8px 10px -6px rgba(0, 0, 0, .06);
+      --shadow-focus-navy: 0 0 0 3px rgba(30, 58, 95, .22);
+      --shadow-focus-gold: 0 0 0 3px rgba(212, 160, 23, .25);
 
       --trans: all 0.2s ease-in-out;
-      --trans-slow: all 0.35s cubic-bezier(.16,1,.3,1);
+      --trans-slow: all 0.35s cubic-bezier(.16, 1, .3, 1);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -98,17 +109,17 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 70% 60% at 20% 10%, rgba(44,82,130,.45) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 45% at 85% 90%, rgba(212,160,23,.18) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 40% at 60% 40%, rgba(30,58,95,.25) 0%, transparent 60%);
+        radial-gradient(ellipse 70% 60% at 20% 10%, rgba(44, 82, 130, .45) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 85% 90%, rgba(212, 160, 23, .18) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 60% 40%, rgba(30, 58, 95, .25) 0%, transparent 60%);
     }
 
     .hero-grid-overlay {
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
       background-size: 40px 40px;
       mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
     }
@@ -145,7 +156,10 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
-    .hero-logo-text { display: flex; flex-direction: column; }
+    .hero-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
 
     .hero-logo-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -159,7 +173,7 @@
     .hero-logo-sub {
       font-size: .72rem;
       font-weight: 600;
-      color: rgba(255,255,255,.45);
+      color: rgba(255, 255, 255, .45);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-top: 4px;
@@ -204,7 +218,7 @@
 
     .hero-desc {
       font-size: .92rem;
-      color: rgba(255,255,255,.62);
+      color: rgba(255, 255, 255, .62);
       line-height: 1.75;
       margin-bottom: 40px;
       max-width: 320px;
@@ -222,7 +236,7 @@
       align-items: center;
       gap: 14px;
       font-size: .875rem;
-      color: rgba(255,255,255,.72);
+      color: rgba(255, 255, 255, .72);
       font-weight: 500;
     }
 
@@ -230,8 +244,8 @@
       width: 36px;
       height: 36px;
       border-radius: var(--radius-sm);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -242,8 +256,8 @@
     }
 
     .hero-feature-item:hover .feature-icon {
-      background: rgba(212,160,23,.15);
-      border-color: rgba(212,160,23,.3);
+      background: rgba(212, 160, 23, .15);
+      border-color: rgba(212, 160, 23, .3);
       color: var(--gold-400);
       transform: scale(1.08);
     }
@@ -254,7 +268,7 @@
       margin-top: auto;
       padding-top: 40px;
       font-size: .72rem;
-      color: rgba(255,255,255,.28);
+      color: rgba(255, 255, 255, .28);
       font-weight: 500;
     }
 
@@ -296,13 +310,24 @@
     }
 
     /* ── Steps ── */
-    .auth-step[hidden] { display: none; }
+    .auth-step[hidden] {
+      display: none;
+    }
 
-    .auth-step { animation: stepIn .22s ease-out; }
+    .auth-step {
+      animation: stepIn .22s ease-out;
+    }
 
     @keyframes stepIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Card logo */
@@ -353,9 +378,18 @@
       transition: var(--trans);
     }
 
-    .auth-back:hover { color: var(--navy-700); }
-    .auth-back:hover i { transform: translateX(-3px); }
-    .auth-back i { transition: var(--trans); font-size: .75rem; }
+    .auth-back:hover {
+      color: var(--navy-700);
+    }
+
+    .auth-back:hover i {
+      transform: translateX(-3px);
+    }
+
+    .auth-back i {
+      transition: var(--trans);
+      font-size: .75rem;
+    }
 
     /* Badge */
     .auth-badge {
@@ -396,7 +430,8 @@
       margin: 8px 0 20px;
     }
 
-    .auth-divider::before, .auth-divider::after {
+    .auth-divider::before,
+    .auth-divider::after {
       content: '';
       flex: 1;
       height: 1px;
@@ -404,7 +439,11 @@
     }
 
     /* ── Role Buttons ── */
-    .role-list { display: flex; flex-direction: column; gap: 10px; }
+    .role-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
     .role-btn {
       display: flex;
@@ -430,7 +469,10 @@
       box-shadow: var(--shadow-md);
     }
 
-    .role-btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+    .role-btn:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-sm);
+    }
 
     #roleAdmin:hover {
       border-color: #7c3aed;
@@ -465,17 +507,19 @@
       background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
       border-color: transparent;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(30,58,95,.3);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, .3);
     }
 
     #roleAdmin:hover .role-btn-icon.admin {
       background: linear-gradient(135deg, #7c3aed, #6d28d9);
       border-color: transparent;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(124,58,237,.3);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, .3);
     }
 
-    .role-btn-text { flex: 1; }
+    .role-btn-text {
+      flex: 1;
+    }
 
     .role-btn-text strong {
       display: block;
@@ -496,11 +540,19 @@
       transition: var(--trans);
     }
 
-    .role-btn:hover .role-btn-arrow { color: var(--navy-700); transform: translateX(3px); }
-    #roleAdmin:hover .role-btn-arrow { color: #7c3aed; }
+    .role-btn:hover .role-btn-arrow {
+      color: var(--navy-700);
+      transform: translateX(3px);
+    }
+
+    #roleAdmin:hover .role-btn-arrow {
+      color: #7c3aed;
+    }
 
     /* ── Form Fields ── */
-    .field-group { margin-bottom: 16px; }
+    .field-group {
+      margin-bottom: 16px;
+    }
 
     .field-label {
       display: block;
@@ -512,9 +564,13 @@
       transition: color .2s ease;
     }
 
-    .field-group:focus-within .field-label { color: var(--navy-700); }
+    .field-group:focus-within .field-label {
+      color: var(--navy-700);
+    }
 
-    .req { color: var(--red-500); }
+    .req {
+      color: var(--red-500);
+    }
 
     .field-wrap {
       position: relative;
@@ -532,7 +588,9 @@
       transition: var(--trans);
     }
 
-    .field-wrap:focus-within .field-icon { color: var(--navy-700); }
+    .field-wrap:focus-within .field-icon {
+      color: var(--navy-700);
+    }
 
     .field-input {
       width: 100%;
@@ -559,12 +617,14 @@
       box-shadow: var(--shadow-focus-navy);
     }
 
-    .field-input::placeholder { color: var(--slate-400); }
+    .field-input::placeholder {
+      color: var(--slate-400);
+    }
 
     .field-input.invalid {
       border-color: var(--red-500);
       background: var(--red-50);
-      box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
     }
 
     .field-select {
@@ -585,7 +645,10 @@
       transition: var(--trans);
     }
 
-    .field-eye:hover { color: var(--navy-700); background: var(--navy-50); }
+    .field-eye:hover {
+      color: var(--navy-700);
+      background: var(--navy-50);
+    }
 
     .field-error {
       display: block;
@@ -603,7 +666,9 @@
     }
 
     /* ── School Picker ── */
-    .school-picker { position: relative; }
+    .school-picker {
+      position: relative;
+    }
 
     .school-picker-field {
       position: relative;
@@ -621,7 +686,9 @@
       transition: var(--trans);
     }
 
-    .school-picker-field.focused .school-picker-icon { color: var(--navy-700); }
+    .school-picker-field.focused .school-picker-icon {
+      color: var(--navy-700);
+    }
 
     .school-picker-input {
       width: 100%;
@@ -646,10 +713,12 @@
     .school-picker-field.invalid .school-picker-input {
       border-color: var(--red-500);
       background: var(--red-50);
-      box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
     }
 
-    .school-picker-input::placeholder { color: var(--slate-400); }
+    .school-picker-input::placeholder {
+      color: var(--slate-400);
+    }
 
     .school-picker-clear {
       position: absolute;
@@ -669,13 +738,17 @@
       z-index: 2;
     }
 
-    .school-picker-clear:hover { background: var(--red-500); color: #fff; }
+    .school-picker-clear:hover {
+      background: var(--red-500);
+      color: #fff;
+    }
 
     .school-picker-list {
       list-style: none;
       position: absolute;
       top: calc(100% + 6px);
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       background: #fff;
       border: 1.5px solid var(--slate-200);
       border-radius: var(--radius-md);
@@ -686,8 +759,14 @@
       padding: 6px;
     }
 
-    .school-picker-list::-webkit-scrollbar { width: 4px; }
-    .school-picker-list::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 4px; }
+    .school-picker-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .school-picker-list::-webkit-scrollbar-thumb {
+      background: var(--slate-200);
+      border-radius: 4px;
+    }
 
     .sp-option {
       display: flex;
@@ -700,7 +779,9 @@
       transition: background .12s;
     }
 
-    .sp-option:hover { background: var(--navy-50); }
+    .sp-option:hover {
+      background: var(--navy-50);
+    }
 
     .sp-option-name {
       font-size: .85rem;
@@ -736,7 +817,10 @@
       gap: 8px;
     }
 
-    .sp-empty i { font-size: 1.3rem; color: var(--slate-300); }
+    .sp-empty i {
+      font-size: 1.3rem;
+      color: var(--slate-300);
+    }
 
     /* ── Buttons ── */
     .auth-btn {
@@ -764,35 +848,47 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0);
+      background: rgba(255, 255, 255, 0);
       transition: background .2s ease;
     }
 
-    .auth-btn:hover::after { background: rgba(255,255,255,.08); }
+    .auth-btn:hover::after {
+      background: rgba(255, 255, 255, .08);
+    }
 
-    .auth-btn:hover { transform: translateY(-1px); }
-    .auth-btn:active { transform: translateY(0) scale(.99); }
-    .auth-btn:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+    .auth-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .auth-btn:active {
+      transform: translateY(0) scale(.99);
+    }
+
+    .auth-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
     .staff-btn {
       background: linear-gradient(135deg, var(--navy-700) 0%, var(--navy-600) 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(30,58,95,.3);
+      box-shadow: 0 4px 14px rgba(30, 58, 95, .3);
     }
 
     .staff-btn:hover:not(:disabled) {
-      box-shadow: 0 8px 20px rgba(30,58,95,.38);
+      box-shadow: 0 8px 20px rgba(30, 58, 95, .38);
       background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-700) 100%);
     }
 
     .admin-btn {
       background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(124,58,237,.28);
+      box-shadow: 0 4px 14px rgba(124, 58, 237, .28);
     }
 
     .admin-btn:hover:not(:disabled) {
-      box-shadow: 0 8px 20px rgba(124,58,237,.36);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, .36);
     }
 
     /* ── Alert / Success ── */
@@ -828,9 +924,17 @@
     }
 
     /* ── Password Strength ── */
-    .pw-strength { margin-top: 6px; display: flex; flex-direction: column; gap: 5px; }
+    .pw-strength {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
 
-    .pw-strength-bars { display: flex; gap: 4px; }
+    .pw-strength-bars {
+      display: flex;
+      gap: 4px;
+    }
 
     .pw-bar {
       flex: 1;
@@ -840,10 +944,21 @@
       transition: background .25s ease;
     }
 
-    .pw-bar.active-weak   { background: #ef4444; }
-    .pw-bar.active-fair   { background: #f59e0b; }
-    .pw-bar.active-good   { background: #3b82f6; }
-    .pw-bar.active-strong { background: #10b981; }
+    .pw-bar.active-weak {
+      background: #ef4444;
+    }
+
+    .pw-bar.active-fair {
+      background: #f59e0b;
+    }
+
+    .pw-bar.active-good {
+      background: #3b82f6;
+    }
+
+    .pw-bar.active-strong {
+      background: #10b981;
+    }
 
     .pw-strength-label {
       font-size: .7rem;
@@ -852,10 +967,21 @@
       transition: color .25s ease;
     }
 
-    .pw-strength-label.weak   { color: #ef4444; }
-    .pw-strength-label.fair   { color: #f59e0b; }
-    .pw-strength-label.good   { color: #3b82f6; }
-    .pw-strength-label.strong { color: #10b981; }
+    .pw-strength-label.weak {
+      color: #ef4444;
+    }
+
+    .pw-strength-label.fair {
+      color: #f59e0b;
+    }
+
+    .pw-strength-label.good {
+      color: #3b82f6;
+    }
+
+    .pw-strength-label.strong {
+      color: #10b981;
+    }
 
     /* ── Terms ── */
     .terms-label {
@@ -869,10 +995,21 @@
       line-height: 1.55;
     }
 
-    .terms-label input { margin-top: 3px; accent-color: var(--navy-700); flex-shrink: 0; }
+    .terms-label input {
+      margin-top: 3px;
+      accent-color: var(--navy-700);
+      flex-shrink: 0;
+    }
 
-    .terms-label a { color: var(--navy-700); font-weight: 600; text-decoration: none; }
-    .terms-label a:hover { text-decoration: underline; }
+    .terms-label a {
+      color: var(--navy-700);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .terms-label a:hover {
+      text-decoration: underline;
+    }
 
     /* ── Link row ── */
     .auth-link-row {
@@ -888,7 +1025,9 @@
       text-decoration: none;
     }
 
-    .auth-link-row a:hover { text-decoration: underline; }
+    .auth-link-row a:hover {
+      text-decoration: underline;
+    }
 
     /* ── Toast ── */
     .toast {
@@ -907,17 +1046,35 @@
       gap: 10px;
       box-shadow: var(--shadow-xl);
       max-width: 360px;
-      animation: toastIn .3s cubic-bezier(.22,.61,.36,1);
+      animation: toastIn .3s cubic-bezier(.22, .61, .36, 1);
     }
 
     @keyframes toastIn {
-      from { opacity:0; transform: translateY(10px) scale(.96); }
-      to   { opacity:1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
-    .toast.success { background: #065f46; border-left: 3px solid #10b981; }
-    .toast.error   { background: #7f1d1d; border-left: 3px solid #ef4444; }
-    .toast.info    { background: var(--navy-900); border-left: 3px solid var(--gold-500); }
+    .toast.success {
+      background: #065f46;
+      border-left: 3px solid #10b981;
+    }
+
+    .toast.error {
+      background: #7f1d1d;
+      border-left: 3px solid #ef4444;
+    }
+
+    .toast.info {
+      background: var(--navy-900);
+      border-left: 3px solid var(--gold-500);
+    }
 
     /* ── Splash Screen ── */
     .splash-hero {
@@ -931,14 +1088,17 @@
       transition: opacity .55s ease, visibility .55s ease;
     }
 
-    .splash-hero.hidden { opacity: 0; visibility: hidden; }
+    .splash-hero.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
 
     .splash-grid {
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
       background-size: 44px 44px;
     }
 
@@ -947,7 +1107,7 @@
       width: 600px;
       height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(44,82,130,.3) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(44, 82, 130, .3) 0%, transparent 70%);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -962,16 +1122,23 @@
       align-items: center;
       gap: 20px;
       padding: 56px 64px;
-      border: 1px solid rgba(255,255,255,.08);
+      border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 28px;
-      background: rgba(255,255,255,.03);
+      background: rgba(255, 255, 255, .03);
       backdrop-filter: blur(16px);
-      animation: splashIn .7s cubic-bezier(.16,1,.3,1) both;
+      animation: splashIn .7s cubic-bezier(.16, 1, .3, 1) both;
     }
 
     @keyframes splashIn {
-      from { opacity: 0; transform: translateY(20px) scale(.96); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .splash-logo {
@@ -979,14 +1146,21 @@
       height: 100px;
       border-radius: 20px;
       object-fit: cover;
-      border: 2px solid rgba(212,160,23,.4);
-      box-shadow: 0 0 0 8px rgba(30,58,95,.15), 0 0 48px rgba(30,58,95,.3);
+      border: 2px solid rgba(212, 160, 23, .4);
+      box-shadow: 0 0 0 8px rgba(30, 58, 95, .15), 0 0 48px rgba(30, 58, 95, .3);
       animation: splashFloat 3.5s ease-in-out infinite;
     }
 
     @keyframes splashFloat {
-      0%,100% { transform: translateY(0); }
-      50%     { transform: translateY(-8px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
     }
 
     .splash-title {
@@ -1000,12 +1174,15 @@
 
     .splash-sub {
       font-size: .92rem;
-      color: rgba(255,255,255,.5);
+      color: rgba(255, 255, 255, .5);
       text-align: center;
       line-height: 1.6;
     }
 
-    .splash-sub span { color: var(--gold-400); font-weight: 600; }
+    .splash-sub span {
+      color: var(--gold-400);
+      font-weight: 600;
+    }
 
     .splash-loader {
       display: flex;
@@ -1021,36 +1198,103 @@
       flex-shrink: 0;
     }
 
-    .loader-dot:nth-child(1) { background: var(--navy-500); }
-    .loader-dot:nth-child(2) { background: var(--gold-500); animation-delay: .2s; }
-    .loader-dot:nth-child(3) { background: #93c5fd; animation-delay: .4s; }
+    .loader-dot:nth-child(1) {
+      background: var(--navy-500);
+    }
+
+    .loader-dot:nth-child(2) {
+      background: var(--gold-500);
+      animation-delay: .2s;
+    }
+
+    .loader-dot:nth-child(3) {
+      background: #93c5fd;
+      animation-delay: .4s;
+    }
 
     @keyframes splashBounce {
-      0%, 80%, 100% { transform: translateY(0) scale(0.8); opacity: 0.5; }
-      40%           { transform: translateY(-8px) scale(1.1); opacity: 1; }
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0.5;
+      }
+
+      40% {
+        transform: translateY(-8px) scale(1.1);
+        opacity: 1;
+      }
     }
 
     /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 99px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--slate-300); }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--slate-200);
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--slate-300);
+    }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .auth-layout { grid-template-columns: 1fr; }
-      .auth-hero { display: none; }
-      .auth-panel { min-height: 100vh; padding: 32px 20px; background: var(--slate-50); }
-      .auth-card { max-width: 100%; border-radius: var(--radius-lg); }
+      .auth-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-hero {
+        display: none;
+      }
+
+      .auth-panel {
+        min-height: 100vh;
+        padding: 32px 20px;
+        background: var(--slate-50);
+      }
+
+      .auth-card {
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+      }
     }
 
     @media (max-width: 480px) {
-      .auth-panel { padding: 24px 16px; align-items: flex-start; padding-top: 32px; }
-      .auth-card { padding: 28px 20px; border-radius: var(--radius-md); }
-      .auth-title { font-size: 1.3rem; }
-      .field-row-2 { grid-template-columns: 1fr; }
-      .splash-content { padding: 36px 28px; border-radius: 20px; }
-      .splash-title { font-size: 2rem; }
+      .auth-panel {
+        padding: 24px 16px;
+        align-items: flex-start;
+        padding-top: 32px;
+      }
+
+      .auth-card {
+        padding: 28px 20px;
+        border-radius: var(--radius-md);
+      }
+
+      .auth-title {
+        font-size: 1.3rem;
+      }
+
+      .field-row-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .splash-content {
+        padding: 36px 28px;
+        border-radius: 20px;
+      }
+
+      .splash-title {
+        font-size: 2rem;
+      }
     }
 
     /* ── Focus accessibility ── */
@@ -1059,18 +1303,22 @@
     .auth-back:focus-visible,
     .field-input:focus-visible,
     .school-picker-input:focus-visible {
-      outline: 3px solid rgba(30,58,95,.25);
+      outline: 3px solid rgba(30, 58, 95, .25);
       outline-offset: 2px;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+
+      *,
+      *::before,
+      *::after {
         animation-duration: .01ms !important;
         transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
+
 <body class="page-fade-in">
   <!-- PREMIUM BACKGROUND -->
   <div class="animated-bg">
@@ -1078,325 +1326,334 @@
     <div class="bg-blob bg-blob-2"></div>
   </div>
 
-<!-- ═══════ SPLASH SCREEN ═══════ -->
-<div class="splash-hero" id="splashHero">
-  <div class="splash-grid"></div>
-  <div class="splash-glow"></div>
-  <div class="splash-content">
-    <img src="../assets/logo.jpg" alt="SMME" class="splash-logo" onerror="this.style.display='none'" />
-    <h1 class="splash-title">SMME</h1>
-    <p class="splash-sub">School Management<br><span>Monitoring &amp; Evaluation</span></p>
-    <div class="splash-loader">
-      <div class="loader-dot"></div>
-      <div class="loader-dot"></div>
-      <div class="loader-dot"></div>
+  <!-- ═══════ SPLASH SCREEN ═══════ -->
+  <div class="splash-hero" id="splashHero">
+    <div class="splash-grid"></div>
+    <div class="splash-glow"></div>
+    <div class="splash-content">
+      <img src="../assets/logo.jpg" alt="SMME" class="splash-logo" onerror="this.style.display='none'" />
+      <h1 class="splash-title">SMME</h1>
+      <p class="splash-sub">School Management<br><span>Monitoring &amp; Evaluation</span></p>
+      <div class="splash-loader">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ═══════ MAIN LAYOUT ═══════ -->
-<div class="auth-layout" id="authLayout">
+  <!-- ═══════ MAIN LAYOUT ═══════ -->
+  <div class="auth-layout" id="authLayout">
 
-  <!-- LEFT: HERO PANEL -->
-  <div class="auth-hero">
-    <div class="hero-gold-line"></div>
-    <div class="hero-grid-overlay"></div>
+    <!-- LEFT: HERO PANEL -->
+    <div class="auth-hero">
+      <div class="hero-gold-line"></div>
+      <div class="hero-grid-overlay"></div>
 
-    <div class="hero-content">
-      <div class="hero-logo-wrap">
-        <img src="../assets/logo.jpg" alt="SMME Logo" class="hero-logo-img" onerror="this.style.display='none'" />
-        <div class="hero-logo-text">
-          <span class="hero-logo-title">SMME</span>
-          <span class="hero-logo-sub">Division Portal</span>
-        </div>
-      </div>
-
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-line"></span>
-        Official Division Office Portal
-      </div>
-
-      <h1 class="hero-heading">
-        School Management<br />
-        <span>Monitoring &amp;<br />Evaluation</span>
-      </h1>
-
-      <p class="hero-desc">
-        A secure platform for private schools to submit documents directly to the Division Office — organized, trackable, and reliable.
-      </p>
-
-      <ul class="hero-features">
-        <li class="hero-feature-item">
-          <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
-          <span>Secure document submission</span>
-        </li>
-        <li class="hero-feature-item">
-          <div class="feature-icon"><i class="fas fa-users"></i></div>
-          <span>Personal staff accounts</span>
-        </li>
-        <li class="hero-feature-item">
-          <div class="feature-icon"><i class="fas fa-file-lines"></i></div>
-          <span>PDF, Word &amp; Excel support</span>
-        </li>
-        <li class="hero-feature-item">
-          <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
-          <span>All school levels covered</span>
-        </li>
-      </ul>
-    </div>
-
-    <p class="hero-footer">&copy; 2026 Division Office &mdash; SMME Portal v3.0</p>
-  </div>
-
-  <!-- RIGHT: FORM PANEL -->
-  <div class="auth-panel">
-    <div class="auth-card" id="authCard">
-
-      <!-- STEP 1: ROLE SELECT -->
-      <div class="auth-step" id="stepRole">
-        <img src="../assets/logo.jpg" alt="SMME" class="auth-card-logo" onerror="this.style.background='var(--navy-700)'" />
-        <h2 class="auth-title">Welcome back</h2>
-        <p class="auth-sub">Choose your account type to continue</p>
-
-        <div class="auth-divider">Sign in as</div>
-
-        <div class="role-list">
-          <button class="role-btn" id="roleSchool">
-            <div class="role-btn-icon staff"><i class="fas fa-user-tie"></i></div>
-            <div class="role-btn-text">
-              <strong>School Staff</strong>
-              <span>Submit documents for your school</span>
-            </div>
-            <i class="fas fa-chevron-right role-btn-arrow"></i>
-          </button>
-
-          <button class="role-btn" id="roleAdmin">
-            <div class="role-btn-icon admin"><i class="fas fa-user-shield"></i></div>
-            <div class="role-btn-text">
-              <strong>Division Admin</strong>
-              <span>Review and manage submissions</span>
-            </div>
-            <i class="fas fa-chevron-right role-btn-arrow"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- STEP 2A: STAFF LOGIN -->
-      <div class="auth-step" id="stepStaff" hidden>
-        <button class="auth-back" id="backFromStaff">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <div class="auth-badge staff-badge">
-          <i class="fas fa-user-tie"></i> School Staff
-        </div>
-        <h2 class="auth-title">Staff Sign In</h2>
-        <p class="auth-sub">Sign in with your personal staff credentials</p>
-
-        <form id="schoolLoginForm" novalidate>
-          <div class="field-group" id="staffSchoolGroup">
-            <label class="field-label">School <span class="req">*</span></label>
-            <select id="staffSchool" style="display:none"><option value="">-- Select --</option></select>
-            <span class="field-error" id="staffSchoolErr"></span>
+      <div class="hero-content">
+        <div class="hero-logo-wrap">
+          <img src="../assets/logo.jpg" alt="SMME Logo" class="hero-logo-img" onerror="this.style.display='none'" />
+          <div class="hero-logo-text">
+            <span class="hero-logo-title">SMME</span>
+            <span class="hero-logo-sub">Division Portal</span>
           </div>
+        </div>
 
-          <div class="field-group">
-            <label class="field-label" for="schoolEmail">Email Address <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-envelope field-icon"></i>
-              <input type="email" id="schoolEmail" class="field-input"
-                placeholder="yourname@school.edu.ph" autocomplete="username" />
-            </div>
-            <span class="field-error" id="schoolEmailErr"></span>
-          </div>
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-line"></span>
+          Official Division Office Portal
+        </div>
 
-          <div class="field-group">
-            <label class="field-label" for="schoolPassword">Password <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-lock field-icon"></i>
-              <input type="password" id="schoolPassword" class="field-input"
-                placeholder="Enter your password" autocomplete="current-password" />
-              <button type="button" class="field-eye" data-target="schoolPassword" aria-label="Toggle password">
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-            <span class="field-error" id="schoolPasswordErr"></span>
-          </div>
+        <h1 class="hero-heading">
+          School Management<br />
+          <span>Monitoring &amp;<br />Evaluation</span>
+        </h1>
 
-          <button type="submit" class="auth-btn staff-btn" id="schoolLoginBtn">
-            <i class="fas fa-arrow-right-to-bracket"></i> Sign In
-          </button>
-        </form>
-
-        <p class="auth-link-row">
-          New staff member? <a href="#" id="registerLink">Create an account</a>
+        <p class="hero-desc">
+          A secure platform for private schools to submit documents directly to the Division Office — organized,
+          trackable, and reliable.
         </p>
+
+        <ul class="hero-features">
+          <li class="hero-feature-item">
+            <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+            <span>Secure document submission</span>
+          </li>
+          <li class="hero-feature-item">
+            <div class="feature-icon"><i class="fas fa-users"></i></div>
+            <span>Personal staff accounts</span>
+          </li>
+          <li class="hero-feature-item">
+            <div class="feature-icon"><i class="fas fa-file-lines"></i></div>
+            <span>PDF, Word &amp; Excel support</span>
+          </li>
+          <li class="hero-feature-item">
+            <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span>All school levels covered</span>
+          </li>
+        </ul>
       </div>
 
-      <!-- STEP 2B: ADMIN LOGIN -->
-      <div class="auth-step" id="stepAdmin" hidden>
-        <button class="auth-back" id="backFromAdmin">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <div class="auth-badge admin-badge">
-          <i class="fas fa-user-shield"></i> Division Admin
-        </div>
-        <h2 class="auth-title">Admin Sign In</h2>
-        <p class="auth-sub">Authorized Division Office personnel only</p>
-
-        <form id="adminLoginForm" novalidate>
-          <div class="field-group">
-            <label class="field-label" for="adminUsername">Username <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-user field-icon"></i>
-              <input type="text" id="adminUsername" class="field-input"
-                placeholder="Enter admin username" autocomplete="username" />
-            </div>
-            <span class="field-error" id="adminUsernameErr"></span>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="adminPassword">Password <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-lock field-icon"></i>
-              <input type="password" id="adminPassword" class="field-input"
-                placeholder="Enter your password" autocomplete="current-password" />
-              <button type="button" class="field-eye" data-target="adminPassword" aria-label="Toggle password">
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-            <span class="field-error" id="adminPasswordErr"></span>
-          </div>
-
-          <button type="submit" class="auth-btn admin-btn" id="adminLoginBtn">
-            <i class="fas fa-arrow-right-to-bracket"></i> Sign In as Admin
-          </button>
-        </form>
-      </div>
-
-      <!-- STEP 3: REGISTER -->
-      <div class="auth-step" id="stepRegister" hidden>
-        <button class="auth-back" id="backFromRegister">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <div class="auth-badge staff-badge">
-          <i class="fas fa-user-plus"></i> Staff Registration
-        </div>
-        <h2 class="auth-title">Create Account</h2>
-        <p class="auth-sub">Register to submit documents on behalf of your school</p>
-
-        <form id="registerForm" novalidate>
-          <div class="field-row-2">
-            <div class="field-group">
-              <label class="field-label" for="regFirstName">First Name <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-user field-icon"></i>
-                <input type="text" id="regFirstName" class="field-input" placeholder="First name" />
-              </div>
-              <span class="field-error" id="regFirstNameErr"></span>
-            </div>
-            <div class="field-group">
-              <label class="field-label" for="regLastName">Last Name <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-user field-icon"></i>
-                <input type="text" id="regLastName" class="field-input" placeholder="Last name" />
-              </div>
-              <span class="field-error" id="regLastNameErr"></span>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="regPosition">Position <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-id-badge field-icon"></i>
-              <select id="regPosition" class="field-input field-select">
-                <option value="">-- Select Position --</option>
-                <option>School Principal</option>
-                <option>Assistant Principal</option>
-                <option>School Registrar</option>
-                <option>Administrative Officer</option>
-                <option>Guidance Counselor</option>
-                <option>Department Head</option>
-                <option>Teacher</option>
-                <option>Clerk / Secretary</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <span class="field-error" id="regPositionErr"></span>
-          </div>
-
-          <div class="field-group" id="regSchoolGroup">
-            <label class="field-label">School <span class="req">*</span></label>
-            <select id="regSchool" style="display:none"><option value="">-- Select --</option></select>
-            <span class="field-error" id="regSchoolErr"></span>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="regEmail">Email Address <span class="req">*</span></label>
-            <div class="field-wrap">
-              <i class="fas fa-envelope field-icon"></i>
-              <input type="email" id="regEmail" class="field-input" placeholder="yourname@school.edu.ph" />
-            </div>
-            <span class="field-error" id="regEmailErr"></span>
-          </div>
-
-          <div class="field-row-2">
-            <div class="field-group">
-              <label class="field-label" for="regPassword">Password <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="regPassword" class="field-input" placeholder="Min. 8 characters" />
-                <button type="button" class="field-eye" data-target="regPassword" aria-label="Toggle"><i class="fas fa-eye"></i></button>
-              </div>
-              <div class="pw-strength" id="pwStrength" hidden>
-                <div class="pw-strength-bars">
-                  <div class="pw-bar" id="pwBar1"></div>
-                  <div class="pw-bar" id="pwBar2"></div>
-                  <div class="pw-bar" id="pwBar3"></div>
-                  <div class="pw-bar" id="pwBar4"></div>
-                </div>
-                <span class="pw-strength-label" id="pwStrengthLabel"></span>
-              </div>
-              <span class="field-error" id="regPasswordErr"></span>
-            </div>
-            <div class="field-group">
-              <label class="field-label" for="regConfirm">Confirm <span class="req">*</span></label>
-              <div class="field-wrap">
-                <i class="fas fa-lock field-icon"></i>
-                <input type="password" id="regConfirm" class="field-input" placeholder="Re-enter password" />
-                <button type="button" class="field-eye" data-target="regConfirm" aria-label="Toggle"><i class="fas fa-eye"></i></button>
-              </div>
-              <span class="field-error" id="regConfirmErr"></span>
-            </div>
-          </div>
-
-          <label class="terms-label">
-            <input type="checkbox" id="regTerms" />
-            <span>I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></span>
-          </label>
-          <span class="field-error" id="regTermsErr"></span>
-
-          <button type="submit" class="auth-btn staff-btn" style="margin-top: 16px">
-            <i class="fas fa-user-plus"></i> Create Account
-          </button>
-        </form>
-      </div>
-
+      <p class="hero-footer">&copy; 2026 Division Office &mdash; SMME Portal v3.0</p>
     </div>
-  </div>
 
-</div><!-- end auth-layout -->
+    <!-- RIGHT: FORM PANEL -->
+    <div class="auth-panel">
+      <div class="auth-card" id="authCard">
 
-<script src="../js/api.js?v=3.0.0"></script>
-<script src="../js/login.js?v=3.0.0"></script>
+        <!-- STEP 1: ROLE SELECT -->
+        <div class="auth-step" id="stepRole">
+          <img src="../assets/logo.jpg" alt="SMME" class="auth-card-logo"
+            onerror="this.style.background='var(--navy-700)'" />
+          <h2 class="auth-title">Welcome back</h2>
+          <p class="auth-sub">Choose your account type to continue</p>
 
-<script>
-  /* ── Splash dismiss ── */
-  window.addEventListener('load', function () {
-    setTimeout(function () {
-      var splash = document.getElementById('splashHero');
-      if (splash) splash.classList.add('hidden');
-    }, 1900);
-  });
-</script>
+          <div class="auth-divider">Sign in as</div>
+
+          <div class="role-list">
+            <button class="role-btn" id="roleSchool">
+              <div class="role-btn-icon staff"><i class="fas fa-user-tie"></i></div>
+              <div class="role-btn-text">
+                <strong>School Staff</strong>
+                <span>Submit documents for your school</span>
+              </div>
+              <i class="fas fa-chevron-right role-btn-arrow"></i>
+            </button>
+
+            <button class="role-btn" id="roleAdmin">
+              <div class="role-btn-icon admin"><i class="fas fa-user-shield"></i></div>
+              <div class="role-btn-text">
+                <strong>Division Admin</strong>
+                <span>Review and manage submissions</span>
+              </div>
+              <i class="fas fa-chevron-right role-btn-arrow"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2A: STAFF LOGIN -->
+        <div class="auth-step" id="stepStaff" hidden>
+          <button class="auth-back" id="backFromStaff">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <div class="auth-badge staff-badge">
+            <i class="fas fa-user-tie"></i> School Staff
+          </div>
+          <h2 class="auth-title">Staff Sign In</h2>
+          <p class="auth-sub">Sign in with your personal staff credentials</p>
+
+          <form id="schoolLoginForm" novalidate>
+            <div class="field-group" id="staffSchoolGroup">
+              <label class="field-label">School <span class="req">*</span></label>
+              <select id="staffSchool" style="display:none">
+                <option value="">-- Select --</option>
+              </select>
+              <span class="field-error" id="staffSchoolErr"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="schoolEmail">Email Address <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-envelope field-icon"></i>
+                <input type="email" id="schoolEmail" class="field-input" placeholder="yourname@school.edu.ph"
+                  autocomplete="username" />
+              </div>
+              <span class="field-error" id="schoolEmailErr"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="schoolPassword">Password <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-lock field-icon"></i>
+                <input type="password" id="schoolPassword" class="field-input" placeholder="Enter your password"
+                  autocomplete="current-password" />
+                <button type="button" class="field-eye" data-target="schoolPassword" aria-label="Toggle password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <span class="field-error" id="schoolPasswordErr"></span>
+            </div>
+
+            <button type="submit" class="auth-btn staff-btn" id="schoolLoginBtn">
+              <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+            </button>
+          </form>
+
+          <p class="auth-link-row">
+            New staff member? <a href="#" id="registerLink">Create an account</a>
+          </p>
+        </div>
+
+        <!-- STEP 2B: ADMIN LOGIN -->
+        <div class="auth-step" id="stepAdmin" hidden>
+          <button class="auth-back" id="backFromAdmin">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <div class="auth-badge admin-badge">
+            <i class="fas fa-user-shield"></i> Division Admin
+          </div>
+          <h2 class="auth-title">Admin Sign In</h2>
+          <p class="auth-sub">Authorized Division Office personnel only</p>
+
+          <form id="adminLoginForm" novalidate>
+            <div class="field-group">
+              <label class="field-label" for="adminUsername">Username <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-user field-icon"></i>
+                <input type="text" id="adminUsername" class="field-input" placeholder="Enter admin username"
+                  autocomplete="username" />
+              </div>
+              <span class="field-error" id="adminUsernameErr"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="adminPassword">Password <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-lock field-icon"></i>
+                <input type="password" id="adminPassword" class="field-input" placeholder="Enter your password"
+                  autocomplete="current-password" />
+                <button type="button" class="field-eye" data-target="adminPassword" aria-label="Toggle password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <span class="field-error" id="adminPasswordErr"></span>
+            </div>
+
+            <button type="submit" class="auth-btn admin-btn" id="adminLoginBtn">
+              <i class="fas fa-arrow-right-to-bracket"></i> Sign In as Admin
+            </button>
+          </form>
+        </div>
+
+        <!-- STEP 3: REGISTER -->
+        <div class="auth-step" id="stepRegister" hidden>
+          <button class="auth-back" id="backFromRegister">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <div class="auth-badge staff-badge">
+            <i class="fas fa-user-plus"></i> Staff Registration
+          </div>
+          <h2 class="auth-title">Create Account</h2>
+          <p class="auth-sub">Register to submit documents on behalf of your school</p>
+
+          <form id="registerForm" novalidate>
+            <div class="field-row-2">
+              <div class="field-group">
+                <label class="field-label" for="regFirstName">First Name <span class="req">*</span></label>
+                <div class="field-wrap">
+                  <i class="fas fa-user field-icon"></i>
+                  <input type="text" id="regFirstName" class="field-input" placeholder="First name" />
+                </div>
+                <span class="field-error" id="regFirstNameErr"></span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="regLastName">Last Name <span class="req">*</span></label>
+                <div class="field-wrap">
+                  <i class="fas fa-user field-icon"></i>
+                  <input type="text" id="regLastName" class="field-input" placeholder="Last name" />
+                </div>
+                <span class="field-error" id="regLastNameErr"></span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="regPosition">Position <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-id-badge field-icon"></i>
+                <select id="regPosition" class="field-input field-select">
+                  <option value="">-- Select Position --</option>
+                  <option>School Principal</option>
+                  <option>Assistant Principal</option>
+                  <option>School Registrar</option>
+                  <option>Administrative Officer</option>
+                  <option>Guidance Counselor</option>
+                  <option>Department Head</option>
+                  <option>Teacher</option>
+                  <option>Clerk / Secretary</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <span class="field-error" id="regPositionErr"></span>
+            </div>
+
+            <div class="field-group" id="regSchoolGroup">
+              <label class="field-label">School <span class="req">*</span></label>
+              <select id="regSchool" style="display:none">
+                <option value="">-- Select --</option>
+              </select>
+              <span class="field-error" id="regSchoolErr"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="regEmail">Email Address <span class="req">*</span></label>
+              <div class="field-wrap">
+                <i class="fas fa-envelope field-icon"></i>
+                <input type="email" id="regEmail" class="field-input" placeholder="yourname@school.edu.ph" />
+              </div>
+              <span class="field-error" id="regEmailErr"></span>
+            </div>
+
+            <div class="field-row-2">
+              <div class="field-group">
+                <label class="field-label" for="regPassword">Password <span class="req">*</span></label>
+                <div class="field-wrap">
+                  <i class="fas fa-lock field-icon"></i>
+                  <input type="password" id="regPassword" class="field-input" placeholder="Min. 8 characters" />
+                  <button type="button" class="field-eye" data-target="regPassword" aria-label="Toggle"><i
+                      class="fas fa-eye"></i></button>
+                </div>
+                <div class="pw-strength" id="pwStrength" hidden>
+                  <div class="pw-strength-bars">
+                    <div class="pw-bar" id="pwBar1"></div>
+                    <div class="pw-bar" id="pwBar2"></div>
+                    <div class="pw-bar" id="pwBar3"></div>
+                    <div class="pw-bar" id="pwBar4"></div>
+                  </div>
+                  <span class="pw-strength-label" id="pwStrengthLabel"></span>
+                </div>
+                <span class="field-error" id="regPasswordErr"></span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="regConfirm">Confirm <span class="req">*</span></label>
+                <div class="field-wrap">
+                  <i class="fas fa-lock field-icon"></i>
+                  <input type="password" id="regConfirm" class="field-input" placeholder="Re-enter password" />
+                  <button type="button" class="field-eye" data-target="regConfirm" aria-label="Toggle"><i
+                      class="fas fa-eye"></i></button>
+                </div>
+                <span class="field-error" id="regConfirmErr"></span>
+              </div>
+            </div>
+
+            <label class="terms-label">
+              <input type="checkbox" id="regTerms" />
+              <span>I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></span>
+            </label>
+            <span class="field-error" id="regTermsErr"></span>
+
+            <button type="submit" class="auth-btn staff-btn" style="margin-top: 16px">
+              <i class="fas fa-user-plus"></i> Create Account
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end auth-layout -->
+
+  <script src="../js/api.js?v=3.0.0"></script>
+  <script src="../js/login.js?v=3.0.0"></script>
+
+  <script>
+    /* ── Splash dismiss ── */
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var splash = document.getElementById('splashHero');
+        if (splash) splash.classList.add('hidden');
+      }, 1900);
+    });
+  </script>
 </body>
+
 </html>

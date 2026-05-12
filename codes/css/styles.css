@@ -628,13 +628,13 @@ a:focus-visible {
 }
 
 .nav-link.active {
-  color: var(--text-inverse);
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
-  box-shadow: var(--shadow-md), 0 4px 14px rgba(30, 58, 95, .25);
+  color: var(--primary-600);
+  background: transparent;
+  box-shadow: none;
 }
 
 .nav-link.active::before {
-  opacity: 1;
+  opacity: 0;
 }
 
 .nav-link i {
