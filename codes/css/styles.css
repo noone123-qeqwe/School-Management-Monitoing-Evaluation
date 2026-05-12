@@ -616,8 +616,8 @@ a:focus-visible {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
-  opacity: 0;
+  background: none !important;
+  opacity: 0 !important;
   transition: opacity var(--transition-base);
 }
 
@@ -628,13 +628,15 @@ a:focus-visible {
 }
 
 .nav-link.active {
-  color: var(--primary-600);
-  background: transparent;
-  box-shadow: none;
+  color: var(--primary-600) !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.nav-link.active::before {
-  opacity: 0;
+.nav-link.active::before,
+.nav-link.active::after {
+  display: none !important;
+  content: none !important;
 }
 
 .nav-link i {
