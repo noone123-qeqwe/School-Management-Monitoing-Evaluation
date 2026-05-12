@@ -163,3 +163,17 @@ if (!prefersReducedMotion && 'IntersectionObserver' in window) {
     scrollObserver.observe(el);
   });
 }
+/* ── Intro Screen Removal ── */
+window.addEventListener('load', () => {
+  const intro = document.getElementById('introScreen');
+  if (intro) {
+    setTimeout(() => {
+      intro.style.opacity = '0';
+      intro.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
+      setTimeout(() => {
+        intro.style.visibility = 'hidden';
+        intro.style.display = 'none';
+      }, 600);
+    }, 2000); // 2 seconds delay
+  }
+});

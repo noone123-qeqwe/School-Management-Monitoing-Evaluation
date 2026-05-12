@@ -1012,16 +1012,17 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      animation: dotPulse 1.4s ease-in-out infinite;
+      animation: splashBounce 1.4s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
     .loader-dot:nth-child(1) { background: var(--navy-500); }
     .loader-dot:nth-child(2) { background: var(--gold-500); animation-delay: .2s; }
     .loader-dot:nth-child(3) { background: #93c5fd; animation-delay: .4s; }
 
-    @keyframes dotPulse {
-      0%,80%,100% { transform: scale(.6); opacity: .4; }
-      40%         { transform: scale(1);  opacity: 1; }
+    @keyframes splashBounce {
+      0%, 80%, 100% { transform: translateY(0) scale(0.8); opacity: 0.5; }
+      40%           { transform: translateY(-8px) scale(1.1); opacity: 1; }
     }
 
     /* ── Scrollbar ── */
