@@ -60,7 +60,7 @@ window.addEventListener("scroll", () => {
 navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     const href = link.getAttribute("href");
-    if (!href || !href.startsWith("#")) return;
+    if (!href || !href.startsWith("#") || href === "#") return;
     const target = document.querySelector(href);
     if (!target) return;
 

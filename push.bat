@@ -6,6 +6,9 @@ echo.
 echo Committing...
 git commit -m "Update: %date% %time%"
 echo.
+echo Pulling latest changes from GitHub...
+git pull origin main --rebase --autostash
+echo.
 echo Pushing to GitHub...
 git push origin main
 echo.
