@@ -115,19 +115,19 @@ h1, h2, h3, h4, .logo-title {
 
 .bg-blob {
   position: absolute;
-  width: 500px;
-  height: 500px;
-  background: var(--p-accent-glow);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
   filter: blur(80px);
   border-radius: 50%;
-  animation: blobFloat 20s infinite alternate;
+  animation: blobFloat 25s infinite alternate;
 }
 
 .bg-blob-2 {
-  bottom: -100px;
-  right: -100px;
-  background: var(--p-gold-glow);
-  animation-delay: -5s;
+  bottom: -150px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
+  animation-delay: -7s;
 }
 
 @keyframes blobFloat {
@@ -195,23 +195,41 @@ h1, h2, h3, h4, .logo-title {
 
 /* ── Premium Float Cards ── */
 .premium-float-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
-  padding: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  padding: 32px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  transition: var(--p-transition);
+  gap: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s var(--spring);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-float-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: 0.5s;
+}
+
+.premium-float-card:hover::after {
+  left: 200%;
 }
 
 .premium-float-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  background: #fff;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-12px) scale(1.03);
+  background: #ffffff;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  border-color: #3b82f6;
 }
 
 .premium-float-icon {
@@ -228,16 +246,18 @@ h1, h2, h3, h4, .logo-title {
 }
 
 .premium-float-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--p-primary);
-  margin-bottom: 4px;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
 }
 
 .premium-float-desc {
-  font-size: 0.9rem;
-  color: #64748b;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 /* ── Holographic & Modern Widget ── */

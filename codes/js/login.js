@@ -167,7 +167,7 @@
 
       try {
         await API.auth.loginStaff(email, password);
-        window.location.href = '/html/school-dashboard.html';
+        window.location.href = '/html/school-dashboard-modern.html';
       } catch (err) {
         if (typeof API !== 'undefined' && API.showToast) {
           API.showToast(err.message || 'Sign in failed.', 'error');
@@ -207,7 +207,7 @@
 
       try {
         await API.auth.loginAdmin(username, password);
-        window.location.href = '/html/admin-dashboard.html';
+        window.location.href = '/html/admin-dashboard-modern.html';
       } catch (err) {
         if (typeof API !== 'undefined' && API.showToast) {
           API.showToast(err.message || 'Sign in failed.', 'error');
@@ -306,7 +306,7 @@
     // Execute background auth check last so it doesn't freeze the UI while the Render server wakes up
     if (typeof API !== 'undefined' && API.auth && API.auth.isLoggedIn()) {
       API.auth.verifySession().then((verified) => {
-        if (verified) window.location.href = verified.role === 'staff' ? '/html/school-dashboard.html' : '/html/admin-dashboard.html';
+        if (verified) window.location.href = verified.role === 'staff' ? '/html/school-dashboard-modern.html' : '/html/admin-dashboard-modern.html';
       });
     }
     if (params.get('reason') === 'timeout' && typeof API !== 'undefined' && API.showToast) {
