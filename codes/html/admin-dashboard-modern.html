@@ -259,40 +259,245 @@
               </button>
             </div>
             <div class="card-body" style="padding: 0;">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Reference</th>
-                    <th>School</th>
-                    <th>Document</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="pendingTableBody">
-                  <tr>
-                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00156</span></td>
-                    <td>Adventist Elementary School</td>
-                    <td>Enrollment Report</td>
-                    <td style="color: var(--text-muted); font-size: 0.8125rem;">Today</td>
-                    <td><button class="btn btn-sm btn-primary">Review</button></td>
-                  </tr>
-                  <tr>
-                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00155</span></td>
-                    <td>Burias College, Inc.</td>
-                    <td>Financial Reports</td>
-                    <td style="color: var(--text-muted); font-size: 0.8125rem;">Yesterday</td>
-                    <td><button class="btn btn-sm btn-primary">Review</button></td>
-                  </tr>
-                  <tr>
-                    <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00154</span></td>
-                    <td>Masbate Colleges Inc.</td>
-                    <td>Faculty Credentials</td>
-                    <td style="color: var(--text-muted); font-size: 0.8125rem;">2 days ago</td>
-                    <td><button class="btn btn-sm btn-primary">Review</button></td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-container">
+                <div class="table-header">
+                  <div class="table-title-section">
+                    <h3 class="table-title">Pending Submissions</h3>
+                    <span class="table-subtitle">5 items requiring review</span>
+                  </div>
+                  <div class="table-actions">
+                    <div class="table-search">
+                      <i class="fas fa-search table-search-icon"></i>
+                      <input type="text" class="table-search-input" placeholder="Search submissions..." id="pendingSearch">
+                    </div>
+                    <button class="table-filter-btn" id="pendingFilter">
+                      <i class="fas fa-filter"></i>
+                      <span>Filter</span>
+                    </button>
+                    <button class="table-export-btn" id="pendingExport">
+                      <i class="fas fa-download"></i>
+                      <span>Export</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="table-wrapper">
+                  <table class="data-table enhanced-table">
+                    <thead>
+                      <tr>
+                        <th class="sortable-column" data-sort="reference">
+                          <div class="table-header-cell">
+                            <span>Reference</span>
+                            <i class="fas fa-sort table-sort-icon"></i>
+                          </div>
+                        </th>
+                        <th class="sortable-column" data-sort="school">
+                          <div class="table-header-cell">
+                            <span>School</span>
+                            <i class="fas fa-sort table-sort-icon"></i>
+                          </div>
+                        </th>
+                        <th class="sortable-column" data-sort="document">
+                          <div class="table-header-cell">
+                            <span>Document</span>
+                            <i class="fas fa-sort table-sort-icon"></i>
+                          </div>
+                        </th>
+                        <th class="sortable-column" data-sort="date">
+                          <div class="table-header-cell">
+                            <span>Date</span>
+                            <i class="fas fa-sort table-sort-icon"></i>
+                          </div>
+                        </th>
+                        <th class="table-actions-header">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pendingTableBody">
+                      <tr class="table-row">
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="reference-badge">SMME-2026-00156</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="school-info">
+                              <span class="school-name">Adventist Elementary School</span>
+                              <span class="school-type">Elementary</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="document-info">
+                              <i class="fas fa-file-alt document-icon"></i>
+                              <span class="document-name">Enrollment Report</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="date-badge recent">Today</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-actions">
+                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
+                              <i class="fas fa-eye"></i>
+                              <span>Review</span>
+                            </button>
+                            <div class="dropdown table-dropdown">
+                              <button class="dropdown-toggle" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-download"></i>
+                                  Download
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-share"></i>
+                                  Share
+                                </a>
+                                <a href="#" class="dropdown-item text-danger">
+                                  <i class="fas fa-trash"></i>
+                                  Delete
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="table-row">
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="reference-badge">SMME-2026-00155</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="school-info">
+                              <span class="school-name">Burias College, Inc.</span>
+                              <span class="school-type">College</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="document-info">
+                              <i class="fas fa-file-invoice-dollar document-icon"></i>
+                              <span class="document-name">Financial Reports</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="date-badge">Yesterday</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-actions">
+                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
+                              <i class="fas fa-eye"></i>
+                              <span>Review</span>
+                            </button>
+                            <div class="dropdown table-dropdown">
+                              <button class="dropdown-toggle" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-download"></i>
+                                  Download
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-share"></i>
+                                  Share
+                                </a>
+                                <a href="#" class="dropdown-item text-danger">
+                                  <i class="fas fa-trash"></i>
+                                  Delete
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="table-row">
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="reference-badge">SMME-2026-00154</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="school-info">
+                              <span class="school-name">Masbate Colleges Inc.</span>
+                              <span class="school-type">College</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <div class="document-info">
+                              <i class="fas fa-user-graduate document-icon"></i>
+                              <span class="document-name">Faculty Credentials</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-content">
+                            <span class="date-badge">2 days ago</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="table-cell-actions">
+                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
+                              <i class="fas fa-eye"></i>
+                              <span>Review</span>
+                            </button>
+                            <div class="dropdown table-dropdown">
+                              <button class="dropdown-toggle" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-download"></i>
+                                  Download
+                                </a>
+                                <a href="#" class="dropdown-item">
+                                  <i class="fas fa-share"></i>
+                                  Share
+                                </a>
+                                <a href="#" class="dropdown-item text-danger">
+                                  <i class="fas fa-trash"></i>
+                                  Delete
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-footer">
+                  <div class="table-pagination">
+                    <div class="pagination-info">
+                      <span>Showing 1-3 of 5 results</span>
+                    </div>
+                    <div class="pagination-controls">
+                      <button class="pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                      </button>
+                      <button class="pagination-btn active">1</button>
+                      <button class="pagination-btn">2</button>
+                      <button class="pagination-btn">
+                        <i class="fas fa-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -441,36 +646,200 @@
             </div>
           </div>
           <div class="card-body" style="padding: 0;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th><input type="checkbox" id="selectAll"></th>
-                  <th>Reference No.</th>
-                  <th>School</th>
-                  <th>Level</th>
-                  <th>Document Type</th>
-                  <th>School Year</th>
-                  <th>Submitted By</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminSubmissionsBody">
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <td><span style="font-family: monospace; font-size: 0.8125rem; color: var(--primary-500);">SMME-2026-00156</span></td>
-                  <td>Adventist Elementary School</td>
-                  <td><span class="badge badge-info">Elementary</span></td>
-                  <td>Enrollment Report</td>
-                  <td>2026-2027</td>
-                  <td>Maria Santos</td>
-                  <td style="color: var(--text-muted); font-size: 0.8125rem;">Today</td>
-                  <td><span class="status-pill status-pill-review">Under Review</span></td>
-                  <td><button class="btn btn-sm btn-primary">Review</button></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">All Submissions</h3>
+                  <span class="table-subtitle">Manage and review all document submissions</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" placeholder="Search submissions..." id="adminSearch">
+                  </div>
+                  <select class="table-filter-select" id="levelFilter">
+                    <option value="">All Levels</option>
+                    <option value="kindergarten">Kindergarten</option>
+                    <option value="elementary">Elementary</option>
+                    <option value="junior">Junior High</option>
+                    <option value="senior">Senior High</option>
+                  </select>
+                  <button class="table-export-btn" id="adminExport">
+                    <i class="fas fa-download"></i>
+                    <span>Export</span>
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="table-checkbox-header">
+                        <div class="table-header-cell">
+                          <input type="checkbox" id="selectAll" class="table-checkbox">
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="school">
+                        <div class="table-header-cell">
+                          <span>School</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="level">
+                        <div class="table-header-cell">
+                          <span>Level</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="submitter">
+                        <div class="table-header-cell">
+                          <span>Submitted By</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminSubmissionsBody">
+                    <tr class="table-row">
+                      <td>
+                        <div class="table-cell-content">
+                          <input type="checkbox" class="table-checkbox">
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <span class="reference-badge">SMME-2026-00156</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <div class="school-info">
+                            <span class="school-name">Adventist Elementary School</span>
+                            <span class="school-id">School ID: 001</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <span class="level-badge level-elementary">Elementary</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <div class="document-info">
+                            <i class="fas fa-file-alt document-icon"></i>
+                            <span class="document-name">Enrollment Report</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <span class="year-badge">2026-2027</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <div class="submitter-info">
+                            <div class="submitter-avatar" style="background: var(--accent-500);">
+                              <i class="fas fa-user"></i>
+                            </div>
+                            <span class="submitter-name">Maria Santos</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <span class="date-badge recent">Today</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-content">
+                          <span class="status-pill status-review">Under Review</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-cell-actions">
+                          <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
+                            <i class="fas fa-eye"></i>
+                            <span>Review</span>
+                          </button>
+                          <div class="dropdown table-dropdown">
+                            <button class="dropdown-toggle" title="More Options">
+                              <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a href="#" class="dropdown-item">
+                                <i class="fas fa-download"></i>
+                                Download
+                              </a>
+                              <a href="#" class="dropdown-item">
+                                <i class="fas fa-share"></i>
+                                Share
+                              </a>
+                              <a href="#" class="dropdown-item">
+                                <i class="fas fa-comment"></i>
+                                Add Comment
+                              </a>
+                              <a href="#" class="dropdown-item text-danger">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <div class="table-pagination">
+                  <div class="pagination-info">
+                    <span>Showing 1-1 of 1 results</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

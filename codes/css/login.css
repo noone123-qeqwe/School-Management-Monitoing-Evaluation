@@ -577,152 +577,184 @@ button, input, select, textarea { font: inherit; }
 .admin-badge { background: #fef3c7; color: #b45309; }
 
 /* =============================================================================
-   FORM FIELDS
-   =============================================================================/* ── Enhanced Form Fields ── */
-.field-group {
+   AUTHENTICATION FORM FIELDS
+   ============================================================================= */
+
+.auth-form-group {
   margin-bottom: var(--space-5);
 }
 
-.field-label {
+.auth-form-label {
   display: block;
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--auth-text);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
   margin-bottom: var(--space-2);
 }
 
-.req { color: var(--danger-500); }
-
-.field-wrap {
+.auth-form-field {
   position: relative;
 }
 
-.field-input,
-.field-select {
+.auth-form-input {
   width: 100%;
-  padding: var(--space-3) var(--space-4);
-  font-size: 0.9rem;
-  color: var(--auth-text);
-  background: var(--auth-surface);
-  border: 2px solid var(--auth-border);
-  border-radius: var(--radius-lg);
-  transition: all var(--transition);
+  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 2px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
   outline: none;
-  font-family: inherit;
+  font-family: var(--font-sans);
+  box-sizing: border-box;
 }
 
-.field-input:hover,
-.field-select:hover {
-  border-color: var(--auth-border-strong);
+.auth-form-input:hover {
+  border-color: var(--border-secondary);
+  background: var(--bg-tertiary);
 }
 
-.field-input:focus,
-.field-select:focus {
+.auth-form-input:focus {
   border-color: var(--primary-500);
-  box-shadow: 0 0 0 4px var(--primary-50), var(--shadow-sm);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 4px var(--primary-50), var(--shadow-md);
   transform: translateY(-1px);
 }
 
-.field-icon {
-  position: absolute;
-  left: var(--space-4);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--auth-text-muted);
-  pointer-events: none;
-  font-size: 0.9rem;
+.auth-form-input::placeholder {
+  color: var(--text-quaternary);
+  opacity: 0.8;
 }
 
-.field-input.with-icon {
-  padding-left: var(--space-10);
+/* Username Field Specific */
+.auth-form-input.username {
+  padding-left: var(--space-12);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: var(--space-4) center;
+  background-size: 20px;
 }
 
-.field-eye {
+/* Password Field Specific */
+.auth-form-input.password {
+  padding-right: var(--space-12);
+  letter-spacing: 0.05em;
+}
+
+/* Password Toggle */
+.auth-form-toggle {
   position: absolute;
   right: var(--space-3);
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--auth-text-muted);
+  color: var(--text-tertiary);
   cursor: pointer;
   padding: var(--space-2);
-  border-radius: var(--radius);
-  transition: all var(--transition);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
 }
 
-.field-eye:hover {
-  color: var(--auth-text);
-  background: var(--gray-100);
+.auth-form-toggle:hover {
+  color: var(--primary-500);
+  background: var(--primary-50);
 }
 
-.field-error {
+.auth-form-toggle:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Error States */
+.auth-form-error {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--danger-500);
-  margin-top: var(--space-1);
-  min-height: 1rem;
+  margin-top: var(--space-2);
   opacity: 0;
   transform: translateY(-4px);
-  transition: all var(--transition);
+  transition: all var(--transition-base);
+  line-height: var(--leading-relaxed);
 }
 
-.field-error.is-visible {
+.auth-form-error.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.field-row-2 {
+.auth-form-input.error {
+  border-color: var(--danger-500);
+  background: var(--danger-50);
+  box-shadow: 0 0 0 4px var(--danger-50);
+}
+
+.auth-form-input.error:focus {
+  border-color: var(--danger-500);
+  box-shadow: 0 0 0 4px var(--danger-50), var(--shadow-md);
+}
+
+/* Success States */
+.auth-form-input.success {
+  border-color: var(--success-500);
+  background: var(--success-50);
+  box-shadow: 0 0 0 4px var(--success-50);
+}
+
+/* Required Indicator */
+.auth-form-label .required {
+  color: var(--danger-500);
+  margin-left: var(--space-1);
+  font-weight: var(--font-bold);
+}
+
+/* Field Groups */
+.auth-form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: var(--space-4);
 }
 
-.field-select {
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 38px;
+.auth-form-row-single {
+  grid-template-columns: 1fr;
 }
 
-/* ── Two-column row ── */
-.field-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+/* Loading State */
+.auth-form-input.loading {
+  background-image: linear-gradient(45deg, transparent 30%, var(--gray-100) 50%, transparent 70%);
+  background-size: 200% 200%;
+  animation: authInputShimmer 1.5s infinite;
+  color: transparent;
 }
 
-.field-error {
-  display: block;
-  font-size: .78rem;
-  color: var(--auth-danger);
-  margin-top: 4px;
-  min-height: 0;
+@keyframes authInputShimmer {
+  0% { background-position: 200% 50%; }
+  50% { background-position: -200% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
-/* ── Password eye ── */
-.field-eye {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--auth-text-light);
-  font-size: .92rem;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: var(--auth-transition);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Disabled State */
+.auth-form-input:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  border-color: var(--border-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
-.field-eye:hover { color: var(--auth-text-muted); background: rgba(0,0,0,.04); }
+
+.auth-form-input:disabled:hover {
+  border-color: var(--border-tertiary);
+  background: var(--bg-tertiary);
+  transform: none;
+  box-shadow: none;
+}
 
 /* =============================================================================
    PASSWORD STRENGTH

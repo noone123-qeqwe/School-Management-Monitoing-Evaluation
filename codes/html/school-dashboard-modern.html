@@ -245,41 +245,88 @@
             </button>
           </div>
           <div class="card-body" style="padding: 0;">
-            <div id="recentSubmissionsContainer">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Reference No.</th>
-                    <th>Document Type</th>
-                    <th>School Year</th>
-                    <th>Submitted By</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="recentSubmissionsBody">
-                  <!-- Skeleton rows -->
-                  <tr>
-                    <td><div class="skeleton" style="height: 16px; width: 120px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 150px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 80px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 100px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 80px;"></div></td>
-                    <td><div class="skeleton" style="height: 24px; width: 100px; border-radius: 9999px;"></div></td>
-                    <td><div class="skeleton" style="height: 32px; width: 80px;"></div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="skeleton" style="height: 16px; width: 120px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 150px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 80px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 100px;"></div></td>
-                    <td><div class="skeleton" style="height: 16px; width: 80px;"></div></td>
-                    <td><div class="skeleton" style="height: 24px; width: 100px; border-radius: 9999px;"></div></td>
-                    <td><div class="skeleton" style="height: 32px; width: 80px;"></div></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">Recent School Submissions</h3>
+                  <span class="table-subtitle">Latest submissions from your school</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" placeholder="Search submissions..." id="recentSearch">
+                  </div>
+                  <button class="table-refresh-btn" id="recentRefresh" title="Refresh">
+                    <i class="fas fa-sync"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="submitter">
+                        <div class="table-header-cell">
+                          <span>Submitted By</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentSubmissionsBody">
+                    <!-- Skeleton loading rows -->
+                    <tr class="table-row skeleton-row">
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text-sm"></div></td>
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text-sm"></div></td>
+                      <td><div class="skeleton skeleton-button"></div></td>
+                      <td><div class="skeleton skeleton-button"></div></td>
+                    </tr>
+                    <tr class="table-row skeleton-row">
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text-sm"></div></td>
+                      <td><div class="skeleton skeleton-text"></div></td>
+                      <td><div class="skeleton skeleton-text-sm"></div></td>
+                      <td><div class="skeleton skeleton-button"></div></td>
+                      <td><div class="skeleton skeleton-button"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -451,24 +498,123 @@
             </button>
           </div>
           <div class="card-body" style="padding: 0;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Reference No.</th>
-                  <th>Document Type</th>
-                  <th>School Year</th>
-                  <th>Submitted By</th>
-                  <th>Position</th>
-                  <th>Date</th>
-                  <th>Files</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="allSubmissionsBody">
-                <!-- Content loaded dynamically -->
-              </tbody>
-            </table>
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">School Submissions</h3>
+                  <span class="table-subtitle">All documents submitted by all staff of your school</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" id="submissionSearch" placeholder="Search by reference, document, staff...">
+                  </div>
+                  <select class="table-filter-select" id="submissionFilter">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="returned">Returned</option>
+                    <option value="received">Received</option>
+                  </select>
+                  <button class="table-export-btn" id="exportSubsBtn">
+                    <i class="fas fa-download"></i>
+                    <span>Export CSV</span>
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="submitter">
+                        <div class="table-header-cell">
+                          <span>Submitted By</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="position">
+                        <div class="table-header-cell">
+                          <span>Position</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="files">
+                        <div class="table-header-cell">
+                          <span>Files</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="allSubmissionsBody">
+                    <!-- Content loaded dynamically -->
+                    <tr class="table-row empty-state">
+                      <td colspan="9">
+                        <div class="empty-state">
+                          <i class="fas fa-inbox empty-state-icon"></i>
+                          <div class="empty-state-content">
+                            <h4 class="empty-state-title">No submissions yet</h4>
+                            <p class="empty-state-description">Start by submitting your first document to the division office.</p>
+                            <button class="btn btn-primary">
+                              <i class="fas fa-plus"></i>
+                              Create First Submission
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <div class="table-pagination">
+                  <div class="pagination-info">
+                    <span>No results to display</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -490,34 +636,120 @@
             <div style="display: flex; gap: var(--space-3);">
               <div class="search-bar" style="width: 280px;">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" id="mineSearch" placeholder="Search submissions..." />
+                <input type="text" class="search-input" id="mySubmissionSearch" placeholder="Search my submissions..." />
+                <button class="search-clear"><i class="fas fa-times"></i></button>
               </div>
-              <select class="form-select" id="mineFilter" style="width: 160px;">
+              <select class="form-select" id="mySubmissionFilter" style="width: 160px;">
                 <option value="">All Status</option>
+                <option value="pending">Pending</option>
                 <option value="review">Under Review</option>
                 <option value="approved">Approved</option>
                 <option value="returned">Returned</option>
-                <option value="received">Received</option>
               </select>
             </div>
+            <button class="btn btn-secondary" id="exportMySubsBtn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
           </div>
           <div class="card-body" style="padding: 0;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Reference No.</th>
-                  <th>Document Type</th>
-                  <th>School Year</th>
-                  <th>Date</th>
-                  <th>Files</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="mineSubmissionsBody">
-                <!-- Content loaded dynamically -->
-              </tbody>
-            </table>
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">My Submissions</h3>
+                  <span class="table-subtitle">Documents you personally submitted</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" id="mySearch" placeholder="Search submissions...">
+                  </div>
+                  <select class="table-filter-select" id="myFilter">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="returned">Returned</option>
+                  </select>
+                  <button class="table-export-btn" id="myExport">
+                    <i class="fas fa-download"></i>
+                    <span>Export CSV</span>
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mineSubmissionsBody">
+                    <!-- Content loaded dynamically -->
+                    <tr class="table-row empty-state">
+                      <td colspan="6">
+                        <div class="empty-state">
+                          <i class="fas fa-file-upload empty-state-icon"></i>
+                          <div class="empty-state-content">
+                            <h4 class="empty-state-title">No submissions yet</h4>
+                            <p class="empty-state-description">You haven't submitted any documents to the division office.</p>
+                            <button class="btn btn-primary">
+                              <i class="fas fa-plus"></i>
+                              Submit First Document
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <div class="table-pagination">
+                  <div class="pagination-info">
+                    <span>No results to display</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
