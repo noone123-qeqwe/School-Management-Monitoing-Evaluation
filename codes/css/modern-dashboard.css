@@ -4002,3 +4002,20 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gray-400);
 }
+
+/* Fix nested table containers inside card bodies */
+.card-body .table-container,
+.card-body .data-table-container {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+}
+.card-body .table-header,
+.card-body .data-table-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+  background: transparent;
+}

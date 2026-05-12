@@ -373,7 +373,7 @@ textarea:focus-visible {
 
 .hero-badges {
   width: min(1180px, calc(100% - 2rem));
-  margin: 60px auto 0;
+  margin: 60px auto 80px !important;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
