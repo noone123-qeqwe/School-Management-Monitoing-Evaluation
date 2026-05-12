@@ -98,11 +98,15 @@
       window.history.replaceState({}, '', '/html/login.html');
     }
 
-    // ── Force hide splash screen to ensure clicks work ──
+    // ── Handle splash screen animation gracefully ──
     const splash = document.getElementById('splashHero');
     if (splash && !splash.classList.contains('hidden')) {
-      splash.classList.add('hidden');
-      splash.style.display = 'none';
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 500); // Allows time for a CSS fade-out transition
+      }, 1500); // 1.5 seconds delay to let the intro animation play
     }
 
     // ── Step navigation buttons ──
