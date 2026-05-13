@@ -72,6 +72,23 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); switchPage(link.dataset.page); });
 });
 
+/* ===== GLOBAL SEARCH & CLEAR ===== */
+document.getElementById('globalSearch')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const v = e.target.value;
+    switchPage('submissions');
+    const search = document.getElementById('adminSearch');
+    if (search) { search.value = v; search.dispatchEvent(new Event('input')); }
+  }
+});
+
+document.querySelectorAll('.search-clear').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const input = e.target.closest('.search-bar')?.querySelector('.search-input');
+    if (input) { input.value = ''; input.dispatchEvent(new Event('input')); }
+  });
+});
+
 function renderEmpty(container, message) {
   if (!container) return;
   container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:24px">${API.escapeHtml(message)}</p>`;
@@ -129,6 +146,18 @@ async function renderDashboardCharts() {
     });
 
     const sc = data.statusCounts || { approved: 0, pending: 0, returned: 0 };
+    const total = (sc.approved + sc.pending + sc.returned) || 1;
+    const setProg = (id, val) => {
+      const pct = Math.round((val / total) * 100);
+      const textEl = document.getElementById('v2Prog' + id + 'Text');
+      const barEl = document.getElementById('v2Prog' + id + 'Bar');
+      if (textEl) textEl.textContent = pct + '%';
+      if (barEl) barEl.style.width = pct + '%';
+    };
+    setProg('Approved', sc.approved || 0);
+    setProg('Review', sc.pending || 0);
+    setProg('Returned', sc.returned || 0);
+
     if (chartStatusInst) chartStatusInst.destroy();
     chartStatusInst = new Chart(pieEl, {
       type: 'doughnut',

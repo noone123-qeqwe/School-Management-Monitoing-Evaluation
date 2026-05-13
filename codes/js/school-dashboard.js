@@ -151,6 +151,23 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); switchPage(link.dataset.page); });
 });
 
+/* ===== GLOBAL SEARCH & CLEAR ===== */
+document.getElementById('globalSearch')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const v = e.target.value;
+    switchPage('submissions');
+    const search = document.getElementById('submissionSearch');
+    if (search) { search.value = v; search.dispatchEvent(new Event('input')); }
+  }
+});
+
+document.querySelectorAll('.search-clear').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const input = e.target.closest('.search-bar')?.querySelector('.search-input');
+    if (input) { input.value = ''; input.dispatchEvent(new Event('input')); }
+  });
+});
+
 /* ===== FEEDBACK CELL ===== */
 function feedbackCell(s) {
   if (!s.feedback) return '<span style="color:var(--text-muted);font-size:.75rem">\u2014</span>';
@@ -162,6 +179,23 @@ async function loadDashboard() {
   API.ui.showSkeleton('recentSubmissionsBody', 'table', 4);
   try {
     const subs = await API.submissions.list({ limit: 100 });
+
+    const approved = subs.filter(s => s.status === 'approved').length;
+    const review = subs.filter(s => s.status === 'review' || s.status === 'received').length;
+    const returned = subs.filter(s => s.status === 'returned').length;
+    const total = subs.length || 1;
+
+    const setProg = (id, val) => {
+      const pct = Math.round((val / total) * 100);
+      const el = document.getElementById('progress' + id);
+      const bar = document.getElementById('bar' + id);
+      if (el) el.textContent = pct + '%';
+      if (bar) bar.style.width = pct + '%';
+    };
+    setProg('Approved', approved);
+    setProg('Review', review);
+    setProg('Returned', returned);
+
     document.getElementById('statTotal').textContent = subs.length;
     document.getElementById('statReview').textContent = subs.filter(s => s.status === 'review' || s.status === 'received').length;
     document.getElementById('statApproved').textContent = subs.filter(s => s.status === 'approved').length;
@@ -322,6 +356,18 @@ document.getElementById('exportSubsBtn')?.addEventListener('click', async () => 
       subs.map(s => [s.ref, s.doc_type, s.school_year, (s.first_name || '') + ' ' + (s.last_name || ''), s.staff_position || '', new Date(s.submitted_at).toLocaleDateString('en-PH'), s.file_count || 0, s.status, s.feedback || '']),
       ['Reference', 'Document Type', 'School Year', 'Submitted By', 'Position', 'Date', 'Files', 'Status', 'Feedback'],
       'submissions.csv'
+    );
+  } catch (err) { API.showToast('Export failed: ' + err.message, 'error'); }
+});
+
+document.getElementById('exportMySubsBtn')?.addEventListener('click', async () => {
+  try {
+    const subs = await API.submissions.list({ limit: 1000 });
+    const mine = subs.filter(s => Number(s.staff_id) === Number(user.id));
+    API.exportToCSV(
+      mine.map(s => [s.ref, s.doc_type, s.school_year, new Date(s.submitted_at).toLocaleDateString('en-PH'), s.status]),
+      ['Reference', 'Document Type', 'School Year', 'Date', 'Status'],
+      'my_submissions.csv'
     );
   } catch (err) { API.showToast('Export failed: ' + err.message, 'error'); }
 });
