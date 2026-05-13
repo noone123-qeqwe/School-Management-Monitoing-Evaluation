@@ -455,656 +455,660 @@
           </div>
         </div>
       </div>
-    </main>
 
-    <!-- Page: Submit Documents -->
-    <div class="dash-page" id="page-submit">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Submit Documents</h1>
-          <p class="page-subtitle" id="submitSubtitle">Submitting on behalf of your school</p>
-        </div>
-        <div style="display: flex; gap: var(--space-3);">
-          <button class="btn btn-secondary" id="loadTemplateBtn">
-            <i class="fas fa-bookmark"></i> Load Template
-          </button>
-          <button class="btn btn-secondary" id="saveDraftBtn">
-            <i class="fas fa-save"></i> Save Draft
-          </button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <div class="draft-banner" id="draftBanner" hidden>
-            <i class="fas fa-file-signature"></i>
-            <span>You have an unsaved draft from <strong id="draftDate"></strong>.</span>
-            <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn btn-sm btn-primary" id="loadDraftBtn">Resume Draft</button>
-              <button type="button" class="btn btn-sm btn-ghost" id="discardDraftBtn">Discard</button>
-            </div>
+      <!-- Page: Submit Documents -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-submit">
+        <div class="v2-header">
+          <div>
+            <h1>Submit Documents</h1>
+            <p id="submitSubtitle">Submitting on behalf of your school</p>
           </div>
+          <div style="display: flex; gap: var(--space-3);">
+            <button class="btn btn-secondary" id="loadTemplateBtn">
+              <i class="fas fa-bookmark"></i> Load Template
+            </button>
+            <button class="btn btn-secondary" id="saveDraftBtn">
+              <i class="fas fa-save"></i> Save Draft
+            </button>
+          </div>
+        </div>
 
-          <form id="dashSubmitForm" style="max-width: 800px;">
-            <!-- Document Details -->
-            <div style="margin-bottom: var(--space-6);">
-              <h3
-                style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
-                <i class="fas fa-file-alt" style="color: var(--primary-500);"></i>
-                Document Details
-              </h3>
-              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4);">
-                <div class="form-group">
-                  <label class="form-label form-label-required">Document Type</label>
-                  <select class="form-select" id="dDocType" required>
-                    <option value="">Select Document Type</option>
-                    <option>Enrollment Report</option>
-                    <option>Curriculum Documents</option>
-                    <option>Faculty Credentials</option>
-                    <option>Accreditation Documents</option>
-                    <option>Financial Reports</option>
-                    <option>Compliance Requirements</option>
-                    <option>School Application / Permit</option>
-                    <option>Assessment Data</option>
-                    <option>Graduation Requirements</option>
-                    <option>Other</option>
-                  </select>
+        <div class="card">
+          <div class="card-body">
+            <div class="draft-banner" id="draftBanner" hidden>
+              <i class="fas fa-file-signature"></i>
+              <span>You have an unsaved draft from <strong id="draftDate"></strong>.</span>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn btn-sm btn-primary" id="loadDraftBtn">Resume Draft</button>
+                <button type="button" class="btn btn-sm btn-ghost" id="discardDraftBtn">Discard</button>
+              </div>
+            </div>
+
+            <form id="dashSubmitForm" style="max-width: 800px;">
+              <!-- Document Details -->
+              <div style="margin-bottom: var(--space-6);">
+                <h3
+                  style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+                  <i class="fas fa-file-alt" style="color: var(--primary-500);"></i>
+                  Document Details
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label form-label-required">Document Type</label>
+                    <select class="form-select" id="dDocType" required>
+                      <option value="">Select Document Type</option>
+                      <option>Enrollment Report</option>
+                      <option>Curriculum Documents</option>
+                      <option>Faculty Credentials</option>
+                      <option>Accreditation Documents</option>
+                      <option>Financial Reports</option>
+                      <option>Compliance Requirements</option>
+                      <option>School Application / Permit</option>
+                      <option>Assessment Data</option>
+                      <option>Graduation Requirements</option>
+                      <option>Other</option>
+                    </select>
+                    <div class="form-feedback"></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label form-label-required">School Year</label>
+                    <select class="form-select" id="dSchoolYear" required>
+                      <option value="">Select School Year</option>
+                      <option>2026-2027</option>
+                      <option>2025-2026</option>
+                      <option>2024-2025</option>
+                      <option>2023-2024</option>
+                    </select>
+                    <div class="form-feedback"></div>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: var(--space-4);">
+                  <label class="form-label form-label-required">Subject / Purpose</label>
+                  <input type="text" class="form-input" id="dSubject"
+                    placeholder="Brief description of the submission purpose" required />
                   <div class="form-feedback"></div>
                 </div>
-                <div class="form-group">
-                  <label class="form-label form-label-required">School Year</label>
-                  <select class="form-select" id="dSchoolYear" required>
-                    <option value="">Select School Year</option>
-                    <option>2026-2027</option>
-                    <option>2025-2026</option>
-                    <option>2024-2025</option>
-                    <option>2023-2024</option>
-                  </select>
-                  <div class="form-feedback"></div>
+                <div class="form-group" style="margin-top: var(--space-4);">
+                  <label class="form-label">Remarks / Notes</label>
+                  <textarea class="form-textarea" id="dRemarks" rows="3"
+                    placeholder="Additional information for the Division Office..."></textarea>
                 </div>
               </div>
-              <div class="form-group" style="margin-top: var(--space-4);">
-                <label class="form-label form-label-required">Subject / Purpose</label>
-                <input type="text" class="form-input" id="dSubject"
-                  placeholder="Brief description of the submission purpose" required />
-                <div class="form-feedback"></div>
-              </div>
-              <div class="form-group" style="margin-top: var(--space-4);">
-                <label class="form-label">Remarks / Notes</label>
-                <textarea class="form-textarea" id="dRemarks" rows="3"
-                  placeholder="Additional information for the Division Office..."></textarea>
-              </div>
-            </div>
 
-            <!-- File Upload -->
-            <div style="margin-bottom: var(--space-6);">
-              <h3
-                style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
-                <i class="fas fa-paperclip" style="color: var(--primary-500);"></i>
-                Attach Files
-              </h3>
-              <div class="upload-area" id="dUploadArea"
-                style="border: 2px dashed var(--border-strong); border-radius: var(--radius-xl); padding: var(--space-8); text-align: center; cursor: pointer; transition: all var(--transition-fast);"
-                ondragover="this.style.borderColor='var(--primary-500)'; this.style.background='var(--primary-50)';"
-                ondragleave="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';"
-                ondrop="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';">
-                <input type="file" id="dFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
-                <div style="color: var(--primary-500); font-size: 2.5rem; margin-bottom: var(--space-3);">
-                  <i class="fas fa-cloud-upload-alt"></i>
+              <!-- File Upload -->
+              <div style="margin-bottom: var(--space-6);">
+                <h3
+                  style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+                  <i class="fas fa-paperclip" style="color: var(--primary-500);"></i>
+                  Attach Files
+                </h3>
+                <div class="upload-area" id="dUploadArea"
+                  style="border: 2px dashed var(--border-strong); border-radius: var(--radius-xl); padding: var(--space-8); text-align: center; cursor: pointer; transition: all var(--transition-fast);"
+                  ondragover="this.style.borderColor='var(--primary-500)'; this.style.background='var(--primary-50)';"
+                  ondragleave="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';"
+                  ondrop="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';">
+                  <input type="file" id="dFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
+                  <div style="color: var(--primary-500); font-size: 2.5rem; margin-bottom: var(--space-3);">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                  </div>
+                  <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: var(--space-2);">
+                    Drag & drop files here or <button type="button" class="btn btn-sm btn-primary" id="dBrowseBtn"
+                      style="display: inline-flex;">Browse Files</button>
+                  </p>
+                  <p style="color: var(--text-muted); font-size: 0.8125rem;">
+                    PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file
+                  </p>
+                  <ul class="file-list" id="dFileList" style="margin-top: var(--space-4); text-align: left;"></ul>
                 </div>
-                <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: var(--space-2);">
-                  Drag & drop files here or <button type="button" class="btn btn-sm btn-primary" id="dBrowseBtn"
-                    style="display: inline-flex;">Browse Files</button>
-                </p>
-                <p style="color: var(--text-muted); font-size: 0.8125rem;">
-                  PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file
-                </p>
-                <ul class="file-list" id="dFileList" style="margin-top: var(--space-4); text-align: left;"></ul>
+                <div class="form-feedback" id="dFileErr"></div>
               </div>
-              <div class="form-feedback" id="dFileErr"></div>
-            </div>
 
-            <!-- Actions -->
-            <div
-              style="display: flex; gap: var(--space-3); justify-content: flex-end; padding-top: var(--space-4); border-top: 1px solid var(--border-default);">
-              <button type="button" class="btn btn-secondary" id="saveTemplateBtn">
-                <i class="fas fa-bookmark"></i> Save as Template
-              </button>
-              <button type="reset" class="btn btn-ghost">Clear</button>
-              <button type="submit" class="btn btn-primary" id="dSubmitBtn">
-                <i class="fas fa-paper-plane"></i> Submit to Division Office
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Page: School Submissions -->
-    <div class="dash-page v2-dashboard-wrapper" id="page-submissions">
-      <div class="v2-header">
-        <h1>School Submissions</h1>
-        <p>All documents submitted by all staff of your school</p>
-      </div>
-      <button class="btn btn-primary" onclick="switchPage('submit')">
-        <i class="fas fa-plus"></i> New Submission
-      </button>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-          <div class="search-bar" style="width: 280px;">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" id="submissionSearch"
-              placeholder="Search by reference, document, staff..." />
-            <button class="search-clear"><i class="fas fa-times"></i></button>
+              <!-- Actions -->
+              <div
+                style="display: flex; gap: var(--space-3); justify-content: flex-end; padding-top: var(--space-4); border-top: 1px solid var(--border-default);">
+                <button type="button" class="btn btn-secondary" id="saveTemplateBtn">
+                  <i class="fas fa-bookmark"></i> Save as Template
+                </button>
+                <button type="reset" class="btn btn-ghost">Clear</button>
+                <button type="submit" class="btn btn-primary" id="dSubmitBtn">
+                  <i class="fas fa-paper-plane"></i> Submit to Division Office
+                </button>
+              </div>
+            </form>
           </div>
-          <select class="form-select" id="submissionFilter" style="width: 160px;">
-            <option value="">All Status</option>
-            <option value="review">Under Review</option>
-            <option value="approved">Approved</option>
-            <option value="returned">Returned</option>
-            <option value="received">Received</option>
-          </select>
         </div>
-        <button class="btn btn-secondary" id="exportSubsBtn">
-          <i class="fas fa-download"></i> Export CSV
-        </button>
       </div>
-      <div class="card-body" style="padding: 0;">
-        <div class="table-container">
-          <div class="table-header">
-            <div class="table-title-section">
-              <h3 class="table-title">School Submissions</h3>
-              <span class="table-subtitle">All documents submitted by all staff of your school</span>
-            </div>
-            <div class="table-actions">
-              <div class="table-search">
-                <i class="fas fa-search table-search-icon"></i>
-                <input type="text" class="table-search-input" id="submissionSearch"
-                  placeholder="Search by reference, document, staff...">
+
+      <!-- Page: School Submissions -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-submissions">
+        <div class="v2-header">
+          <div>
+            <h1>School Submissions</h1>
+            <p>All documents submitted by all staff of your school</p>
+          </div>
+          <button class="btn btn-primary" onclick="switchPage('submit')">
+            <i class="fas fa-plus"></i> New Submission
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+              <div class="search-bar" style="width: 280px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="submissionSearch"
+                  placeholder="Search by reference, document, staff..." />
+                <button class="search-clear"><i class="fas fa-times"></i></button>
               </div>
-              <select class="table-filter-select" id="submissionFilter">
+              <select class="form-select" id="submissionFilter" style="width: 160px;">
                 <option value="">All Status</option>
-                <option value="pending">Pending</option>
                 <option value="review">Under Review</option>
                 <option value="approved">Approved</option>
                 <option value="returned">Returned</option>
                 <option value="received">Received</option>
               </select>
-              <button class="table-export-btn" id="exportSubsBtn">
-                <i class="fas fa-download"></i>
-                <span>Export CSV</span>
-              </button>
             </div>
+            <button class="btn btn-secondary" id="exportSubsBtn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
           </div>
-          <div class="table-wrapper">
-            <table class="data-table enhanced-table">
-              <thead>
-                <tr>
-                  <th class="sortable-column" data-sort="reference">
-                    <div class="table-header-cell">
-                      <span>Reference No.</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="document">
-                    <div class="table-header-cell">
-                      <span>Document Type</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="year">
-                    <div class="table-header-cell">
-                      <span>School Year</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="submitter">
-                    <div class="table-header-cell">
-                      <span>Submitted By</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="position">
-                    <div class="table-header-cell">
-                      <span>Position</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="date">
-                    <div class="table-header-cell">
-                      <span>Date</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="files">
-                    <div class="table-header-cell">
-                      <span>Files</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="status">
-                    <div class="table-header-cell">
-                      <span>Status</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="table-actions-header">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="allSubmissionsBody">
-                <!-- Content loaded dynamically -->
-                <tr class="table-row empty-state">
-                  <td colspan="9">
-                    <div class="empty-state">
-                      <i class="fas fa-inbox empty-state-icon"></i>
-                      <div class="empty-state-content">
-                        <h4 class="empty-state-title">No submissions yet</h4>
-                        <p class="empty-state-description">Start by submitting your first document to the division
-                          office.</p>
-                        <button class="btn btn-primary">
-                          <i class="fas fa-plus"></i>
-                          Create First Submission
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-footer">
-            <div class="table-pagination">
-              <div class="pagination-info">
-                <span>No results to display</span>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">School Submissions</h3>
+                  <span class="table-subtitle">All documents submitted by all staff of your school</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" id="submissionSearch"
+                      placeholder="Search by reference, document, staff...">
+                  </div>
+                  <select class="table-filter-select" id="submissionFilter">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="returned">Returned</option>
+                    <option value="received">Received</option>
+                  </select>
+                  <button class="table-export-btn" id="exportSubsBtn">
+                    <i class="fas fa-download"></i>
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
-              <div class="pagination-controls">
-                <button class="pagination-btn" disabled>
-                  <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="pagination-btn active">1</button>
-                <button class="pagination-btn" disabled>
-                  <i class="fas fa-chevron-right"></i>
-                </button>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="submitter">
+                        <div class="table-header-cell">
+                          <span>Submitted By</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="position">
+                        <div class="table-header-cell">
+                          <span>Position</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="files">
+                        <div class="table-header-cell">
+                          <span>Files</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="allSubmissionsBody">
+                    <!-- Content loaded dynamically -->
+                    <tr class="table-row empty-state">
+                      <td colspan="9">
+                        <div class="empty-state">
+                          <i class="fas fa-inbox empty-state-icon"></i>
+                          <div class="empty-state-content">
+                            <h4 class="empty-state-title">No submissions yet</h4>
+                            <p class="empty-state-description">Start by submitting your first document to the division
+                              office.</p>
+                            <button class="btn btn-primary">
+                              <i class="fas fa-plus"></i>
+                              Create First Submission
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <div class="table-pagination">
+                  <div class="pagination-info">
+                    <span>No results to display</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  </div>
 
-  <!-- Page: My Submissions -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-mine">
-    <div class="v2-header">
-      <div>
-        <h1>My Submissions</h1>
-        <p>Documents you personally submitted</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div style="display: flex; gap: var(--space-3);">
-          <div class="search-bar" style="width: 280px;">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" id="mySubmissionSearch" placeholder="Search my submissions..." />
-            <button class="search-clear"><i class="fas fa-times"></i></button>
+      <!-- Page: My Submissions -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-mine">
+        <div class="v2-header">
+          <div>
+            <h1>My Submissions</h1>
+            <p>Documents you personally submitted</p>
           </div>
-          <select class="form-select" id="mySubmissionFilter" style="width: 160px;">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="review">Under Review</option>
-            <option value="approved">Approved</option>
-            <option value="returned">Returned</option>
-          </select>
         </div>
-        <button class="btn btn-secondary" id="exportMySubsBtn">
-          <i class="fas fa-download"></i> Export CSV
-        </button>
-      </div>
-      <div class="card-body" style="padding: 0;">
-        <div class="table-container">
-          <div class="table-header">
-            <div class="table-title-section">
-              <h3 class="table-title">My Submissions</h3>
-              <span class="table-subtitle">Documents you personally submitted</span>
-            </div>
-            <div class="table-actions">
-              <div class="table-search">
-                <i class="fas fa-search table-search-icon"></i>
-                <input type="text" class="table-search-input" id="mySearch" placeholder="Search submissions...">
+
+        <div class="card">
+          <div class="card-header">
+            <div style="display: flex; gap: var(--space-3);">
+              <div class="search-bar" style="width: 280px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="mySubmissionSearch"
+                  placeholder="Search my submissions..." />
+                <button class="search-clear"><i class="fas fa-times"></i></button>
               </div>
-              <select class="table-filter-select" id="myFilter">
+              <select class="form-select" id="mySubmissionFilter" style="width: 160px;">
                 <option value="">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="review">Under Review</option>
                 <option value="approved">Approved</option>
                 <option value="returned">Returned</option>
               </select>
-              <button class="table-export-btn" id="myExport">
-                <i class="fas fa-download"></i>
-                <span>Export CSV</span>
-              </button>
             </div>
+            <button class="btn btn-secondary" id="exportMySubsBtn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
           </div>
-          <div class="table-wrapper">
-            <table class="data-table enhanced-table">
-              <thead>
-                <tr>
-                  <th class="sortable-column" data-sort="reference">
-                    <div class="table-header-cell">
-                      <span>Reference No.</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="document">
-                    <div class="table-header-cell">
-                      <span>Document Type</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="year">
-                    <div class="table-header-cell">
-                      <span>School Year</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="date">
-                    <div class="table-header-cell">
-                      <span>Date</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="sortable-column" data-sort="status">
-                    <div class="table-header-cell">
-                      <span>Status</span>
-                      <i class="fas fa-sort table-sort-icon"></i>
-                    </div>
-                  </th>
-                  <th class="table-actions-header">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="mineSubmissionsBody">
-                <!-- Content loaded dynamically -->
-                <tr class="table-row empty-state">
-                  <td colspan="6">
-                    <div class="empty-state">
-                      <i class="fas fa-file-upload empty-state-icon"></i>
-                      <div class="empty-state-content">
-                        <h4 class="empty-state-title">No submissions yet</h4>
-                        <p class="empty-state-description">You haven't submitted any documents to the division office.
-                        </p>
-                        <button class="btn btn-primary">
-                          <i class="fas fa-plus"></i>
-                          Submit First Document
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-footer">
-            <div class="table-pagination">
-              <div class="pagination-info">
-                <span>No results to display</span>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-container">
+              <div class="table-header">
+                <div class="table-title-section">
+                  <h3 class="table-title">My Submissions</h3>
+                  <span class="table-subtitle">Documents you personally submitted</span>
+                </div>
+                <div class="table-actions">
+                  <div class="table-search">
+                    <i class="fas fa-search table-search-icon"></i>
+                    <input type="text" class="table-search-input" id="mySearch" placeholder="Search submissions...">
+                  </div>
+                  <select class="table-filter-select" id="myFilter">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="returned">Returned</option>
+                  </select>
+                  <button class="table-export-btn" id="myExport">
+                    <i class="fas fa-download"></i>
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
-              <div class="pagination-controls">
-                <button class="pagination-btn" disabled>
-                  <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="pagination-btn active">1</button>
-                <button class="pagination-btn" disabled>
-                  <i class="fas fa-chevron-right"></i>
-                </button>
+              <div class="table-wrapper">
+                <table class="data-table enhanced-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable-column" data-sort="reference">
+                        <div class="table-header-cell">
+                          <span>Reference No.</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="document">
+                        <div class="table-header-cell">
+                          <span>Document Type</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="year">
+                        <div class="table-header-cell">
+                          <span>School Year</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="date">
+                        <div class="table-header-cell">
+                          <span>Date</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="sortable-column" data-sort="status">
+                        <div class="table-header-cell">
+                          <span>Status</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
+                      <th class="table-actions-header">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mineSubmissionsBody">
+                    <!-- Content loaded dynamically -->
+                    <tr class="table-row empty-state">
+                      <td colspan="6">
+                        <div class="empty-state">
+                          <i class="fas fa-file-upload empty-state-icon"></i>
+                          <div class="empty-state-content">
+                            <h4 class="empty-state-title">No submissions yet</h4>
+                            <p class="empty-state-description">You haven't submitted any documents to the division
+                              office.
+                            </p>
+                            <button class="btn btn-primary">
+                              <i class="fas fa-plus"></i>
+                              Submit First Document
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <div class="table-pagination">
+                  <div class="pagination-info">
+                    <span>No results to display</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn" disabled>
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  </div>
 
-  <!-- Page: Compliance -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-compliance">
-    <div class="v2-header">
-      <div>
-        <h1>Compliance Checklist</h1>
-        <p>Required documents for the selected school year</p>
-      </div>
-      <select class="form-select" id="complianceYear" style="width: 160px;">
-        <option value="2026-2027">2026-2027</option>
-        <option value="2025-2026">2025-2026</option>
-      </select>
-    </div>
-    <div id="complianceGrid" class="grid-2">
-      <!-- Compliance items loaded dynamically -->
-    </div>
-  </div>
-
-  <!-- Page: Deadlines -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-deadlines">
-    <div class="v2-header">
-      <div>
-        <h1>Submission Deadlines</h1>
-        <p>Track upcoming deadlines and manage submissions</p>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-body">
-        <div id="deadlineCalendar">
-          <!-- Calendar placeholder -->
-        </div>
-      </div>
-    </div>
-    <div class="card" style="margin-top: var(--space-5);">
-      <div class="card-header">
-        <div class="card-title">
-          <i class="fas fa-list" style="color: var(--primary-500);"></i>
-          Upcoming Deadlines
-        </div>
-      </div>
-      <div class="card-body" id="deadlinesList">
-        <!-- Deadlines loaded dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Page: Track Status -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-track">
-    <div class="v2-header">
-      <div>
-        <h1>Track Submission</h1>
-        <p>Check the status of any submitted document</p>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-body">
-          <div class="form-group">
-            <label class="form-label">Reference Number</label>
-            <div style="display: flex; gap: var(--space-3);">
-              <input type="text" class="form-input" id="dTrackInput" placeholder="e.g., SMME-2026-12345"
-                style="flex: 1;" />
-              <button class="btn btn-primary" id="dTrackBtn">
-                <i class="fas fa-search"></i> Track
-              </button>
-            </div>
+      <!-- Page: Compliance -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-compliance">
+        <div class="v2-header">
+          <div>
+            <h1>Compliance Checklist</h1>
+            <p>Required documents for the selected school year</p>
           </div>
-          <div id="dTrackResult" hidden style="margin-top: var(--space-5);">
-            <div class="track-card">
-              <div class="track-header">
-                <div class="track-ref" id="dTrackRef"></div>
-                <span class="status-pill" id="dTrackStatus"></span>
-              </div>
-              <div class="track-details" id="dTrackDetails"></div>
-              <div class="feedback-box" id="dTrackFeedback" hidden></div>
-              <div class="track-timeline" id="dTrackTimeline"></div>
+          <select class="form-select" id="complianceYear" style="width: 160px;">
+            <option value="2026-2027">2026-2027</option>
+            <option value="2025-2026">2025-2026</option>
+          </select>
+        </div>
+        <div id="complianceGrid" class="grid-2">
+          <!-- Compliance items loaded dynamically -->
+        </div>
+      </div>
 
-              <div id="dTrackThread"
-                style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: none;">
-                <h4 style="font-size: 0.9rem; margin-bottom: 10px;">Discussion</h4>
-                <div id="dTrackCommentsList"
-                  style="max-height: 200px; overflow-y: auto; margin-bottom: 10px; font-size: 0.85rem;"></div>
-                <textarea id="dTrackNewComment" class="form-textarea" rows="2" placeholder="Add a reply..."></textarea>
-                <button id="dTrackPostCommentBtn" class="btn btn-sm btn-secondary" style="margin-top: 8px;">Post
-                  Reply</button>
-              </div>
+      <!-- Page: Deadlines -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-deadlines">
+        <div class="v2-header">
+          <div>
+            <h1>Submission Deadlines</h1>
+            <p>Track upcoming deadlines and manage submissions</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div id="deadlineCalendar">
+              <!-- Calendar placeholder -->
             </div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-info-circle" style="color: var(--primary-500);"></i>
-            Status Guide
+        <div class="card" style="margin-top: var(--space-5);">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-list" style="color: var(--primary-500);"></i>
+              Upcoming Deadlines
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-            <div
-              style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
-              <span class="status-pill status-pill-received">Received</span>
-              <span style="color: var(--text-secondary); font-size: 0.875rem;">Submission received by Division
-                Office</span>
-            </div>
-            <div
-              style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
-              <span class="status-pill status-pill-review">Under Review</span>
-              <span style="color: var(--text-secondary); font-size: 0.875rem;">Being reviewed by Division Office</span>
-            </div>
-            <div
-              style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
-              <span class="status-pill status-pill-approved">Approved</span>
-              <span style="color: var(--text-secondary); font-size: 0.875rem;">Documents approved successfully</span>
-            </div>
-            <div
-              style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
-              <span class="status-pill status-pill-returned">Returned</span>
-              <span style="color: var(--text-secondary); font-size: 0.875rem;">Needs revision and resubmission</span>
-            </div>
+          <div class="card-body" id="deadlinesList">
+            <!-- Deadlines loaded dynamically -->
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Page: Profile -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-profile">
-    <div class="v2-header">
-      <div>
-        <h1>My Profile</h1>
-        <p>Manage your personal staff account</p>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="card" style="text-align: center; padding: var(--space-8);">
-        <div
-          style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-500); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto var(--space-4);">
-          <i class="fas fa-user-tie"></i>
+      <!-- Page: Track Status -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-track">
+        <div class="v2-header">
+          <div>
+            <h1>Track Submission</h1>
+            <p>Check the status of any submitted document</p>
+          </div>
         </div>
-        <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1);"
-          id="profileStaffName">Staff Name</h3>
-        <span class="badge badge-info" id="profilePosition">Position</span>
-        <p style="color: var(--text-secondary); margin-top: var(--space-3); font-size: 0.875rem;" id="profileEmail">
-          email@school.edu.ph</p>
-        <div
-          style="margin-top: var(--space-5); padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius-lg); text-align: left;">
-          <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1);">School</div>
-          <div style="font-weight: 600; color: var(--text-primary);" id="profileSchoolName">School Name</div>
-          <div style="font-size: 0.75rem; color: var(--text-muted);" id="profileSchoolLevel">Level</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Personal Information</div>
-        </div>
-        <div class="card-body">
-          <form id="profileForm">
-            <div
-              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-body">
               <div class="form-group">
-                <label class="form-label">First Name</label>
-                <input type="text" class="form-input" id="pfFirstName" />
+                <label class="form-label">Reference Number</label>
+                <div style="display: flex; gap: var(--space-3);">
+                  <input type="text" class="form-input" id="dTrackInput" placeholder="e.g., SMME-2026-12345"
+                    style="flex: 1;" />
+                  <button class="btn btn-primary" id="dTrackBtn">
+                    <i class="fas fa-search"></i> Track
+                  </button>
+                </div>
               </div>
-              <div class="form-group">
-                <label class="form-label">Last Name</label>
-                <input type="text" class="form-input" id="pfLastName" />
-              </div>
-            </div>
-            <div
-              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-              <div class="form-group">
-                <label class="form-label">Position</label>
-                <select class="form-select" id="pfPosition">
-                  <option>School Principal</option>
-                  <option>Assistant Principal</option>
-                  <option>School Registrar</option>
-                  <option>Administrative Officer</option>
-                  <option>Guidance Counselor</option>
-                  <option>Department Head</option>
-                  <option>Teacher</option>
-                  <option>Clerk / Secretary</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="pfEmail" />
+              <div id="dTrackResult" hidden style="margin-top: var(--space-5);">
+                <div class="track-card">
+                  <div class="track-header">
+                    <div class="track-ref" id="dTrackRef"></div>
+                    <span class="status-pill" id="dTrackStatus"></span>
+                  </div>
+                  <div class="track-details" id="dTrackDetails"></div>
+                  <div class="feedback-box" id="dTrackFeedback" hidden></div>
+                  <div class="track-timeline" id="dTrackTimeline"></div>
+
+                  <div id="dTrackThread"
+                    style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: none;">
+                    <h4 style="font-size: 0.9rem; margin-bottom: 10px;">Discussion</h4>
+                    <div id="dTrackCommentsList"
+                      style="max-height: 200px; overflow-y: auto; margin-bottom: 10px; font-size: 0.85rem;"></div>
+                    <textarea id="dTrackNewComment" class="form-textarea" rows="2"
+                      placeholder="Add a reply..."></textarea>
+                    <button id="dTrackPostCommentBtn" class="btn btn-sm btn-secondary" style="margin-top: 8px;">Post
+                      Reply</button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div
-              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-              <div class="form-group">
-                <label class="form-label">School</label>
-                <input type="text" class="form-input" id="pfSchool" readonly style="background: var(--gray-100);" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Contact Number</label>
-                <input type="tel" class="form-input" id="pfPhone" placeholder="09XX-XXX-XXXX" />
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fas fa-info-circle" style="color: var(--primary-500);"></i>
+                Status Guide
               </div>
             </div>
-            <div style="display: flex; justify-content: flex-end;">
-              <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Save Changes
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <h4
-            style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">
-            Change Password</h4>
-          <form id="changePasswordForm">
-            <div
-              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-              <div class="form-group">
-                <label class="form-label">Current Password</label>
-                <input type="password" class="form-input" id="pfCurrentPw" />
+            <div class="card-body">
+              <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <div
+                  style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
+                  <span class="status-pill status-pill-received">Received</span>
+                  <span style="color: var(--text-secondary); font-size: 0.875rem;">Submission received by Division
+                    Office</span>
+                </div>
+                <div
+                  style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
+                  <span class="status-pill status-pill-review">Under Review</span>
+                  <span style="color: var(--text-secondary); font-size: 0.875rem;">Being reviewed by Division
+                    Office</span>
+                </div>
+                <div
+                  style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
+                  <span class="status-pill status-pill-approved">Approved</span>
+                  <span style="color: var(--text-secondary); font-size: 0.875rem;">Documents approved
+                    successfully</span>
+                </div>
+                <div
+                  style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); background: var(--gray-50); border-radius: var(--radius-lg);">
+                  <span class="status-pill status-pill-returned">Returned</span>
+                  <span style="color: var(--text-secondary); font-size: 0.875rem;">Needs revision and
+                    resubmission</span>
+                </div>
               </div>
-              <div class="form-group">
-                <label class="form-label">New Password</label>
-                <input type="password" class="form-input" id="pfNewPw" placeholder="Min. 8 characters" />
-              </div>
             </div>
-            <div style="display: flex; justify-content: flex-end;">
-              <button type="submit" class="btn btn-secondary">
-                <i class="fas fa-key"></i> Update Password
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  </main>
+
+      <!-- Page: Profile -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-profile">
+        <div class="v2-header">
+          <div>
+            <h1>My Profile</h1>
+            <p>Manage your personal staff account</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card" style="text-align: center; padding: var(--space-8);">
+            <div
+              style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-500); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto var(--space-4);">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1);"
+              id="profileStaffName">Staff Name</h3>
+            <span class="badge badge-info" id="profilePosition">Position</span>
+            <p style="color: var(--text-secondary); margin-top: var(--space-3); font-size: 0.875rem;" id="profileEmail">
+              email@school.edu.ph</p>
+            <div
+              style="margin-top: var(--space-5); padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius-lg); text-align: left;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1);">School</div>
+              <div style="font-weight: 600; color: var(--text-primary);" id="profileSchoolName">School Name</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);" id="profileSchoolLevel">Level</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Personal Information</div>
+            </div>
+            <div class="card-body">
+              <form id="profileForm">
+                <div
+                  style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" id="pfFirstName" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" id="pfLastName" />
+                  </div>
+                </div>
+                <div
+                  style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">Position</label>
+                    <select class="form-select" id="pfPosition">
+                      <option>School Principal</option>
+                      <option>Assistant Principal</option>
+                      <option>School Registrar</option>
+                      <option>Administrative Officer</option>
+                      <option>Guidance Counselor</option>
+                      <option>Department Head</option>
+                      <option>Teacher</option>
+                      <option>Clerk / Secretary</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="pfEmail" />
+                  </div>
+                </div>
+                <div
+                  style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">School</label>
+                    <input type="text" class="form-input" id="pfSchool" readonly style="background: var(--gray-100);" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Contact Number</label>
+                    <input type="tel" class="form-input" id="pfPhone" placeholder="09XX-XXX-XXXX" />
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer">
+              <h4
+                style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">
+                Change Password</h4>
+              <form id="changePasswordForm">
+                <div
+                  style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-input" id="pfCurrentPw" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" id="pfNewPw" placeholder="Min. 8 characters" />
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                  <button type="submit" class="btn btn-secondary">
+                    <i class="fas fa-key"></i> Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <!-- Submission Success Modal -->
