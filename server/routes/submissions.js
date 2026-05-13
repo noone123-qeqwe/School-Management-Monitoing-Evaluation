@@ -546,4 +546,50 @@ router.get('/:ref/files/:fileId', requireAuth, async (req, res) => {
   }
 });
 
+/* ─────────────────────────────────────────────
+   GET /api/submissions/:ref/download-all  – download all files as zip
+───────────────────────────────────────────── */
+router.get('/:ref/download-all', requireAuth, async (req, res) => {
+  try {
+    let archiver;
+    try {
+      archiver = require('archiver');
+    } catch (e) {
+      return res.status(501).json({ error: 'ZIP feature requires the "archiver" package. Please run: npm install archiver' });
+    }
+
+    const subResult = await pool.query(
+      'SELECT id, school_id FROM submissions WHERE ref=$1',
+      [req.params.ref]
+    );
+    if (!subResult.rows.length) return res.status(404).json({ error: 'Submission not found.' });
+    const sub = subResult.rows[0];
+
+    if (req.user.role === 'staff' && sub.school_id !== req.user.schoolId)
+      return res.status(403).json({ error: 'Access denied.' });
+
+    const filesResult = await pool.query('SELECT * FROM submission_files WHERE submission_id=$1', [sub.id]);
+    if (!filesResult.rows.length) return res.status(404).json({ error: 'No files to download.' });
+
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${req.params.ref}_files.zip"`);
+
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    archive.on('error', err => { throw err; });
+    archive.pipe(res);
+
+    filesResult.rows.forEach(file => {
+      const filePath = path.join(uploadDir, path.basename(file.stored_name));
+      if (fs.existsSync(filePath)) {
+        archive.file(filePath, { name: sanitizeDownloadName(file.original_name) });
+      }
+    });
+
+    archive.finalize();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 module.exports = router;

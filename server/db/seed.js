@@ -97,6 +97,11 @@ async function seed() {
       ALTER TABLE schools ADD CONSTRAINT IF NOT EXISTS schools_school_code_key UNIQUE (school_code);
     `).catch((err) => { console.warn('   ⚠️   Warning adding unique constraint:', err.message); });
 
+    // Ensure school_id is nullable since staff registration no longer requires a school upfront
+    await client.query(`
+      ALTER TABLE staff ALTER COLUMN school_id DROP NOT NULL;
+    `).catch((err) => { console.warn('   ⚠️   Warning altering staff table:', err.message); });
+
     // 1. Schools
     console.log('   Seeding schools…');
     for (const s of SCHOOL_LIST) {

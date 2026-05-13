@@ -88,6 +88,19 @@
 
   /* ── Initialization ── */
   async function init() {
+    // Ensure forms are cleared on refresh or back-button navigation (bfcache)
+    window.addEventListener('pageshow', () => {
+      $('schoolLoginForm')?.reset();
+      $('adminLoginForm')?.reset();
+      $('registerForm')?.reset();
+      // Force clear specific fields just in case aggressive browser autofill persists
+      const fieldsToClear = ['schoolEmail', 'schoolPassword', 'adminUsername', 'adminPassword'];
+      fieldsToClear.forEach(id => {
+        const el = $(id);
+        if (el) el.value = '';
+      });
+    });
+
     // Handle logout redirect
     const params = new URLSearchParams(window.location.search);
     if (params.get('logout') === '1') {
@@ -241,7 +254,7 @@
       };
 
       // Match frontend validation strictly to backend requirements
-      const nameRegex = /^[a-zA-ZÀ-ÿ\s'\-\.]+$/;
+      const nameRegex = /^[a-zA-ZÀ-ÿ0-9\s'\-\.,]+$/;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
       if (!firstName) {

@@ -200,6 +200,41 @@ const API = (() => {
         setTimeout(() => URL.revokeObjectURL(url), 100);
       }
     },
+
+    /**
+     * Fetch a file securely and return a Blob URL for in-app previewing (iframes)
+     */
+    async getFileBlob(ref, fileId) {
+      const token = getToken();
+      const res = await fetch(BASE + '/submissions/' + ref + '/files/' + fileId, {
+        method: 'GET',
+        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+      });
+      if (!res.ok) throw new Error('Preview failed (' + res.status + ')');
+      const blob = await res.blob();
+      return URL.createObjectURL(blob);
+    },
+
+    /**
+     * Request the backend to ZIP all files and download them together
+     */
+    async downloadAll(ref) {
+      const token = getToken();
+      const res = await fetch(BASE + '/submissions/' + ref + '/download-all', {
+        method: 'GET',
+        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Download failed (' + res.status + ')');
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `${ref}_files.zip`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
   };
 
   /* ══════════════════════════════════════════

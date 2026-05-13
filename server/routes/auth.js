@@ -150,7 +150,7 @@ router.post('/staff/register', async (req, res) => {
   if (password.length > 128)
     return res.status(400).json({ error: 'Password is too long.' });
 
-  if (!/^[a-zA-ZÀ-ÿ\s'\-\.]+$/.test(firstName) || !/^[a-zA-ZÀ-ÿ\s'\-\.]+$/.test(lastName))
+  if (!/^[a-zA-ZÀ-ÿ0-9\s'\-\.,]+$/.test(firstName) || !/^[a-zA-ZÀ-ÿ0-9\s'\-\.,]+$/.test(lastName))
     return res.status(400).json({ error: 'Name contains invalid characters.' });
 
   try {

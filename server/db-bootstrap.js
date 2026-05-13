@@ -177,7 +177,11 @@ class MockPool {
           const row = db.staff.find(s => (s.email || '').toLowerCase() === (email || '').toLowerCase());
           return { rows: row ? [row] : [] };
         }
-        if (params.length === 1) { const row = db.staff.find(s => String(s.id) === String(params[0])); return { rows: row ? [row] : [] }; }
+        if (params.length === 1) {
+          const paramStr = String(params[0]).toLowerCase();
+          const row = db.staff.find(s => String(s.id) === paramStr || (s.email || '').toLowerCase() === paramStr);
+          return { rows: row ? [row] : [] };
+        }
         if (params.length === 2) {
           const [email, schoolId] = params;
           const row = db.staff.find(s => s.email === (email || '').toLowerCase() && String(s.school_id) === String(schoolId));

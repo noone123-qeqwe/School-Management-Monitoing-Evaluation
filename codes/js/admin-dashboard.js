@@ -27,15 +27,18 @@ populateAdminHeader();
   populateAdminHeader();
 })();
 
-document.getElementById('currentDate').textContent =
-  new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+const currentDateEl = document.getElementById('currentDate');
+if (currentDateEl) {
+  currentDateEl.textContent =
+    new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
 
 /* ===== SIDEBAR TOGGLE ===== */
 const sidebar = document.getElementById('sidebar');
 const topbarMenu = document.getElementById('topbarMenu');
 const sidebarClose = document.getElementById('sidebarClose');
-topbarMenu.addEventListener('click', () => sidebar.classList.add('open'));
-sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+topbarMenu?.addEventListener('click', () => sidebar.classList.add('open'));
+sidebarClose?.addEventListener('click', () => sidebar.classList.remove('open'));
 
 /* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
@@ -460,11 +463,24 @@ async function openReview(ref) {
 
     let fileLinks = '';
     if (s.files && s.files.length) {
-      fileLinks = `<br/><strong>Download Files:</strong> ` + s.files.map(f => `
-        <button class="action-btn view" style="margin:2px" onclick="downloadFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}')">
-          <i class="fas fa-download"></i> ${API.escapeHtml(f.original_name)}
-        </button>
-      `).join(' ');
+      fileLinks = `<br/><div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+        <strong>Attached Files:</strong><div style="display:flex; gap:8px; flex-wrap:wrap;">`;
+
+      if (s.files.length > 1) {
+        fileLinks += `<button class="action-btn" style="background:#f1f5f9" onclick="downloadAllAdminFiles('${API.escapeHtml(s.ref)}')"><i class="fas fa-file-archive"></i> Download All (ZIP)</button>`;
+      }
+      fileLinks += s.files.map(f => `
+        <div style="display:inline-flex; border:1px solid var(--border,#e2e8f0); border-radius:4px; overflow:hidden;">
+          <button class="action-btn view" style="border:none; border-right:1px solid var(--border,#e2e8f0); border-radius:0; margin:0;" onclick="previewAdminFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}', '${API.escapeHtml(f.mime_type)}')">
+            <i class="fas fa-eye"></i> Preview
+          </button>
+          <button class="action-btn" style="border:none; border-radius:0; margin:0; background:#f8fafc;" title="Download" onclick="downloadFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}')">
+            <i class="fas fa-download"></i>
+          </button>
+          <span style="padding:4px 8px; font-size:0.75rem; background:#fff; display:flex; align-items:center;">${API.escapeHtml(f.original_name)}</span>
+        </div>
+      `).join('');
+      fileLinks += `</div></div>`;
     }
 
     document.getElementById('reviewDetails').innerHTML = `
@@ -494,6 +510,33 @@ function closeReviewModal() {
   if (cl) cl.innerHTML = '';
   const nc = document.getElementById('reviewNewComment');
   if (nc) nc.value = '';
+}
+
+window.downloadAllAdminFiles = async function (ref) {
+  try {
+    await API.submissions.downloadAll(ref);
+  } catch (err) { API.showToast(`Download failed: ${err.message}`, 'error'); }
+}
+
+window.previewAdminFile = async function (ref, fileId, filename, mimeType) {
+  const modal = document.getElementById('previewModal');
+  const title = document.getElementById('previewModalTitle');
+  const iframe = document.getElementById('previewIframe');
+  const unsupported = document.getElementById('previewUnsupported');
+
+  title.textContent = filename;
+  modal.removeAttribute('hidden');
+  iframe.src = '';
+
+  if (mimeType === 'application/pdf') {
+    iframe.removeAttribute('hidden'); unsupported.setAttribute('hidden', '');
+    try {
+      iframe.src = await API.submissions.getFileBlob(ref, fileId);
+    } catch (err) { API.showToast(`Preview failed: ${err.message}`, 'error'); modal.setAttribute('hidden', ''); }
+  } else {
+    iframe.setAttribute('hidden', ''); unsupported.removeAttribute('hidden');
+    document.getElementById('previewDownloadBtn').onclick = () => window.downloadFile(ref, fileId, filename);
+  }
 }
 
 async function downloadFile(ref, fileId, filename) {
