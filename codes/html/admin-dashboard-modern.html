@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,8 +13,86 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* Inject Vibrant Sidebar Colors for Admin Dashboard */
+    .sidebar {
+      background: linear-gradient(180deg, #170F24 0%, #2A1758 40%, #46228A 100%) !important;
+      box-shadow: 4px 0 24px rgba(70, 34, 138, 0.3) !important;
+      border-right: none !important;
+    }
+
+    .sidebar-logo span,
+    .sidebar-user-name {
+      color: #ffffff !important;
+    }
+
+    .sidebar-section {
+      color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .sidebar-user-role {
+      color: #c4b5fd !important;
+    }
+
+    .sidebar-link {
+      color: #ddd6fe !important;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #ffffff !important;
+      border-left-color: #a78bfa !important;
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(90deg, rgba(167, 139, 250, 0.2), transparent) !important;
+      color: #a78bfa !important;
+      border-left-color: #a78bfa !important;
+    }
+
+    .sidebar-link i {
+      color: #c4b5fd !important;
+    }
+
+    .sidebar-link.active i,
+    .sidebar-link:hover i {
+      color: #ffffff !important;
+    }
+
+    .sidebar-toggle {
+      color: #ddd6fe !important;
+    }
+
+    .sidebar-logout {
+      color: #ddd6fe !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+
+    .sidebar-user,
+    .sidebar-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .sidebar-avatar {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #a78bfa !important;
+    }
+  </style>
 </head>
+
 <body class="page-fade-in">
   <!-- PREMIUM BACKGROUND -->
   <div class="animated-bg">
@@ -114,12 +193,14 @@
         </button>
         <div class="search-bar" style="width: 320px;">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" class="search-input" id="globalSearch" placeholder="Search schools, submissions, staff..." />
+          <input type="text" class="search-input" id="globalSearch"
+            placeholder="Search schools, submissions, staff..." />
           <button class="search-clear"><i class="fas fa-times"></i></button>
         </div>
       </div>
       <div class="header-right">
-        <div class="header-date" style="display: flex; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: 0.875rem;">
+        <div class="header-date"
+          style="display: flex; align-items: center; gap: var(--space-2); color: var(--text-tertiary); font-size: 0.875rem;">
           <i class="fas fa-calendar-alt"></i>
           <span id="currentDate">May 11, 2026</span>
         </div>
@@ -134,7 +215,7 @@
           </div>
         </div>
       </div>
-    </header>    <!-- Dashboard Content -->
+    </header> <!-- Dashboard Content -->
     <main class="main-content">
       <!-- Profile Badge (Top Right) -->
       <div class="v2-user-badge">
@@ -203,9 +284,7 @@
               <div class="v2-stat-label">Registered Schools</div>
             </div>
           </div>
-        </div>
-
-        <!-- Analytics Card -->
+        </div>        <!-- Analytics Card -->
         <div class="v2-analytics-card">
           <div class="v2-main-analytics">
             <div class="v2-card-title">
@@ -221,933 +300,674 @@
             </div>
 
             <div class="v2-chart-placeholder">
-                <i class="fas fa-chart-area"></i>
-                <p>No data to display, charts will appear when data is loaded</p>
+              <i class="fas fa-chart-area"></i>
+              <p>No data to display, charts will appear when data is loaded</p>
             </div>
           </div>
 
           <div class="v2-status-section">
             <h4>By Status</h4>
-            
+
             <div class="v2-status-item">
-                <div class="v2-status-label">
-                    <span>Approved</span>
-                    <span>76%</span>
-                </div>
-                <div class="v2-progress-bar">
-                    <div class="v2-progress-fill bg-success" style="width: 76%;"></div>
-                </div>
+              <div class="v2-status-label">
+                <span>Approved</span>
+                <span>76%</span>
+              </div>
+              <div class="v2-progress-bar">
+                <div class="v2-progress-fill bg-success" style="width: 76%;"></div>
+              </div>
             </div>
 
             <div class="v2-status-item">
-                <div class="v2-status-label">
-                    <span>Under Review</span>
-                    <span>15%</span>
-                </div>
-                <div class="v2-progress-bar">
-                    <div class="v2-progress-fill bg-warning" style="width: 15%;"></div>
-                </div>
+              <div class="v2-status-label">
+                <span>Under Review</span>
+                <span>15%</span>
+              </div>
+              <div class="v2-progress-bar">
+                <div class="v2-progress-fill bg-warning" style="width: 15%;"></div>
+              </div>
             </div>
 
             <div class="v2-status-item">
-                <div class="v2-status-label">
-                    <span>Returned</span>
-                    <span>9%</span>
-                </div>
-                <div class="v2-progress-bar">
-                    <div class="v2-progress-fill bg-danger" style="width: 9%;"></div>
-                </div>
+              <div class="v2-status-label">
+                <span>Returned</span>
+                <span>9%</span>
+              </div>
+              <div class="v2-progress-bar">
+                <div class="v2-progress-fill bg-danger" style="width: 9%;"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
         <!-- Two Column: Pending & Schools -->
-        <div class="grid-2" style="margin-top: var(--space-6);">
+        <div class="grid-2" style="margin-top: 32px;">
           <!-- Pending Review -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fas fa-clock" style="color: var(--warning-500);"></i>
+          <div class="card" style="border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
+            <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+              <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
+                <i class="fas fa-clock" style="color: var(--v2-warning); margin-right: 10px;"></i>
                 Pending Review
               </div>
-              <button class="btn btn-sm btn-ghost" onclick="switchPage('submissions')">
+              <button class="btn btn-sm btn-ghost" onclick="switchPage('submissions')" style="color: var(--v2-primary);">
                 View All <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
               </button>
             </div>
             <div class="card-body" style="padding: 0;">
-              <div class="table-container">
-                <div class="table-header">
-                  <div class="table-title-section">
-                    <h3 class="table-title">Pending Submissions</h3>
-                    <span class="table-subtitle">5 items requiring review</span>
-                  </div>
-                  <div class="table-actions">
-                    <div class="table-search">
-                      <i class="fas fa-search table-search-icon"></i>
-                      <input type="text" class="table-search-input" placeholder="Search submissions..." id="pendingSearch">
-                    </div>
-                    <button class="table-filter-btn" id="pendingFilter">
-                      <i class="fas fa-filter"></i>
-                      <span>Filter</span>
-                    </button>
-                    <button class="table-export-btn" id="pendingExport">
-                      <i class="fas fa-download"></i>
-                      <span>Export</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="table-wrapper">
-                  <table class="data-table enhanced-table">
-                    <thead>
-                      <tr>
-                        <th class="sortable-column" data-sort="reference">
-                          <div class="table-header-cell">
-                            <span>Reference</span>
-                            <i class="fas fa-sort table-sort-icon"></i>
-                          </div>
-                        </th>
-                        <th class="sortable-column" data-sort="school">
-                          <div class="table-header-cell">
-                            <span>School</span>
-                            <i class="fas fa-sort table-sort-icon"></i>
-                          </div>
-                        </th>
-                        <th class="sortable-column" data-sort="document">
-                          <div class="table-header-cell">
-                            <span>Document</span>
-                            <i class="fas fa-sort table-sort-icon"></i>
-                          </div>
-                        </th>
-                        <th class="sortable-column" data-sort="date">
-                          <div class="table-header-cell">
-                            <span>Date</span>
-                            <i class="fas fa-sort table-sort-icon"></i>
-                          </div>
-                        </th>
-                        <th class="table-actions-header">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody id="pendingTableBody">
-                      <tr class="table-row">
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="reference-badge">SMME-2026-00156</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="school-info">
-                              <span class="school-name">Adventist Elementary School</span>
-                              <span class="school-type">Elementary</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="document-info">
-                              <i class="fas fa-file-alt document-icon"></i>
-                              <span class="document-name">Enrollment Report</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="date-badge recent">Today</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-actions">
-                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
-                              <i class="fas fa-eye"></i>
-                              <span>Review</span>
-                            </button>
-                            <div class="dropdown table-dropdown">
-                              <button class="dropdown-toggle" title="More Options">
-                                <i class="fas fa-ellipsis-v"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-download"></i>
-                                  Download
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-share"></i>
-                                  Share
-                                </a>
-                                <a href="#" class="dropdown-item text-danger">
-                                  <i class="fas fa-trash"></i>
-                                  Delete
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="table-row">
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="reference-badge">SMME-2026-00155</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="school-info">
-                              <span class="school-name">Burias College, Inc.</span>
-                              <span class="school-type">College</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="document-info">
-                              <i class="fas fa-file-invoice-dollar document-icon"></i>
-                              <span class="document-name">Financial Reports</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="date-badge">Yesterday</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-actions">
-                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
-                              <i class="fas fa-eye"></i>
-                              <span>Review</span>
-                            </button>
-                            <div class="dropdown table-dropdown">
-                              <button class="dropdown-toggle" title="More Options">
-                                <i class="fas fa-ellipsis-v"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-download"></i>
-                                  Download
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-share"></i>
-                                  Share
-                                </a>
-                                <a href="#" class="dropdown-item text-danger">
-                                  <i class="fas fa-trash"></i>
-                                  Delete
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="table-row">
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="reference-badge">SMME-2026-00154</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="school-info">
-                              <span class="school-name">Masbate Colleges Inc.</span>
-                              <span class="school-type">College</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <div class="document-info">
-                              <i class="fas fa-user-graduate document-icon"></i>
-                              <span class="document-name">Faculty Credentials</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-content">
-                            <span class="date-badge">2 days ago</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="table-cell-actions">
-                            <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
-                              <i class="fas fa-eye"></i>
-                              <span>Review</span>
-                            </button>
-                            <div class="dropdown table-dropdown">
-                              <button class="dropdown-toggle" title="More Options">
-                                <i class="fas fa-ellipsis-v"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-download"></i>
-                                  Download
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                  <i class="fas fa-share"></i>
-                                  Share
-                                </a>
-                                <a href="#" class="dropdown-item text-danger">
-                                  <i class="fas fa-trash"></i>
-                                  Delete
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="table-footer">
-                  <div class="table-pagination">
-                    <div class="pagination-info">
-                      <span>Showing 1-3 of 5 results</span>
-                    </div>
-                    <div class="pagination-controls">
-                      <button class="pagination-btn" disabled>
-                        <i class="fas fa-chevron-left"></i>
-                      </button>
-                      <button class="pagination-btn active">1</button>
-                      <button class="pagination-btn">2</button>
-                      <button class="pagination-btn">
-                        <i class="fas fa-chevron-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div class="table-wrapper" style="overflow-x: auto;">
+                <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                  <tbody id="pendingTableBody">
+                    <tr style="border-bottom: 1px solid #f8fafc;">
+                      <td style="padding: 16px 24px;">
+                        <div style="font-weight: 600; font-size: 0.9rem;">SMME-2026-00156</div>
+                        <div style="font-size: 0.75rem; color: var(--v2-text-sub);">Adventist Elementary</div>
+                      </td>
+                      <td style="padding: 16px 24px; text-align: right;">
+                        <span style="padding: 4px 12px; border-radius: 20px; background: #fff7ed; color: #9a3412; font-size: 0.7rem; font-weight: 700;">PENDING</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f8fafc;">
+                      <td style="padding: 16px 24px;">
+                        <div style="font-weight: 600; font-size: 0.9rem;">SMME-2026-00155</div>
+                        <div style="font-size: 0.75rem; color: var(--v2-text-sub);">Burias College, Inc.</div>
+                      </td>
+                      <td style="padding: 16px 24px; text-align: right;">
+                        <span style="padding: 4px 12px; border-radius: 20px; background: #fff7ed; color: #9a3412; font-size: 0.7rem; font-weight: 700;">PENDING</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
 
           <!-- Schools by Level -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fas fa-chart-pie" style="color: var(--primary-500);"></i>
+          <div class="card" style="border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
+            <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+              <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
+                <i class="fas fa-chart-pie" style="color: var(--v2-primary); margin-right: 10px;"></i>
                 Schools by Level
               </div>
             </div>
-            <div class="card-body">
-              <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+            <div class="card-body" style="padding: 24px;">
+              <div style="display: flex; flex-direction: column; gap: 16px;">
                 <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></span>
-                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Kindergarten</span>
-                    <span style="font-weight: 600; color: var(--text-primary);">5</span>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                    <span style="color: var(--v2-text-sub);">Elementary</span>
+                    <span style="font-weight: 700;">16 Schools</span>
                   </div>
-                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                    <div style="width: 13%; height: 100%; background: #f59e0b; border-radius: var(--radius-full);"></div>
+                  <div style="height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 42%; height: 100%; background: var(--v2-primary);"></div>
                   </div>
                 </div>
                 <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6;"></span>
-                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Elementary</span>
-                    <span style="font-weight: 600; color: var(--text-primary);">16</span>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                    <span style="color: var(--v2-text-sub);">Junior High</span>
+                    <span style="font-weight: 700;">10 Schools</span>
                   </div>
-                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                    <div style="width: 42%; height: 100%; background: #3b82f6; border-radius: var(--radius-full);"></div>
-                  </div>
-                </div>
-                <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #8b5cf6;"></span>
-                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Junior High</span>
-                    <span style="font-weight: 600; color: var(--text-primary);">10</span>
-                  </div>
-                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                    <div style="width: 26%; height: 100%; background: #8b5cf6; border-radius: var(--radius-full);"></div>
+                  <div style="height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden;">
+                    <div style="width: 26%; height: 100%; background: var(--v2-purple);"></div>
                   </div>
                 </div>
-                <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></span>
-                    <span style="flex: 1; font-size: 0.875rem; color: var(--text-secondary);">Senior High</span>
-                    <span style="font-weight: 600; color: var(--text-primary);">7</span>
-                  </div>
-                  <div style="height: 8px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                    <div style="width: 18%; height: 100%; background: #10b981; border-radius: var(--radius-full);"></div>
-                  </div>
-                </div>
-              </div>
-              <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-default); text-align: center; font-size: 0.8125rem; color: var(--text-muted);">
-                Total: 38 registered private schools
               </div>
             </div>
           </div>
         </div>
 
         <!-- Recent Activity -->
-        <div class="card" style="margin-top: var(--space-6);">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-history" style="color: var(--primary-500);"></i>
+        <div class="card" style="margin-top: 32px; border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
+          <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+            <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
+              <i class="fas fa-history" style="color: var(--v2-primary); margin-right: 10px;"></i>
               Recent Activity
             </div>
           </div>
-          <div class="card-body">
-            <div id="activityList" style="display: flex; flex-direction: column; gap: var(--space-3);">
-              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
-                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--success-100); color: var(--success-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <div class="card-body" style="padding: 12px 24px;">
+            <div id="activityList" style="display: flex; flex-direction: column;">
+              <div style="display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f8fafc;">
+                <div style="width: 40px; height: 40px; border-radius: 12px; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                   <i class="fas fa-check"></i>
                 </div>
                 <div style="flex: 1;">
-                  <div style="font-size: 0.875rem; color: var(--text-primary);">
-                    <strong>Submission approved</strong> — Enrollment Report from Adventist Elementary School
-                  </div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);">2 minutes ago</div>
+                  <div style="font-size: 0.9rem; color: var(--v2-text-main);"><strong>Submission approved</strong> — Enrollment Report from AES</div>
+                  <div style="font-size: 0.75rem; color: var(--v2-text-sub);">2 minutes ago</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
-                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--info-100); color: var(--info-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="fas fa-user-plus"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div style="font-size: 0.875rem; color: var(--text-primary);">
-                    <strong>New staff registered</strong> — Maria Santos from Adventist Elementary School
-                  </div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);">15 minutes ago</div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3);">
-                <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--warning-100); color: var(--warning-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="fas fa-undo"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div style="font-size: 0.875rem; color: var(--text-primary);">
-                    <strong>Document returned</strong> — Financial Reports from Burias College, Inc.
-                  </div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);">1 hour ago</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: All Submissions -->
-      <div class="dash-page" id="page-submissions">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">All Submissions</h1>
-            <p class="page-subtitle">Review and manage documents from all schools</p>
-          </div>
-          <div style="display: flex; gap: var(--space-3);">
-            <button class="btn btn-secondary" id="exportAdminBtn">
-              <i class="fas fa-download"></i> Export CSV
-            </button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; flex: 1;">
-              <div class="search-bar" style="width: 280px;">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" id="adminSearch" placeholder="Search by school, reference, document..." />
-                <button class="search-clear"><i class="fas fa-times"></i></button>
-              </div>
-              <select class="form-select" id="adminStatusFilter" style="width: 160px;">
-                <option value="">All Status</option>
-                <option value="received">Received</option>
-                <option value="review">Under Review</option>
-                <option value="approved">Approved</option>
-                <option value="returned">Returned</option>
-              </select>
-              <select class="form-select" id="adminLevelFilter" style="width: 160px;">
-                <option value="">All Levels</option>
-                <option value="kindergarten">Kindergarten</option>
-                <option value="elementary">Elementary</option>
-                <option value="junior">Junior High</option>
-                <option value="senior">Senior High</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-body" style="padding: 0;">
-            <div class="table-container">
-              <div class="table-header">
-                <div class="table-title-section">
-                  <h3 class="table-title">All Submissions</h3>
-                  <span class="table-subtitle">Manage and review all document submissions</span>
-                </div>
-                <div class="table-actions">
-                  <div class="table-search">
-                    <i class="fas fa-search table-search-icon"></i>
-                    <input type="text" class="table-search-input" placeholder="Search submissions..." id="adminSearch">
-                  </div>
-                  <select class="table-filter-select" id="levelFilter">
-                    <option value="">All Levels</option>
-                    <option value="kindergarten">Kindergarten</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="junior">Junior High</option>
-                    <option value="senior">Senior High</option>
-                  </select>
-                  <button class="table-export-btn" id="adminExport">
-                    <i class="fas fa-download"></i>
-                    <span>Export</span>
-                  </button>
-                </div>
-              </div>
-              <div class="table-wrapper">
-                <table class="data-table enhanced-table">
-                  <thead>
-                    <tr>
-                      <th class="table-checkbox-header">
-                        <div class="table-header-cell">
-                          <input type="checkbox" id="selectAll" class="table-checkbox">
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="reference">
-                        <div class="table-header-cell">
-                          <span>Reference No.</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="school">
-                        <div class="table-header-cell">
-                          <span>School</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="level">
-                        <div class="table-header-cell">
-                          <span>Level</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="document">
-                        <div class="table-header-cell">
-                          <span>Document Type</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="year">
-                        <div class="table-header-cell">
-                          <span>School Year</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="submitter">
-                        <div class="table-header-cell">
-                          <span>Submitted By</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="date">
-                        <div class="table-header-cell">
-                          <span>Date</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="sortable-column" data-sort="status">
-                        <div class="table-header-cell">
-                          <span>Status</span>
-                          <i class="fas fa-sort table-sort-icon"></i>
-                        </div>
-                      </th>
-                      <th class="table-actions-header">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="adminSubmissionsBody">
-                    <tr class="table-row">
-                      <td>
-                        <div class="table-cell-content">
-                          <input type="checkbox" class="table-checkbox">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="reference-badge">SMME-2026-00156</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="school-info">
-                            <span class="school-name">Adventist Elementary School</span>
-                            <span class="school-id">School ID: 001</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="level-badge level-elementary">Elementary</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="document-info">
-                            <i class="fas fa-file-alt document-icon"></i>
-                            <span class="document-name">Enrollment Report</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="year-badge">2026-2027</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="submitter-info">
-                            <div class="submitter-avatar" style="background: var(--accent-500);">
-                              <i class="fas fa-user"></i>
-                            </div>
-                            <span class="submitter-name">Maria Santos</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="date-badge recent">Today</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="status-pill status-review">Under Review</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-actions">
-                          <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
-                            <i class="fas fa-eye"></i>
-                            <span>Review</span>
-                          </button>
-                          <div class="dropdown table-dropdown">
-                            <button class="dropdown-toggle" title="More Options">
-                              <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-download"></i>
-                                Download
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-share"></i>
-                                Share
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-comment"></i>
-                                Add Comment
-                              </a>
-                              <a href="#" class="dropdown-item text-danger">
-                                <i class="fas fa-trash"></i>
-                                Delete
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="table-footer">
-                <div class="table-pagination">
-                  <div class="pagination-info">
-                    <span>Showing 1-1 of 1 results</span>
-                  </div>
-                  <div class="pagination-controls">
-                    <button class="pagination-btn" disabled>
-                      <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="pagination-btn active">1</button>
-                    <button class="pagination-btn" disabled>
-                      <i class="fas fa-chevron-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: Schools -->
-      <div class="dash-page" id="page-schools">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Registered Schools</h1>
-            <p class="page-subtitle">All private schools registered under this division</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div style="display: flex; gap: var(--space-3);">
-              <div class="search-bar" style="width: 280px;">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" id="schoolSearch" placeholder="Search schools..." />
-              </div>
-              <select class="form-select" id="schoolLevelFilter" style="width: 160px;">
-                <option value="">All Levels</option>
-                <option value="kindergarten">Kindergarten</option>
-                <option value="elementary">Elementary</option>
-                <option value="junior">Junior High</option>
-                <option value="senior">Senior High</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-body">
-            <div id="schoolsGrid" class="grid-2">
-              <!-- Schools loaded dynamically -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: Staff Accounts -->
-      <div class="dash-page" id="page-staff">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Staff Accounts</h1>
-            <p class="page-subtitle">Manage school staff who can submit documents</p>
-          </div>
-        </div>
-
-        <!-- Pending Approvals -->
-        <div class="card" id="pendingStaffCard" style="margin-bottom: var(--space-6);">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-user-clock" style="color: var(--warning-500);"></i>
-              Pending Approval
-            </div>
-          </div>
-          <div class="card-body" id="pendingStaffList">
-            <!-- Pending staff loaded dynamically -->
-          </div>
-        </div>
-
-        <!-- All Staff -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-users" style="color: var(--primary-500);"></i>
-              All Staff
-            </div>
-            <div style="display: flex; gap: var(--space-3);">
-              <div class="search-bar" style="width: 240px;">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" id="staffSearch" placeholder="Search staff..." />
-              </div>
-            </div>
-          </div>
-          <div class="card-body" style="padding: 0;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>School</th>
-                  <th>Email</th>
-                  <th>Status</th>
-                  <th>Registered</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="allStaffBody">
-                <!-- Staff loaded dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: Deadlines -->
-      <div class="dash-page" id="page-deadlines">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Submission Deadlines</h1>
-            <p class="page-subtitle">Set and manage deadlines visible to all schools</p>
-          </div>
-          <button class="btn btn-primary" id="addDeadlineBtn">
-            <i class="fas fa-plus"></i> Add Deadline
-          </button>
-        </div>
-
-        <div class="card">
-          <div class="card-body" id="deadlineMgmtList">
-            <!-- Deadlines loaded dynamically -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: Notices -->
-      <div class="dash-page" id="page-notices">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Division Notices</h1>
-            <p class="page-subtitle">Post announcements visible to all registered schools</p>
-          </div>
-          <button class="btn btn-primary" id="addNoticeBtn">
-            <i class="fas fa-plus"></i> Add Notice
-          </button>
-        </div>
-
-        <div class="grid-3" style="margin-bottom: var(--space-6);">
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-blue">
-              <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">38</div>
-              <div class="stat-label">Audience Size</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-green">
-              <i class="fas fa-eye"></i>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">32</div>
-              <div class="stat-label">Viewed Schools</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-amber">
-              <i class="fas fa-chart-line"></i>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">84%</div>
-              <div class="stat-label">View Rate</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" id="noticeFormCard" hidden>
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-paper-plane" style="color: var(--primary-500);"></i>
-              New Notice
-            </div>
-          </div>
-          <div class="card-body">
-            <form id="noticeForm">
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-                <div class="form-group">
-                  <label class="form-label form-label-required">Title</label>
-                  <input type="text" class="form-input" id="noticeTitle" placeholder="Notice title" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Type</label>
-                  <select class="form-select" id="noticeType">
-                    <option value="info">Information</option>
-                    <option value="warning">Warning</option>
-                    <option value="success">Announcement</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Target Level</label>
-                  <select class="form-select" id="noticeTargetLevel">
-                    <option value="all">All Levels</option>
-                    <option value="kindergarten">Kindergarten</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="junior">Junior High</option>
-                    <option value="senior">Senior High</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group" style="margin-bottom: var(--space-4);">
-                <label class="form-label form-label-required">Message</label>
-                <textarea class="form-textarea" id="noticeMessage" rows="3" placeholder="Notice content..."></textarea>
-              </div>
-              <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
-                <button type="button" class="btn btn-ghost" id="cancelNotice">Cancel</button>
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-paper-plane"></i> Post Notice
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body" id="adminNoticesList">
-            <!-- Notices loaded dynamically -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Page: Settings -->
-      <div class="dash-page" id="page-settings">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Settings</h1>
-            <p class="page-subtitle">Manage your admin account</p>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card" style="text-align: center; padding: var(--space-8);">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--accent-500); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto var(--space-4);">
-              <i class="fas fa-user-shield"></i>
-            </div>
-            <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1);" id="settingsAdminName">Administrator</h3>
-            <span class="badge badge-warning" id="settingsDivision">Division of Masbate</span>
-            <p style="color: var(--text-secondary); margin-top: var(--space-3); font-size: 0.875rem;">
-              <i class="fas fa-shield-alt"></i> Division Administrator
-            </p>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <i class="fas fa-id-card" style="color: var(--primary-500);"></i>
-                Account Information
-              </div>
-            </div>
-            <div class="card-body">
-              <form id="adminProfileForm">
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-                  <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-input" id="adminFullName" placeholder="Full name" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Position</label>
-                    <input type="text" class="form-input" id="adminPosition" placeholder="e.g. Education Program Supervisor" />
-                  </div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-                  <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-input" id="adminEmail" placeholder="admin@deped.gov.ph" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Contact Number</label>
-                    <input type="tel" class="form-input" id="adminPhone" placeholder="09XX-XXX-XXXX" />
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Save Changes
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div class="card-footer">
-              <h4 style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">
-                <i class="fas fa-lock" style="color: var(--primary-500);"></i> Change Password
-              </h4>
-              <form id="adminPwForm">
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
-                  <div class="form-group">
-                    <label class="form-label">Current Password</label>
-                    <input type="password" class="form-input" id="adminCurrPw" placeholder="Enter current password" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">New Password</label>
-                    <input type="password" class="form-input" id="adminNewPw" placeholder="Enter new password" />
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                  <button type="submit" class="btn btn-secondary">
-                    <i class="fas fa-key"></i> Update Password
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- Page: All Submissions -->
+  <div class="dash-page v2-dashboard-wrapper" id="page-submissions">
+    <div class="v2-header">
+      <h1>All Submissions</h1>
+      <p>Review and manage documents from all schools</p>
+    </div>
+      <div style="display: flex; gap: var(--space-3);">
+        <button class="btn btn-secondary" id="exportAdminBtn">
+          <i class="fas fa-download"></i> Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; flex: 1;">
+          <div class="search-bar" style="width: 280px;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="adminSearch"
+              placeholder="Search by school, reference, document..." />
+            <button class="search-clear"><i class="fas fa-times"></i></button>
+          </div>
+          <select class="form-select" id="adminStatusFilter" style="width: 160px;">
+            <option value="">All Status</option>
+            <option value="received">Received</option>
+            <option value="review">Under Review</option>
+            <option value="approved">Approved</option>
+            <option value="returned">Returned</option>
+          </select>
+          <select class="form-select" id="adminLevelFilter" style="width: 160px;">
+            <option value="">All Levels</option>
+            <option value="kindergarten">Kindergarten</option>
+            <option value="elementary">Elementary</option>
+            <option value="junior">Junior High</option>
+            <option value="senior">Senior High</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="table-container">
+          <div class="table-header">
+            <div class="table-title-section">
+              <h3 class="table-title">All Submissions</h3>
+              <span class="table-subtitle">Manage and review all document submissions</span>
+            </div>
+            <div class="table-actions">
+              <div class="table-search">
+                <i class="fas fa-search table-search-icon"></i>
+                <input type="text" class="table-search-input" placeholder="Search submissions..." id="adminSearch">
+              </div>
+              <select class="table-filter-select" id="levelFilter">
+                <option value="">All Levels</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="elementary">Elementary</option>
+                <option value="junior">Junior High</option>
+                <option value="senior">Senior High</option>
+              </select>
+              <button class="table-export-btn" id="adminExport">
+                <i class="fas fa-download"></i>
+                <span>Export</span>
+              </button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table enhanced-table">
+              <thead>
+                <tr>
+                  <th class="table-checkbox-header">
+                    <div class="table-header-cell">
+                      <input type="checkbox" id="selectAll" class="table-checkbox">
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="reference">
+                    <div class="table-header-cell">
+                      <span>Reference No.</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="school">
+                    <div class="table-header-cell">
+                      <span>School</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="level">
+                    <div class="table-header-cell">
+                      <span>Level</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="document">
+                    <div class="table-header-cell">
+                      <span>Document Type</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="year">
+                    <div class="table-header-cell">
+                      <span>School Year</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="submitter">
+                    <div class="table-header-cell">
+                      <span>Submitted By</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="date">
+                    <div class="table-header-cell">
+                      <span>Date</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="sortable-column" data-sort="status">
+                    <div class="table-header-cell">
+                      <span>Status</span>
+                      <i class="fas fa-sort table-sort-icon"></i>
+                    </div>
+                  </th>
+                  <th class="table-actions-header">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminSubmissionsBody">
+                <tr class="table-row">
+                  <td>
+                    <div class="table-cell-content">
+                      <input type="checkbox" class="table-checkbox">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <span class="reference-badge">SMME-2026-00156</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <div class="school-info">
+                        <span class="school-name">Adventist Elementary School</span>
+                        <span class="school-id">School ID: 001</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <span class="level-badge level-elementary">Elementary</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <div class="document-info">
+                        <i class="fas fa-file-alt document-icon"></i>
+                        <span class="document-name">Enrollment Report</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <span class="year-badge">2026-2027</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <div class="submitter-info">
+                        <div class="submitter-avatar" style="background: var(--accent-500);">
+                          <i class="fas fa-user"></i>
+                        </div>
+                        <span class="submitter-name">Maria Santos</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <span class="date-badge recent">Today</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-content">
+                      <span class="status-pill status-review">Under Review</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="table-cell-actions">
+                      <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
+                        <i class="fas fa-eye"></i>
+                        <span>Review</span>
+                      </button>
+                      <div class="dropdown table-dropdown">
+                        <button class="dropdown-toggle" title="More Options">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a href="#" class="dropdown-item">
+                            <i class="fas fa-download"></i>
+                            Download
+                          </a>
+                          <a href="#" class="dropdown-item">
+                            <i class="fas fa-share"></i>
+                            Share
+                          </a>
+                          <a href="#" class="dropdown-item">
+                            <i class="fas fa-comment"></i>
+                            Add Comment
+                          </a>
+                          <a href="#" class="dropdown-item text-danger">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <div class="table-pagination">
+              <div class="pagination-info">
+                <span>Showing 1-1 of 1 results</span>
+              </div>
+              <div class="pagination-controls">
+                <button class="pagination-btn" disabled>
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn" disabled>
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Schools -->
+  <div class="dash-page" id="page-schools">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Registered Schools</h1>
+        <p class="page-subtitle">All private schools registered under this division</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="display: flex; gap: var(--space-3);">
+          <div class="search-bar" style="width: 280px;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="schoolSearch" placeholder="Search schools..." />
+          </div>
+          <select class="form-select" id="schoolLevelFilter" style="width: 160px;">
+            <option value="">All Levels</option>
+            <option value="kindergarten">Kindergarten</option>
+            <option value="elementary">Elementary</option>
+            <option value="junior">Junior High</option>
+            <option value="senior">Senior High</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="schoolsGrid" class="grid-2">
+          <!-- Schools loaded dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Staff Accounts -->
+  <div class="dash-page v2-dashboard-wrapper" id="page-staff">
+    <div class="v2-header">
+      <h1>Staff Accounts</h1>
+      <p>Manage school staff who can submit documents</p>
+    </div>
+    </div>
+
+    <!-- Pending Approvals -->
+    <div class="card" id="pendingStaffCard" style="margin-bottom: var(--space-6);">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-user-clock" style="color: var(--warning-500);"></i>
+          Pending Approval
+        </div>
+      </div>
+      <div class="card-body" id="pendingStaffList">
+        <!-- Pending staff loaded dynamically -->
+      </div>
+    </div>
+
+    <!-- All Staff -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-users" style="color: var(--primary-500);"></i>
+          All Staff
+        </div>
+        <div style="display: flex; gap: var(--space-3);">
+          <div class="search-bar" style="width: 240px;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="staffSearch" placeholder="Search staff..." />
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+              <th>School</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Registered</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="allStaffBody">
+            <!-- Staff loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Deadlines -->
+  <div class="dash-page v2-dashboard-wrapper" id="page-deadlines">
+    <div class="v2-header">
+      <h1>Submission Deadlines</h1>
+      <p>Set and manage deadlines visible to all schools</p>
+    </div>
+      <button class="btn btn-primary" id="addDeadlineBtn">
+        <i class="fas fa-plus"></i> Add Deadline
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-body" id="deadlineMgmtList">
+        <!-- Deadlines loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Notices -->
+  <div class="dash-page v2-dashboard-wrapper" id="page-notices">
+    <div class="v2-header">
+      <h1>Division Notices</h1>
+      <p>Post announcements visible to all registered schools</p>
+    </div>
+      <button class="btn btn-primary" id="addNoticeBtn">
+        <i class="fas fa-plus"></i> Add Notice
+      </button>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: var(--space-6);">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-blue">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">38</div>
+          <div class="stat-label">Audience Size</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-green">
+          <i class="fas fa-eye"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">32</div>
+          <div class="stat-label">Viewed Schools</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-amber">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">84%</div>
+          <div class="stat-label">View Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="noticeFormCard" hidden>
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-paper-plane" style="color: var(--primary-500);"></i>
+          New Notice
+        </div>
+      </div>
+      <div class="card-body">
+        <form id="noticeForm">
+          <div
+            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+            <div class="form-group">
+              <label class="form-label form-label-required">Title</label>
+              <input type="text" class="form-input" id="noticeTitle" placeholder="Notice title" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <select class="form-select" id="noticeType">
+                <option value="info">Information</option>
+                <option value="warning">Warning</option>
+                <option value="success">Announcement</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Level</label>
+              <select class="form-select" id="noticeTargetLevel">
+                <option value="all">All Levels</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="elementary">Elementary</option>
+                <option value="junior">Junior High</option>
+                <option value="senior">Senior High</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label form-label-required">Message</label>
+            <textarea class="form-textarea" id="noticeMessage" rows="3" placeholder="Notice content..."></textarea>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+            <button type="button" class="btn btn-ghost" id="cancelNotice">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i> Post Notice
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" id="adminNoticesList">
+        <!-- Notices loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Page: Settings -->
+  <div class="dash-page v2-dashboard-wrapper" id="page-settings">
+    <div class="v2-header">
+      <h1>Settings</h1>
+      <p>Manage your admin account</p>
+    </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="text-align: center; padding: var(--space-8);">
+        <div
+          style="width: 100px; height: 100px; border-radius: 50%; background: var(--accent-500); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto var(--space-4);">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-1);"
+          id="settingsAdminName">Administrator</h3>
+        <span class="badge badge-warning" id="settingsDivision">Division of Masbate</span>
+        <p style="color: var(--text-secondary); margin-top: var(--space-3); font-size: 0.875rem;">
+          <i class="fas fa-shield-alt"></i> Division Administrator
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-id-card" style="color: var(--primary-500);"></i>
+            Account Information
+          </div>
+        </div>
+        <div class="card-body">
+          <form id="adminProfileForm">
+            <div
+              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="adminFullName" placeholder="Full name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Position</label>
+                <input type="text" class="form-input" id="adminPosition"
+                  placeholder="e.g. Education Program Supervisor" />
+              </div>
+            </div>
+            <div
+              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="adminEmail" placeholder="admin@deped.gov.ph" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" class="form-input" id="adminPhone" placeholder="09XX-XXX-XXXX" />
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <h4
+            style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4);">
+            <i class="fas fa-lock" style="color: var(--primary-500);"></i> Change Password
+          </h4>
+          <form id="adminPwForm">
+            <div
+              style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-4);">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-input" id="adminCurrPw" placeholder="Enter current password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-input" id="adminNewPw" placeholder="Enter new password" />
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-key"></i> Update Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
   </div>
 
   <!-- Review Modal -->
@@ -1163,12 +983,16 @@
       <div class="modal-body">
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
           <div>
-            <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
-              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">Document Details</div>
+            <div
+              style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+              <div
+                style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">
+                Document Details</div>
               <table style="width: 100%; font-size: 0.875rem;">
                 <tr>
                   <td style="padding: var(--space-2) 0; color: var(--text-muted); width: 120px;">Reference</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500; font-family: monospace;" id="reviewRef">SMME-2026-00156</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500; font-family: monospace;" id="reviewRef">
+                    SMME-2026-00156</td>
                 </tr>
                 <tr>
                   <td style="padding: var(--space-2) 0; color: var(--text-muted);">Type</td>
@@ -1176,7 +1000,8 @@
                 </tr>
                 <tr>
                   <td style="padding: var(--space-2) 0; color: var(--text-muted);">School</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewSchool">Adventist Elementary School</td>
+                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewSchool">Adventist Elementary School
+                  </td>
                 </tr>
                 <tr>
                   <td style="padding: var(--space-2) 0; color: var(--text-muted);">Submitted By</td>
@@ -1190,14 +1015,18 @@
             </div>
             <div class="form-group">
               <label class="form-label">Feedback / Remarks</label>
-              <textarea class="form-textarea" id="reviewFeedback" rows="4" placeholder="Enter your feedback or remarks for the school..."></textarea>
+              <textarea class="form-textarea" id="reviewFeedback" rows="4"
+                placeholder="Enter your feedback or remarks for the school..."></textarea>
             </div>
           </div>
           <div>
             <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4);">
-              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">Attached Files</div>
+              <div
+                style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">
+                Attached Files</div>
               <div id="reviewFiles" style="display: flex; flex-direction: column; gap: var(--space-2);">
-                <div style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); background: white; border-radius: var(--radius-md);">
+                <div
+                  style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); background: white; border-radius: var(--radius-md);">
                   <i class="fas fa-file-pdf" style="color: var(--danger-500);"></i>
                   <span style="font-size: 0.8125rem; flex: 1;">enrollment_report.pdf</span>
                   <button class="btn btn-sm btn-ghost"><i class="fas fa-download"></i></button>
@@ -1341,4 +1170,5 @@
     });
   </script>
 </body>
+
 </html>
