@@ -7,6 +7,7 @@ function populateAdminHeader() {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('sidebarAdminName', user.name);
   set('sidebarDivision', user.division || 'Masbate City SDO');
+  set('sidebarLogoText', user.division || 'Division of Masbate');
   set('topbarAdminName', user.name);
   set('adminWelcome', `Welcome, ${user.name}`);
   set('adminDivisionLabel', user.division || 'Masbate City Schools Division Office (SDO)');

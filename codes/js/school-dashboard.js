@@ -9,6 +9,7 @@ function populateStaffDashboard() {
   set('sidebarStaffName', user.name);
   set('sidebarStaffPosition', user.position || 'Staff');
   set('sidebarSchoolCtxName', user.schoolName || 'School');
+  set('sidebarLogoText', user.division || 'Division of Masbate');
   set('topbarUserName', user.name);
   set('topbarUserPos', user.position || 'Staff');
   set('welcomeMsg', 'Welcome, ' + user.name + '!');
