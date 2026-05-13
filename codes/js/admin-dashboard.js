@@ -4,7 +4,7 @@ if (!user || user.role !== 'admin') { window.location.href = '/html/login.html';
 
 function populateAdminHeader() {
   if (!user) return;
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const set = (id, v) => { document.querySelectorAll('#' + id + ', .' + id).forEach(el => el.textContent = v); };
   set('sidebarAdminName', user.name);
   set('sidebarDivision', user.division || 'Masbate City SDO');
   set('sidebarLogoText', user.division || 'Division of Masbate');
@@ -34,11 +34,27 @@ if (currentDateEl) {
 }
 
 /* ===== SIDEBAR TOGGLE ===== */
-const sidebar = document.getElementById('sidebar');
-const topbarMenu = document.getElementById('topbarMenu');
-const sidebarClose = document.getElementById('sidebarClose');
-topbarMenu?.addEventListener('click', () => sidebar.classList.add('open'));
-sidebarClose?.addEventListener('click', () => sidebar.classList.remove('open'));
+const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay') || document.querySelector('.sidebar-overlay');
+
+document.querySelectorAll('#topbarMenu, .topbar-menu').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sidebar?.classList.add('open');
+    sidebarOverlay?.classList.add('active');
+  });
+});
+
+document.querySelectorAll('#sidebarClose, .sidebar-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sidebar?.classList.remove('open');
+    sidebarOverlay?.classList.remove('active');
+  });
+});
+
+sidebarOverlay?.addEventListener('click', () => {
+  sidebar?.classList.remove('open');
+  sidebarOverlay?.classList.remove('active');
+});
 
 /* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
@@ -58,7 +74,8 @@ function switchPage(pageId) {
   };
 
   document.getElementById('topbarTitle').textContent = titles[pageId] || pageId;
-  sidebar.classList.remove('open');
+  if (sidebar) sidebar.classList.remove('open');
+  if (sidebarOverlay) sidebarOverlay.classList.remove('active');
   window.scrollTo(0, 0);
 
   if (pageId === 'dashboard') loadAdminDashboard();

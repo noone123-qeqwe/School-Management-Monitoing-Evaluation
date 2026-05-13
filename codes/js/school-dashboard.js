@@ -4,8 +4,8 @@ if (!user || user.role !== 'staff') { window.location.href = '/html/login.html';
 
 function populateStaffDashboard() {
   if (!user) return;
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  const val = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  const set = (id, v) => { document.querySelectorAll('#' + id + ', .' + id).forEach(el => el.textContent = v); };
+  const val = (id, v) => { document.querySelectorAll('#' + id + ', .' + id).forEach(el => el.value = v); };
   set('sidebarStaffName', user.name);
   set('sidebarStaffPosition', user.position || 'Staff');
   set('sidebarSchoolCtxName', user.schoolName || 'School');
@@ -30,10 +30,11 @@ function populateStaffDashboard() {
   val('pfLastName', parts.slice(1).join(' ') || '');
   val('pfEmail', user.email || '');
   val('pfSchool', user.schoolName || '');
-  const sel = document.getElementById('pfPosition');
-  if (sel) for (let i = 0; i < sel.options.length; i++) {
-    if (sel.options[i].value === user.position) { sel.selectedIndex = i; break; }
-  }
+  document.querySelectorAll('#pfPosition, .pf-position').forEach(sel => {
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === user.position) { sel.selectedIndex = i; break; }
+    }
+  });
 }
 
 function draftKey() {
@@ -117,11 +118,27 @@ async function loadTrackComments(ref) {
 }
 
 /* ===== SIDEBAR TOGGLE ===== */
-const sidebar = document.getElementById('sidebar');
-const topbarMenu = document.getElementById('topbarMenu');
-const sidebarClose = document.getElementById('sidebarClose');
-topbarMenu?.addEventListener('click', () => sidebar.classList.add('open'));
-sidebarClose?.addEventListener('click', () => sidebar.classList.remove('open'));
+const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay') || document.querySelector('.sidebar-overlay');
+
+document.querySelectorAll('#topbarMenu, .topbar-menu').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sidebar?.classList.add('open');
+    sidebarOverlay?.classList.add('active');
+  });
+});
+
+document.querySelectorAll('#sidebarClose, .sidebar-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sidebar?.classList.remove('open');
+    sidebarOverlay?.classList.remove('active');
+  });
+});
+
+sidebarOverlay?.addEventListener('click', () => {
+  sidebar?.classList.remove('open');
+  sidebarOverlay?.classList.remove('active');
+});
 
 /* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
@@ -137,7 +154,8 @@ function switchPage(pageId) {
     track: 'Track Submission', profile: 'My Profile'
   };
   document.getElementById('topbarTitle').textContent = titles[pageId] || pageId;
-  sidebar.classList.remove('open');
+  if (sidebar) sidebar.classList.remove('open');
+  if (sidebarOverlay) sidebarOverlay.classList.remove('active');
   window.scrollTo(0, 0);
   if (pageId === 'dashboard') loadDashboard();
   if (pageId === 'submissions') loadSubmissions('all');
@@ -197,15 +215,15 @@ async function loadDashboard() {
     setProg('Review', review);
     setProg('Returned', returned);
 
-    const badge = document.getElementById('submissionsBadge');
-    if (badge) {
+    document.querySelectorAll('#submissionsBadge, .submissions-badge').forEach(badge => {
       if (returned > 0) {
         badge.removeAttribute('hidden');
         badge.textContent = returned;
       } else {
         badge.setAttribute('hidden', '');
+        badge.textContent = '0';
       }
-    }
+    });
 
     document.getElementById('statTotal').textContent = subs.length;
     document.getElementById('statReview').textContent = subs.filter(s => s.status === 'review' || s.status === 'received').length;
@@ -387,14 +405,21 @@ document.getElementById('exportMySubsBtn')?.addEventListener('click', async () =
 async function refreshNotifBell() {
   try {
     const { count } = await API.notifications.unreadCount();
-    const dot = document.getElementById('notifDot');
-    const cnt = document.getElementById('notifCount');
-    if (count > 0) {
-      dot.removeAttribute('hidden'); cnt.removeAttribute('hidden');
-      cnt.textContent = count > 9 ? '9+' : count;
-    } else {
-      dot.setAttribute('hidden', ''); cnt.setAttribute('hidden', '');
-    }
+
+    document.querySelectorAll('#notifDot, .notif-dot').forEach(dot => {
+      if (count > 0) dot.removeAttribute('hidden');
+      else dot.setAttribute('hidden', '');
+    });
+
+    document.querySelectorAll('#notifCount, .notif-count').forEach(cnt => {
+      if (count > 0) {
+        cnt.removeAttribute('hidden');
+        cnt.textContent = count > 9 ? '9+' : count;
+      } else {
+        cnt.setAttribute('hidden', '');
+        cnt.textContent = '0';
+      }
+    });
   } catch { }
 }
 
