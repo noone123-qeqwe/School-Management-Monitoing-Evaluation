@@ -119,8 +119,8 @@ async function loadTrackComments(ref) {
 const sidebar = document.getElementById('sidebar');
 const topbarMenu = document.getElementById('topbarMenu');
 const sidebarClose = document.getElementById('sidebarClose');
-topbarMenu.addEventListener('click', () => sidebar.classList.add('open'));
-sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+topbarMenu?.addEventListener('click', () => sidebar.classList.add('open'));
+sidebarClose?.addEventListener('click', () => sidebar.classList.remove('open'));
 
 /* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
@@ -309,13 +309,13 @@ async function loadSubmissions(mode) {
   } catch (err) { API.showToast('Failed to load submissions: ' + err.message, 'error'); }
 }
 
-document.getElementById('submissionSearch').addEventListener('input', API.debounce(() => loadSubmissions('all'), 400));
-document.getElementById('submissionFilter').addEventListener('change', () => loadSubmissions('all'));
-document.getElementById('mineSearch').addEventListener('input', API.debounce(() => loadSubmissions('mine'), 400));
-document.getElementById('mineFilter').addEventListener('change', () => loadSubmissions('mine'));
+document.getElementById('submissionSearch')?.addEventListener('input', API.debounce(() => loadSubmissions('all'), 400));
+document.getElementById('submissionFilter')?.addEventListener('change', () => loadSubmissions('all'));
+document.getElementById('mineSearch')?.addEventListener('input', API.debounce(() => loadSubmissions('mine'), 400));
+document.getElementById('mineFilter')?.addEventListener('change', () => loadSubmissions('mine'));
 
 /* ===== EXPORT CSV ===== */
-document.getElementById('exportSubsBtn').addEventListener('click', async () => {
+document.getElementById('exportSubsBtn')?.addEventListener('click', async () => {
   try {
     const subs = await API.submissions.list({ limit: 1000 });
     API.exportToCSV(
@@ -369,14 +369,14 @@ async function renderNotifPanel() {
   }
 }
 
-document.getElementById('notifBell').addEventListener('click', e => {
+document.getElementById('notifBell')?.addEventListener('click', e => {
   e.stopPropagation();
   const panel = document.getElementById('notifPanel');
   if (panel.hasAttribute('hidden')) { renderNotifPanel(); panel.removeAttribute('hidden'); }
   else panel.setAttribute('hidden', '');
 });
 
-document.getElementById('markAllReadBtn').addEventListener('click', async () => {
+document.getElementById('markAllReadBtn')?.addEventListener('click', async () => {
   await API.notifications.markAllRead();
   renderNotifPanel(); refreshNotifBell();
 });
@@ -418,7 +418,7 @@ async function loadCompliance() {
     }).join('');
   } catch (err) { grid.innerHTML = '<p style="color:var(--text-muted)">Failed to load compliance data.</p>'; }
 }
-document.getElementById('complianceYear').addEventListener('change', loadCompliance);
+document.getElementById('complianceYear')?.addEventListener('change', loadCompliance);
 
 /* ===== DEADLINES ===== */
 async function loadDeadlines() {
@@ -463,11 +463,11 @@ const dUploadArea = document.getElementById('dUploadArea');
 const dFileInput = document.getElementById('dFileInput');
 const dFileList = document.getElementById('dFileList');
 
-document.getElementById('dBrowseBtn').addEventListener('click', () => dFileInput.click());
-dFileInput.addEventListener('change', () => { addDFiles(Array.from(dFileInput.files)); dFileInput.value = ''; });
-dUploadArea.addEventListener('dragover', e => { e.preventDefault(); dUploadArea.classList.add('drag-over'); });
-dUploadArea.addEventListener('dragleave', () => dUploadArea.classList.remove('drag-over'));
-dUploadArea.addEventListener('drop', e => {
+document.getElementById('dBrowseBtn')?.addEventListener('click', () => dFileInput.click());
+dFileInput?.addEventListener('change', () => { addDFiles(Array.from(dFileInput.files)); dFileInput.value = ''; });
+dUploadArea?.addEventListener('dragover', e => { e.preventDefault(); dUploadArea.classList.add('drag-over'); });
+dUploadArea?.addEventListener('dragleave', () => dUploadArea.classList.remove('drag-over'));
+dUploadArea?.addEventListener('drop', e => {
   e.preventDefault(); dUploadArea.classList.remove('drag-over');
   addDFiles(Array.from(e.dataTransfer.files));
 });
@@ -564,7 +564,7 @@ document.getElementById('loadDraftBtn').addEventListener('click', () => {
   } catch { }
 });
 
-document.getElementById('discardDraftBtn').addEventListener('click', () => {
+document.getElementById('discardDraftBtn')?.addEventListener('click', () => {
   localStorage.removeItem(draftKey());
   document.getElementById('draftBanner').setAttribute('hidden', '');
   API.showToast('Draft discarded.');
@@ -575,7 +575,7 @@ function getTemplates() {
   try { return JSON.parse(localStorage.getItem(tmplKey()) || '[]'); } catch { return []; }
 }
 
-document.getElementById('saveTemplateBtn').addEventListener('click', () => {
+document.getElementById('saveTemplateBtn')?.addEventListener('click', () => {
   const docType = document.getElementById('dDocType').value;
   const schoolYear = document.getElementById('dSchoolYear').value;
   const subject = document.getElementById('dSubject').value;
@@ -586,7 +586,7 @@ document.getElementById('saveTemplateBtn').addEventListener('click', () => {
   API.showToast('Template saved.', 'success');
 });
 
-document.getElementById('loadTemplateBtn').addEventListener('click', () => {
+document.getElementById('loadTemplateBtn')?.addEventListener('click', () => {
   const modal = document.getElementById('templateModal');
   const list = document.getElementById('templateList');
   const empty = document.getElementById('templateEmpty');
@@ -622,12 +622,12 @@ function removeTemplate(i) {
   document.getElementById('loadTemplateBtn').click();
 }
 
-document.getElementById('templateModalClose').addEventListener('click', () => {
+document.getElementById('templateModalClose')?.addEventListener('click', () => {
   document.getElementById('templateModal').setAttribute('hidden', '');
 });
 
 /* ===== SUBMIT FORM ===== */
-document.getElementById('dashSubmitForm').addEventListener('submit', async e => {
+document.getElementById('dashSubmitForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   let valid = true;
 
@@ -721,7 +721,7 @@ async function runSmartValidationHints() {
   });
 });
 
-document.getElementById('dashModalClose').addEventListener('click', () => {
+document.getElementById('dashModalClose')?.addEventListener('click', () => {
   document.getElementById('dashModalOverlay').setAttribute('hidden', '');
   switchPage('mine');
 });
@@ -733,7 +733,7 @@ function prefillTrack(ref) {
   requestAnimationFrame(() => setTimeout(() => document.getElementById('dTrackBtn').click(), 150));
 }
 
-document.getElementById('dTrackBtn').addEventListener('click', async () => {
+document.getElementById('dTrackBtn')?.addEventListener('click', async () => {
   const ref = document.getElementById('dTrackInput').value.trim().toUpperCase();
   const btn = document.getElementById('dTrackBtn');
   const result = document.getElementById('dTrackResult');
@@ -805,9 +805,9 @@ document.getElementById('dTrackBtn').addEventListener('click', async () => {
     if (threadEl) threadEl.style.display = 'none';
   }
 });
-document.getElementById('dTrackInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('dTrackBtn').click(); });
+document.getElementById('dTrackInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('dTrackBtn').click(); });
 
-document.getElementById('dTrackPostCommentBtn').addEventListener('click', async () => {
+document.getElementById('dTrackPostCommentBtn')?.addEventListener('click', async () => {
   if (!currentTrackRef) return;
   const ta = document.getElementById('dTrackNewComment');
   const body = (ta && ta.value || '').trim();
@@ -841,14 +841,14 @@ function openResubmit(ref) {
   document.getElementById('resubmitModal').removeAttribute('hidden');
 }
 
-document.getElementById('resubBrowseBtn').addEventListener('click', () => document.getElementById('resubFileInput').click());
-document.getElementById('resubFileInput').addEventListener('change', e => {
+document.getElementById('resubBrowseBtn')?.addEventListener('click', () => document.getElementById('resubFileInput').click());
+document.getElementById('resubFileInput')?.addEventListener('change', e => {
   addResubFiles(Array.from(e.target.files));
   renderResubFileList(); e.target.value = '';
 });
-document.getElementById('resubUploadArea').addEventListener('dragover', e => { e.preventDefault(); document.getElementById('resubUploadArea').classList.add('drag-over'); });
-document.getElementById('resubUploadArea').addEventListener('dragleave', () => document.getElementById('resubUploadArea').classList.remove('drag-over'));
-document.getElementById('resubUploadArea').addEventListener('drop', e => {
+document.getElementById('resubUploadArea')?.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('resubUploadArea').classList.add('drag-over'); });
+document.getElementById('resubUploadArea')?.addEventListener('dragleave', () => document.getElementById('resubUploadArea').classList.remove('drag-over'));
+document.getElementById('resubUploadArea')?.addEventListener('drop', e => {
   e.preventDefault(); document.getElementById('resubUploadArea').classList.remove('drag-over');
   addResubFiles(Array.from(e.dataTransfer.files)); renderResubFileList();
 });
@@ -871,7 +871,7 @@ function renderResubFileList() {
   ).join('');
 }
 
-document.getElementById('resubSubmitBtn').addEventListener('click', async () => {
+document.getElementById('resubSubmitBtn')?.addEventListener('click', async () => {
   const fileErr = document.getElementById('resubFileErr');
   if (resubFiles.length === 0) { fileErr.textContent = 'Please attach at least one revised file.'; return; }
   fileErr.textContent = '';
@@ -905,10 +905,10 @@ document.getElementById('resubSubmitBtn').addEventListener('click', async () => 
 });
 
 const closeResubmit = () => { document.getElementById('resubmitModal').setAttribute('hidden', ''); resubRef = null; resubFiles = []; };
-document.getElementById('resubCancelBtn').addEventListener('click', closeResubmit);
-document.getElementById('resubmitModalClose').addEventListener('click', closeResubmit);
+document.getElementById('resubCancelBtn')?.addEventListener('click', closeResubmit);
+document.getElementById('resubmitModalClose')?.addEventListener('click', closeResubmit);
 
-document.getElementById('dashSubmitForm').addEventListener('reset', () => {
+document.getElementById('dashSubmitForm')?.addEventListener('reset', () => {
   dFiles = [];
   renderDFileList();
   const fileErr = document.getElementById('dFileErr');
@@ -916,7 +916,7 @@ document.getElementById('dashSubmitForm').addEventListener('reset', () => {
 });
 
 /* ===== PROFILE FORMS ===== */
-document.getElementById('profileForm').addEventListener('submit', async e => {
+document.getElementById('profileForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   try {
     await API.staff.updateProfile({
@@ -929,7 +929,7 @@ document.getElementById('profileForm').addEventListener('submit', async e => {
   } catch (err) { API.showToast('Update failed: ' + err.message, 'error'); }
 });
 
-document.getElementById('changePasswordForm').addEventListener('submit', async e => {
+document.getElementById('changePasswordForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   try {
     await API.staff.changePassword({
@@ -942,7 +942,19 @@ document.getElementById('changePasswordForm').addEventListener('submit', async e
 });
 
 /* ===== LOGOUT ===== */
-document.getElementById('logoutBtn').addEventListener('click', () => API.auth.logout());
+document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
+
+/* ===== ANALYTICS TIME FILTERS ===== */
+document.querySelectorAll('.v2-filter-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const group = e.target.closest('.v2-time-filters');
+    if (group) {
+      group.querySelectorAll('.v2-filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      API.showToast('Data filtered by: ' + e.target.textContent, 'info');
+    }
+  });
+});
 
 /* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
 setInterval(refreshNotifBell, 60000);

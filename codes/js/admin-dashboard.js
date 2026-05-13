@@ -946,5 +946,17 @@ document.getElementById('adminPwForm')?.addEventListener('submit', async e => {
 /* ===== LOGOUT ===== */
 document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
 
+/* ===== ANALYTICS TIME FILTERS ===== */
+document.querySelectorAll('.v2-filter-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const group = e.target.closest('.v2-time-filters');
+    if (group) {
+      group.querySelectorAll('.v2-filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      API.showToast('Data filtered by: ' + e.target.textContent, 'info');
+    }
+  });
+});
+
 /* ===== INIT ===== */
 loadAdminDashboard();

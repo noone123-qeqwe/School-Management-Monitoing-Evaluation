@@ -142,7 +142,7 @@
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <img src="../assets/logo.jpg" alt="SMME Logo" />
-        <span>SMME</span>
+        <span style="font-size: 0.95rem !important;">Division of Masbate</span>
       </div>
       <button class="sidebar-toggle" id="sidebarToggle" title="Collapse sidebar">
         <i class="fas fa-chevron-left"></i>
@@ -231,6 +231,15 @@
             style="position: absolute; top: -4px; right: -4px; font-size: 0.6rem; padding: 2px 5px;" id="notifCount"
             hidden>0</span>
         </button>
+        <div class="notif-panel" id="notifPanel" hidden>
+          <div class="notif-panel-header">
+            <strong>Notifications</strong>
+            <button class="link-btn" id="markAllReadBtn">Mark all as read</button>
+          </div>
+          <div class="notif-list" id="notifList">
+            <!-- Notifications loaded here -->
+          </div>
+        </div>
         <div class="header-divider"></div>
         <div class="header-user">
           <div class="sidebar-avatar" style="width: 36px; height: 36px;">
@@ -467,6 +476,15 @@
 
       <div class="card">
         <div class="card-body">
+          <div class="draft-banner" id="draftBanner" hidden>
+            <i class="fas fa-file-signature"></i>
+            <span>You have an unsaved draft from <strong id="draftDate"></strong>.</span>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-sm btn-primary" id="loadDraftBtn">Resume Draft</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="discardDraftBtn">Discard</button>
+            </div>
+          </div>
+
           <form id="dashSubmitForm" style="max-width: 800px;">
             <!-- Document Details -->
             <div style="margin-bottom: var(--space-6);">
@@ -860,6 +878,10 @@
         <h1>Compliance Checklist</h1>
         <p>Required documents for the selected school year</p>
       </div>
+      <select class="form-select" id="complianceYear" style="width: 160px;">
+        <option value="2026-2027">2026-2027</option>
+        <option value="2025-2026">2025-2026</option>
+      </select>
     </div>
     <div id="complianceGrid" class="grid-2">
       <!-- Compliance items loaded dynamically -->
@@ -915,8 +937,26 @@
               </button>
             </div>
           </div>
-          <div id="dTrackResult" style="margin-top: var(--space-5);">
-            <!-- Track result appears here -->
+          <div id="dTrackResult" hidden style="margin-top: var(--space-5);">
+            <div class="track-card">
+              <div class="track-header">
+                <div class="track-ref" id="dTrackRef"></div>
+                <span class="status-pill" id="dTrackStatus"></span>
+              </div>
+              <div class="track-details" id="dTrackDetails"></div>
+              <div class="feedback-box" id="dTrackFeedback" hidden></div>
+              <div class="track-timeline" id="dTrackTimeline"></div>
+
+              <div id="dTrackThread"
+                style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: none;">
+                <h4 style="font-size: 0.9rem; margin-bottom: 10px;">Discussion</h4>
+                <div id="dTrackCommentsList"
+                  style="max-height: 200px; overflow-y: auto; margin-bottom: 10px; font-size: 0.85rem;"></div>
+                <textarea id="dTrackNewComment" class="form-textarea" rows="2" placeholder="Add a reply..."></textarea>
+                <button id="dTrackPostCommentBtn" class="btn btn-sm btn-secondary" style="margin-top: 8px;">Post
+                  Reply</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1075,7 +1115,7 @@
           <div class="modal-title-icon"><i class="fas fa-check-circle"></i></div>
           <span>Submission Successful!</span>
         </div>
-        <button class="modal-close" onclick="closeModal('dashModalOverlay')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" id="dashModalClose"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body" style="text-align: center;">
         <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">Your documents have been submitted to
@@ -1106,7 +1146,7 @@
           <div class="modal-title-icon"><i class="fas fa-bookmark"></i></div>
           <span>Submission Templates</span>
         </div>
-        <button class="modal-close" onclick="closeModal('templateModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" id="templateModalClose"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <div id="templateList">
@@ -1129,7 +1169,7 @@
           <div class="modal-title-icon"><i class="fas fa-redo"></i></div>
           <span>Resubmit Document</span>
         </div>
-        <button class="modal-close" onclick="closeModal('resubmitModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" id="resubmitModalClose"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: var(--space-4);">
@@ -1164,7 +1204,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeModal('resubmitModal')">Cancel</button>
+        <button class="btn btn-ghost" id="resubCancelBtn">Cancel</button>
         <button class="btn btn-primary" id="resubSubmitBtn">
           <i class="fas fa-paper-plane"></i> Resubmit
         </button>
