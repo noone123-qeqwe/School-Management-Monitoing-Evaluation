@@ -24,7 +24,35 @@
       border-right: none !important;
     }
 
-    .sidebar-logo span,
+    .sidebar-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+
+    .sidebar-logo {
+      width: auto !important;
+      height: auto !important;
+      background: transparent !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+    }
+
+    .sidebar-logo img {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 10px !important;
+      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .sidebar-logo span {
+      font-size: 1.2rem !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.5px !important;
+      color: #ffffff !important;
+    }
+
     .sidebar-user-name {
       color: #ffffff !important;
     }
@@ -64,6 +92,16 @@
 
     .sidebar-toggle {
       color: #ddd6fe !important;
+      width: 32px !important;
+      height: 32px !important;
+      padding: 0 !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: none !important;
+      border-radius: 8px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
     }
 
     .sidebar-logout {
@@ -488,31 +526,25 @@
               </select>
             </div>
           </div>
+
+          <!-- Bulk Action Bar -->
+          <div id="bulkBar" hidden>
+            <div class="bulk-bar"
+              style="margin: 0 24px 16px; padding: 12px 16px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-weight: 600; color: #1e40af;"><i class="fas fa-check-square"
+                  style="margin-right: 8px;"></i><span id="bulkCount">0 selected</span></div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-sm btn-ghost" id="bulkClearBtn">Clear</button>
+                <button class="btn btn-sm btn-danger" id="bulkReturnBtn"><i class="fas fa-undo"></i> Return
+                  Selected</button>
+                <button class="btn btn-sm btn-success" id="bulkApproveBtn"><i class="fas fa-check"></i> Approve
+                  Selected</button>
+              </div>
+            </div>
+          </div>
+
           <div class="card-body" style="padding: 0;">
             <div class="table-container">
-              <div class="table-header">
-                <div class="table-title-section">
-                  <h3 class="table-title">All Submissions</h3>
-                  <span class="table-subtitle">Manage and review all document submissions</span>
-                </div>
-                <div class="table-actions">
-                  <div class="table-search">
-                    <i class="fas fa-search table-search-icon"></i>
-                    <input type="text" class="table-search-input" placeholder="Search submissions..." id="adminSearch">
-                  </div>
-                  <select class="table-filter-select" id="levelFilter">
-                    <option value="">All Levels</option>
-                    <option value="kindergarten">Kindergarten</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="junior">Junior High</option>
-                    <option value="senior">Senior High</option>
-                  </select>
-                  <button class="table-export-btn" id="adminExport">
-                    <i class="fas fa-download"></i>
-                    <span>Export</span>
-                  </button>
-                </div>
-              </div>
               <div class="table-wrapper">
                 <table class="data-table enhanced-table">
                   <thead>
@@ -789,6 +821,44 @@
           </button>
         </div>
 
+        <div class="card" id="deadlineFormCard" hidden style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div class="card-title">New Deadline</div>
+          </div>
+          <div class="card-body">
+            <form id="deadlineForm">
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px;">
+                <div class="form-group">
+                  <label class="form-label">Document Type</label>
+                  <input type="text" id="dlDocType" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">School Year</label>
+                  <input type="text" id="dlYear" class="form-input" placeholder="e.g. 2026-2027" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Deadline Date</label>
+                  <input type="date" id="dlDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Level</label>
+                  <select id="dlLevel" class="form-select">
+                    <option value="all">All Levels</option>
+                    <option value="kindergarten">Kindergarten</option>
+                    <option value="elementary">Elementary</option>
+                    <option value="junior">Junior High</option>
+                    <option value="senior">Senior High</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn btn-ghost" id="cancelDeadline">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Deadline</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-body" id="deadlineMgmtList">
             <!-- Deadlines loaded dynamically -->
@@ -871,6 +941,12 @@
                     <option value="senior">Senior High</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label class="form-label">Target School</label>
+                  <select class="form-select" id="noticeTargetSchool">
+                    <option value="">All Schools</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group" style="margin-bottom: var(--space-4);">
                 <label class="form-label form-label-required">Message</label>
@@ -890,6 +966,93 @@
           <div class="card-body" id="adminNoticesList">
             <!-- Notices loaded dynamically -->
           </div>
+        </div>
+      </div>
+
+      <!-- Page: Reports -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-reports">
+        <div class="v2-header">
+          <div>
+            <h1>Reports & Analytics</h1>
+            <p>Comprehensive overview of submission data</p>
+          </div>
+          <button class="btn btn-secondary" id="exportReportBtn">
+            <i class="fas fa-download"></i> Export Data
+          </button>
+        </div>
+        <div class="grid-3" style="margin-bottom: 24px;">
+          <div class="v2-stat-card card-green">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="rptApprovalRate">0%</div>
+              <div class="v2-stat-label">Approval Rate</div>
+            </div>
+          </div>
+          <div class="v2-stat-card card-amber">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="rptReturned">0</div>
+              <div class="v2-stat-label">Total Returned</div>
+            </div>
+          </div>
+          <div class="v2-stat-card card-blue">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="rptThisMonth">0</div>
+              <div class="v2-stat-label">Submissions This Month</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">By Document Type</div>
+            </div>
+            <div class="card-body" id="reportBars"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">By School</div>
+            </div>
+            <div class="card-body" id="reportBySchool"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Audit Log -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-audit">
+        <div class="v2-header">
+          <div>
+            <h1>Audit Log</h1>
+            <p>Track all system actions and events</p>
+          </div>
+          <button class="btn btn-secondary" id="exportAuditBtn"><i class="fas fa-download"></i> Export Log</button>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+              <div class="search-bar" style="width: 280px;"><i class="fas fa-search search-icon"></i><input type="text"
+                  class="search-input" id="auditSearch" placeholder="Search logs..." /></div>
+              <select class="form-select" id="auditActionFilter" style="width: 160px;">
+                <option value="">All Actions</option>
+                <option value="submit">Submit</option>
+                <option value="approve">Approve</option>
+                <option value="return">Return</option>
+                <option value="login">Login</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body" id="auditLogList"></div>
+        </div>
+      </div>
+
+      <!-- Page: Validation Rules -->
+      <div class="dash-page v2-dashboard-wrapper" id="page-validation">
+        <div class="v2-header">
+          <div>
+            <h1>Validation Rules</h1>
+            <p>Manage automated system checks</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" id="validationRulesList"></div>
         </div>
       </div>
 
@@ -992,72 +1155,66 @@
           <div class="modal-title-icon"><i class="fas fa-file-alt"></i></div>
           <span>Review Submission</span>
         </div>
-        <button class="modal-close" onclick="closeModal('reviewModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" id="reviewModalClose"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
           <div>
-            <div
-              style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
-              <div
-                style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">
-                Document Details</div>
-              <table style="width: 100%; font-size: 0.875rem;">
-                <tr>
-                  <td style="padding: var(--space-2) 0; color: var(--text-muted); width: 120px;">Reference</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500; font-family: monospace;" id="reviewRef">
-                    SMME-2026-00156</td>
-                </tr>
-                <tr>
-                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Type</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewType">Enrollment Report</td>
-                </tr>
-                <tr>
-                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">School</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewSchool">Adventist Elementary School
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Submitted By</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewStaff">Maria Santos</td>
-                </tr>
-                <tr>
-                  <td style="padding: var(--space-2) 0; color: var(--text-muted);">Date</td>
-                  <td style="padding: var(--space-2) 0; font-weight: 500;" id="reviewDate">May 11, 2026</td>
-                </tr>
-              </table>
+            <div id="reviewDetails"
+              style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4); line-height: 1.6; font-size: 0.875rem;">
             </div>
             <div class="form-group">
               <label class="form-label">Feedback / Remarks</label>
               <textarea class="form-textarea" id="reviewFeedback" rows="4"
                 placeholder="Enter your feedback or remarks for the school..."></textarea>
+              <div class="field-error" id="reviewRemarksErr"
+                style="color: var(--danger-500); font-size: 0.8rem; margin-top: 5px;"></div>
             </div>
           </div>
           <div>
-            <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4);">
-              <div
-                style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">
-                Attached Files</div>
-              <div id="reviewFiles" style="display: flex; flex-direction: column; gap: var(--space-2);">
-                <div
-                  style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); background: white; border-radius: var(--radius-md);">
-                  <i class="fas fa-file-pdf" style="color: var(--danger-500);"></i>
-                  <span style="font-size: 0.8125rem; flex: 1;">enrollment_report.pdf</span>
-                  <button class="btn btn-sm btn-ghost"><i class="fas fa-download"></i></button>
-                </div>
-              </div>
+            <div
+              style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); height: 100%;">
+              <h4
+                style="font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+                Discussion</h4>
+              <div id="reviewCommentsList"
+                style="max-height: 200px; overflow-y: auto; margin-bottom: 10px; font-size: 0.85rem;"></div>
+              <textarea id="reviewNewComment" class="form-textarea" rows="2" placeholder="Add a note..."></textarea>
+              <button id="reviewPostCommentBtn" class="btn btn-sm btn-secondary"
+                style="margin-top: 8px; width: 100%;">Post Note</button>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeModal('reviewModal')">Cancel</button>
-        <button class="btn btn-danger" id="reviewReturnBtn">
+        <button class="btn btn-ghost" id="reviewModalClose2">Cancel</button>
+        <button class="btn btn-danger" id="returnBtn">
           <i class="fas fa-undo"></i> Return
         </button>
-        <button class="btn btn-success" id="reviewApproveBtn">
+        <button class="btn btn-success" id="approveBtn">
           <i class="fas fa-check"></i> Approve
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Return Modal -->
+  <div class="modal-overlay" id="bulkReturnModal" hidden>
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">Bulk Return Submissions</div>
+        <button class="modal-close" id="bulkReturnModalClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Feedback for all selected submissions</label>
+          <textarea class="form-textarea" id="bulkReturnRemarks" rows="4"></textarea>
+          <div class="field-error" id="bulkReturnErr" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="bulkReturnCancelBtn">Cancel</button>
+        <button class="btn btn-danger" id="bulkReturnConfirmBtn"><i class="fas fa-undo"></i> Confirm Return</button>
       </div>
     </div>
   </div>

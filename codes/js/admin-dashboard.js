@@ -339,11 +339,11 @@ async function loadAllSubmissions() {
   }
 }
 
-document.getElementById('adminSearch').addEventListener('input', API.debounce(loadAllSubmissions, 400));
-document.getElementById('adminStatusFilter').addEventListener('change', loadAllSubmissions);
-document.getElementById('adminLevelFilter').addEventListener('change', loadAllSubmissions);
+document.getElementById('adminSearch')?.addEventListener('input', API.debounce(loadAllSubmissions, 400));
+document.getElementById('adminStatusFilter')?.addEventListener('change', loadAllSubmissions);
+document.getElementById('adminLevelFilter')?.addEventListener('change', loadAllSubmissions);
 
-document.getElementById('selectAll').addEventListener('change', function () {
+document.getElementById('selectAll')?.addEventListener('change', function () {
   document.querySelectorAll('.row-check').forEach(cb => {
     cb.checked = this.checked;
     if (this.checked) {
@@ -366,7 +366,7 @@ function updateBulkBar() {
 }
 
 /* ===== BULK ACTIONS ===== */
-document.getElementById('bulkApproveBtn').addEventListener('click', async () => {
+document.getElementById('bulkApproveBtn')?.addEventListener('click', async () => {
   if (!selectedRefs.length) return;
   const btn = document.getElementById('bulkApproveBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
@@ -379,14 +379,14 @@ document.getElementById('bulkApproveBtn').addEventListener('click', async () => 
   finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve Selected'; } }
 });
 
-document.getElementById('bulkReturnBtn').addEventListener('click', () => {
+document.getElementById('bulkReturnBtn')?.addEventListener('click', () => {
   if (!selectedRefs.length) return;
   document.getElementById('bulkReturnRemarks').value = '';
   document.getElementById('bulkReturnErr').textContent = '';
   document.getElementById('bulkReturnModal').removeAttribute('hidden');
 });
 
-document.getElementById('bulkReturnConfirmBtn').addEventListener('click', async () => {
+document.getElementById('bulkReturnConfirmBtn')?.addEventListener('click', async () => {
   const remarks = document.getElementById('bulkReturnRemarks').value.trim();
   if (!remarks) { document.getElementById('bulkReturnErr').textContent = 'Please provide a reason.'; return; }
 
@@ -402,14 +402,14 @@ document.getElementById('bulkReturnConfirmBtn').addEventListener('click', async 
   finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-undo"></i> Confirm Return'; } }
 });
 
-document.getElementById('bulkClearBtn').addEventListener('click', () => {
+document.getElementById('bulkClearBtn')?.addEventListener('click', () => {
   selectedRefs = [];
   document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
   document.getElementById('selectAll').checked = false;
   updateBulkBar();
 });
-document.getElementById('bulkReturnModalClose').addEventListener('click', () => document.getElementById('bulkReturnModal').setAttribute('hidden', ''));
-document.getElementById('bulkReturnCancelBtn').addEventListener('click', () => document.getElementById('bulkReturnModal').setAttribute('hidden', ''));
+document.getElementById('bulkReturnModalClose')?.addEventListener('click', () => document.getElementById('bulkReturnModal').setAttribute('hidden', ''));
+document.getElementById('bulkReturnCancelBtn')?.addEventListener('click', () => document.getElementById('bulkReturnModal').setAttribute('hidden', ''));
 
 /* ===== REVIEW MODAL ===== */
 let currentReviewRef = null;
@@ -464,8 +464,8 @@ async function downloadFile(ref, fileId, filename) {
     API.showToast(`Download failed: ${err.message}`, 'error');
   }
 }
-document.getElementById('reviewModalClose').addEventListener('click', closeReviewModal);
-document.getElementById('reviewModalClose2').addEventListener('click', closeReviewModal);
+document.getElementById('reviewModalClose')?.addEventListener('click', closeReviewModal);
+document.getElementById('reviewModalClose2')?.addEventListener('click', closeReviewModal);
 
 document.getElementById('reviewPostCommentBtn')?.addEventListener('click', async () => {
   if (!currentReviewRef) return;
@@ -480,7 +480,7 @@ document.getElementById('reviewPostCommentBtn')?.addEventListener('click', async
   } catch (e) { API.showToast(e.message || 'Failed to post note.', 'error'); }
 });
 
-document.getElementById('approveBtn').addEventListener('click', async () => {
+document.getElementById('approveBtn')?.addEventListener('click', async () => {
   if (!currentReviewRef) return;
   const btn = document.getElementById('approveBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
@@ -494,7 +494,7 @@ document.getElementById('approveBtn').addEventListener('click', async () => {
   finally { if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Approve'; } }
 });
 
-document.getElementById('returnBtn').addEventListener('click', async () => {
+document.getElementById('returnBtn')?.addEventListener('click', async () => {
   if (!currentReviewRef) return;
   const remarks = document.getElementById('reviewRemarks').value.trim();
   if (!remarks) { document.getElementById('reviewRemarksErr').textContent = 'Feedback is required when returning a submission.'; return; }
@@ -544,8 +544,8 @@ async function loadSchools() {
     `).join('') || `<p style="color:var(--text-muted);padding:24px;text-align:center">No schools found.</p>`;
   } catch (err) { API.showToast(`Failed to load schools: ${err.message}`, 'error'); }
 }
-document.getElementById('schoolSearch').addEventListener('input', API.debounce(loadSchools, 400));
-document.getElementById('schoolLevelFilter').addEventListener('change', loadSchools);
+document.getElementById('schoolSearch')?.addEventListener('input', API.debounce(loadSchools, 400));
+document.getElementById('schoolLevelFilter')?.addEventListener('change', loadSchools);
 
 /* ===== STAFF ACCOUNTS ===== */
 async function loadStaffPage() {
@@ -609,7 +609,7 @@ async function updateStaffStatus(id, status) {
     loadStaffPage(); loadAdminDashboard();
   } catch (err) { API.showToast(`Failed: ${err.message}`, 'error'); }
 }
-document.getElementById('staffSearch').addEventListener('input', API.debounce(loadStaffPage, 400));
+document.getElementById('staffSearch')?.addEventListener('input', API.debounce(loadStaffPage, 400));
 
 /* ===== REPORTS ===== */
 async function loadReports() {
@@ -658,7 +658,7 @@ async function loadReports() {
 }
 
 /* ===== EXPORT ===== */
-document.getElementById('exportAdminBtn').addEventListener('click', async () => {
+document.getElementById('exportAdminBtn')?.addEventListener('click', async () => {
   try {
     const subs = await API.submissions.list({ limit: 5000 });
     API.exportToCSV(
@@ -671,7 +671,7 @@ document.getElementById('exportAdminBtn').addEventListener('click', async () => 
   } catch (err) { API.showToast(`Export failed: ${err.message}`, 'error'); }
 });
 
-document.getElementById('exportReportBtn').addEventListener('click', async () => {
+document.getElementById('exportReportBtn')?.addEventListener('click', async () => {
   try {
     const subs = await API.submissions.list({ limit: 5000 });
     API.exportToCSV(
@@ -711,10 +711,10 @@ async function loadAuditLog() {
     `).join('') : `<p style="color:var(--text-muted);text-align:center;padding:32px">No audit entries found.</p>`;
   } catch (err) { API.showToast(`Failed to load audit log: ${err.message}`, 'error'); }
 }
-document.getElementById('auditSearch').addEventListener('input', API.debounce(loadAuditLog, 400));
-document.getElementById('auditActionFilter').addEventListener('change', loadAuditLog);
+document.getElementById('auditSearch')?.addEventListener('input', API.debounce(loadAuditLog, 400));
+document.getElementById('auditActionFilter')?.addEventListener('change', loadAuditLog);
 
-document.getElementById('exportAuditBtn').addEventListener('click', async () => {
+document.getElementById('exportAuditBtn')?.addEventListener('click', async () => {
   try {
     const log = await API.admin.audit({ limit: 5000 });
     API.exportToCSV(
@@ -760,16 +760,16 @@ async function deleteDeadline(id) {
   catch (err) { API.showToast(`Failed: ${err.message}`, 'error'); }
 }
 
-document.getElementById('addDeadlineBtn').addEventListener('click', () => {
+document.getElementById('addDeadlineBtn')?.addEventListener('click', () => {
   document.getElementById('deadlineFormCard').removeAttribute('hidden');
   document.getElementById('addDeadlineBtn').setAttribute('hidden', '');
 });
-document.getElementById('cancelDeadline').addEventListener('click', () => {
+document.getElementById('cancelDeadline')?.addEventListener('click', () => {
   document.getElementById('deadlineFormCard').setAttribute('hidden', '');
   document.getElementById('addDeadlineBtn').removeAttribute('hidden');
   document.getElementById('deadlineForm').reset();
 });
-document.getElementById('deadlineForm').addEventListener('submit', async e => {
+document.getElementById('deadlineForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   const docType = document.getElementById('dlDocType').value;
   const year = document.getElementById('dlYear').value;
@@ -842,16 +842,16 @@ async function deleteNotice(id) {
   catch (err) { API.showToast(`Failed: ${err.message}`, 'error'); }
 }
 
-document.getElementById('addNoticeBtn').addEventListener('click', () => {
+document.getElementById('addNoticeBtn')?.addEventListener('click', () => {
   document.getElementById('noticeFormCard').removeAttribute('hidden');
   document.getElementById('addNoticeBtn').setAttribute('hidden', '');
 });
-document.getElementById('cancelNotice').addEventListener('click', () => {
+document.getElementById('cancelNotice')?.addEventListener('click', () => {
   document.getElementById('noticeFormCard').setAttribute('hidden', '');
   document.getElementById('addNoticeBtn').removeAttribute('hidden');
   document.getElementById('noticeForm').reset();
 });
-document.getElementById('noticeForm').addEventListener('submit', async e => {
+document.getElementById('noticeForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   const title = document.getElementById('noticeTitle').value.trim();
   const msg = document.getElementById('noticeMessage').value.trim();
@@ -918,7 +918,7 @@ async function toggleRule(code, isEnabled, label, severity, ruleConfig) {
 }
 
 /* ===== SETTINGS ===== */
-document.getElementById('adminProfileForm').addEventListener('submit', async e => {
+document.getElementById('adminProfileForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   try {
     await API.admin.updateProfile({
@@ -931,7 +931,7 @@ document.getElementById('adminProfileForm').addEventListener('submit', async e =
   } catch (err) { API.showToast(`Update failed: ${err.message}`, 'error'); }
 });
 
-document.getElementById('adminPwForm').addEventListener('submit', async e => {
+document.getElementById('adminPwForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   try {
     await API.admin.changePassword({
@@ -944,7 +944,7 @@ document.getElementById('adminPwForm').addEventListener('submit', async e => {
 });
 
 /* ===== LOGOUT ===== */
-document.getElementById('logoutBtn').addEventListener('click', () => API.auth.logout());
+document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
 
 /* ===== INIT ===== */
 loadAdminDashboard();

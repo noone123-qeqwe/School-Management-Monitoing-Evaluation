@@ -24,7 +24,35 @@
       border-right: none !important;
     }
 
-    .sidebar-logo span,
+    .sidebar-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+
+    .sidebar-logo {
+      width: auto !important;
+      height: auto !important;
+      background: transparent !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+    }
+
+    .sidebar-logo img {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 10px !important;
+      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .sidebar-logo span {
+      font-size: 1.2rem !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.5px !important;
+      color: #ffffff !important;
+    }
+
     .sidebar-user-name {
       color: #ffffff !important;
     }
@@ -64,6 +92,16 @@
 
     .sidebar-toggle {
       color: #bfdbfe !important;
+      width: 32px !important;
+      height: 32px !important;
+      padding: 0 !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: none !important;
+      border-radius: 8px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
     }
 
     .sidebar-logout {
@@ -272,7 +310,7 @@
               <div class="v2-stat-label">Submitted by Me</div>
             </div>
           </div>
-        </div>        <!-- Analytics Card -->
+        </div> <!-- Analytics Card -->
         <div class="v2-analytics-card">
           <div class="v2-main-analytics">
             <div class="v2-card-title">
@@ -332,7 +370,8 @@
         <div class="grid-2" style="margin-top: 32px;">
           <!-- Tasks & Deadlines -->
           <div class="card" style="border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
-            <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+            <div class="card-header"
+              style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
               <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
                 <i class="fas fa-list-check" style="color: var(--v2-primary); margin-right: 10px;"></i>
                 My Tasks & Deadlines
@@ -344,10 +383,14 @@
             <div class="card-body" id="tasksList" style="padding: 24px;">
               <div class="skeleton-stack">
                 <div class="skeleton-row" style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
-                  <div class="skeleton" style="width: 32px; height: 32px; border-radius: 8px; background: #f1f5f9;"></div>
+                  <div class="skeleton" style="width: 32px; height: 32px; border-radius: 8px; background: #f1f5f9;">
+                  </div>
                   <div style="flex: 1;">
-                    <div class="skeleton" style="height: 12px; width: 60%; background: #f1f5f9; border-radius: 4px; margin-bottom: 6px;"></div>
-                    <div class="skeleton" style="height: 10px; width: 40%; background: #f8fafc; border-radius: 4px;"></div>
+                    <div class="skeleton"
+                      style="height: 12px; width: 60%; background: #f1f5f9; border-radius: 4px; margin-bottom: 6px;">
+                    </div>
+                    <div class="skeleton" style="height: 10px; width: 40%; background: #f8fafc; border-radius: 4px;">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -356,15 +399,18 @@
 
           <!-- Progress Chart -->
           <div class="card" style="border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
-            <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+            <div class="card-header"
+              style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
               <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
                 <i class="fas fa-chart-pie" style="color: var(--v2-primary); margin-right: 10px;"></i>
                 Submission Progress
               </div>
             </div>
-            <div class="card-body" id="progressChart" style="padding: 24px; display: flex; align-items: center; justify-content: center; height: 240px;">
-              <div style="position: relative; width: 140px; height: 140px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center; border: 8px solid #f1f5f9;">
-                 <i class="fas fa-spinner fa-spin" style="color: #cbd5e1;"></i>
+            <div class="card-body" id="progressChart"
+              style="padding: 24px; display: flex; align-items: center; justify-content: center; height: 240px;">
+              <div
+                style="position: relative; width: 140px; height: 140px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center; border: 8px solid #f1f5f9;">
+                <i class="fas fa-spinner fa-spin" style="color: #cbd5e1;"></i>
               </div>
             </div>
           </div>
@@ -372,7 +418,8 @@
 
         <!-- Recent Submissions -->
         <div class="card" style="margin-top: 32px; border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
-          <div class="card-header" style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+          <div class="card-header"
+            style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
             <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
               <i class="fas fa-clock" style="color: var(--v2-primary); margin-right: 10px;"></i>
               Recent School Submissions
@@ -386,8 +433,10 @@
               <table class="data-table" style="width: 100%; border-collapse: collapse;">
                 <tbody id="recentSubmissionsBody">
                   <tr style="border-bottom: 1px solid #f8fafc;">
-                    <td colspan="3" style="padding: 32px; text-align: center; color: var(--v2-text-sub); font-size: 0.9rem;">
-                      <i class="fas fa-inbox" style="display: block; font-size: 2rem; margin-bottom: 12px; opacity: 0.2;"></i>
+                    <td colspan="3"
+                      style="padding: 32px; text-align: center; color: var(--v2-text-sub); font-size: 0.9rem;">
+                      <i class="fas fa-inbox"
+                        style="display: block; font-size: 2rem; margin-bottom: 12px; opacity: 0.2;"></i>
                       Loading recent submissions...
                     </td>
                   </tr>
@@ -399,126 +448,126 @@
       </div>
     </main>
 
-  <!-- Page: Submit Documents -->
-  <div class="dash-page" id="page-submit">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Submit Documents</h1>
-        <p class="page-subtitle" id="submitSubtitle">Submitting on behalf of your school</p>
+    <!-- Page: Submit Documents -->
+    <div class="dash-page" id="page-submit">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Submit Documents</h1>
+          <p class="page-subtitle" id="submitSubtitle">Submitting on behalf of your school</p>
+        </div>
+        <div style="display: flex; gap: var(--space-3);">
+          <button class="btn btn-secondary" id="loadTemplateBtn">
+            <i class="fas fa-bookmark"></i> Load Template
+          </button>
+          <button class="btn btn-secondary" id="saveDraftBtn">
+            <i class="fas fa-save"></i> Save Draft
+          </button>
+        </div>
       </div>
-      <div style="display: flex; gap: var(--space-3);">
-        <button class="btn btn-secondary" id="loadTemplateBtn">
-          <i class="fas fa-bookmark"></i> Load Template
-        </button>
-        <button class="btn btn-secondary" id="saveDraftBtn">
-          <i class="fas fa-save"></i> Save Draft
-        </button>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-body">
-        <form id="dashSubmitForm" style="max-width: 800px;">
-          <!-- Document Details -->
-          <div style="margin-bottom: var(--space-6);">
-            <h3
-              style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
-              <i class="fas fa-file-alt" style="color: var(--primary-500);"></i>
-              Document Details
-            </h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4);">
-              <div class="form-group">
-                <label class="form-label form-label-required">Document Type</label>
-                <select class="form-select" id="dDocType" required>
-                  <option value="">Select Document Type</option>
-                  <option>Enrollment Report</option>
-                  <option>Curriculum Documents</option>
-                  <option>Faculty Credentials</option>
-                  <option>Accreditation Documents</option>
-                  <option>Financial Reports</option>
-                  <option>Compliance Requirements</option>
-                  <option>School Application / Permit</option>
-                  <option>Assessment Data</option>
-                  <option>Graduation Requirements</option>
-                  <option>Other</option>
-                </select>
+      <div class="card">
+        <div class="card-body">
+          <form id="dashSubmitForm" style="max-width: 800px;">
+            <!-- Document Details -->
+            <div style="margin-bottom: var(--space-6);">
+              <h3
+                style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+                <i class="fas fa-file-alt" style="color: var(--primary-500);"></i>
+                Document Details
+              </h3>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4);">
+                <div class="form-group">
+                  <label class="form-label form-label-required">Document Type</label>
+                  <select class="form-select" id="dDocType" required>
+                    <option value="">Select Document Type</option>
+                    <option>Enrollment Report</option>
+                    <option>Curriculum Documents</option>
+                    <option>Faculty Credentials</option>
+                    <option>Accreditation Documents</option>
+                    <option>Financial Reports</option>
+                    <option>Compliance Requirements</option>
+                    <option>School Application / Permit</option>
+                    <option>Assessment Data</option>
+                    <option>Graduation Requirements</option>
+                    <option>Other</option>
+                  </select>
+                  <div class="form-feedback"></div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label form-label-required">School Year</label>
+                  <select class="form-select" id="dSchoolYear" required>
+                    <option value="">Select School Year</option>
+                    <option>2026-2027</option>
+                    <option>2025-2026</option>
+                    <option>2024-2025</option>
+                    <option>2023-2024</option>
+                  </select>
+                  <div class="form-feedback"></div>
+                </div>
+              </div>
+              <div class="form-group" style="margin-top: var(--space-4);">
+                <label class="form-label form-label-required">Subject / Purpose</label>
+                <input type="text" class="form-input" id="dSubject"
+                  placeholder="Brief description of the submission purpose" required />
                 <div class="form-feedback"></div>
               </div>
-              <div class="form-group">
-                <label class="form-label form-label-required">School Year</label>
-                <select class="form-select" id="dSchoolYear" required>
-                  <option value="">Select School Year</option>
-                  <option>2026-2027</option>
-                  <option>2025-2026</option>
-                  <option>2024-2025</option>
-                  <option>2023-2024</option>
-                </select>
-                <div class="form-feedback"></div>
+              <div class="form-group" style="margin-top: var(--space-4);">
+                <label class="form-label">Remarks / Notes</label>
+                <textarea class="form-textarea" id="dRemarks" rows="3"
+                  placeholder="Additional information for the Division Office..."></textarea>
               </div>
             </div>
-            <div class="form-group" style="margin-top: var(--space-4);">
-              <label class="form-label form-label-required">Subject / Purpose</label>
-              <input type="text" class="form-input" id="dSubject"
-                placeholder="Brief description of the submission purpose" required />
-              <div class="form-feedback"></div>
-            </div>
-            <div class="form-group" style="margin-top: var(--space-4);">
-              <label class="form-label">Remarks / Notes</label>
-              <textarea class="form-textarea" id="dRemarks" rows="3"
-                placeholder="Additional information for the Division Office..."></textarea>
-            </div>
-          </div>
 
-          <!-- File Upload -->
-          <div style="margin-bottom: var(--space-6);">
-            <h3
-              style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
-              <i class="fas fa-paperclip" style="color: var(--primary-500);"></i>
-              Attach Files
-            </h3>
-            <div class="upload-area" id="dUploadArea"
-              style="border: 2px dashed var(--border-strong); border-radius: var(--radius-xl); padding: var(--space-8); text-align: center; cursor: pointer; transition: all var(--transition-fast);"
-              ondragover="this.style.borderColor='var(--primary-500)'; this.style.background='var(--primary-50)';"
-              ondragleave="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';"
-              ondrop="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';">
-              <input type="file" id="dFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
-              <div style="color: var(--primary-500); font-size: 2.5rem; margin-bottom: var(--space-3);">
-                <i class="fas fa-cloud-upload-alt"></i>
+            <!-- File Upload -->
+            <div style="margin-bottom: var(--space-6);">
+              <h3
+                style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+                <i class="fas fa-paperclip" style="color: var(--primary-500);"></i>
+                Attach Files
+              </h3>
+              <div class="upload-area" id="dUploadArea"
+                style="border: 2px dashed var(--border-strong); border-radius: var(--radius-xl); padding: var(--space-8); text-align: center; cursor: pointer; transition: all var(--transition-fast);"
+                ondragover="this.style.borderColor='var(--primary-500)'; this.style.background='var(--primary-50)';"
+                ondragleave="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';"
+                ondrop="this.style.borderColor='var(--border-strong)'; this.style.background='transparent';">
+                <input type="file" id="dFileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" hidden />
+                <div style="color: var(--primary-500); font-size: 2.5rem; margin-bottom: var(--space-3);">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: var(--space-2);">
+                  Drag & drop files here or <button type="button" class="btn btn-sm btn-primary" id="dBrowseBtn"
+                    style="display: inline-flex;">Browse Files</button>
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.8125rem;">
+                  PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file
+                </p>
+                <ul class="file-list" id="dFileList" style="margin-top: var(--space-4); text-align: left;"></ul>
               </div>
-              <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-bottom: var(--space-2);">
-                Drag & drop files here or <button type="button" class="btn btn-sm btn-primary" id="dBrowseBtn"
-                  style="display: inline-flex;">Browse Files</button>
-              </p>
-              <p style="color: var(--text-muted); font-size: 0.8125rem;">
-                PDF, Word (.doc, .docx), Excel (.xls, .xlsx) | Max 100MB per file
-              </p>
-              <ul class="file-list" id="dFileList" style="margin-top: var(--space-4); text-align: left;"></ul>
+              <div class="form-feedback" id="dFileErr"></div>
             </div>
-            <div class="form-feedback" id="dFileErr"></div>
-          </div>
 
-          <!-- Actions -->
-          <div
-            style="display: flex; gap: var(--space-3); justify-content: flex-end; padding-top: var(--space-4); border-top: 1px solid var(--border-default);">
-            <button type="button" class="btn btn-secondary" id="saveTemplateBtn">
-              <i class="fas fa-bookmark"></i> Save as Template
-            </button>
-            <button type="reset" class="btn btn-ghost">Clear</button>
-            <button type="submit" class="btn btn-primary" id="dSubmitBtn">
-              <i class="fas fa-paper-plane"></i> Submit to Division Office
-            </button>
-          </div>
-        </form>
+            <!-- Actions -->
+            <div
+              style="display: flex; gap: var(--space-3); justify-content: flex-end; padding-top: var(--space-4); border-top: 1px solid var(--border-default);">
+              <button type="button" class="btn btn-secondary" id="saveTemplateBtn">
+                <i class="fas fa-bookmark"></i> Save as Template
+              </button>
+              <button type="reset" class="btn btn-ghost">Clear</button>
+              <button type="submit" class="btn btn-primary" id="dSubmitBtn">
+                <i class="fas fa-paper-plane"></i> Submit to Division Office
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Page: School Submissions -->
-  <div class="dash-page v2-dashboard-wrapper" id="page-submissions">
-    <div class="v2-header">
-      <h1>School Submissions</h1>
-      <p>All documents submitted by all staff of your school</p>
-    </div>
+    <!-- Page: School Submissions -->
+    <div class="dash-page v2-dashboard-wrapper" id="page-submissions">
+      <div class="v2-header">
+        <h1>School Submissions</h1>
+        <p>All documents submitted by all staff of your school</p>
+      </div>
       <button class="btn btn-primary" onclick="switchPage('submit')">
         <i class="fas fa-plus"></i> New Submission
       </button>
@@ -668,12 +717,15 @@
       </div>
     </div>
   </div>
+  </div>
 
   <!-- Page: My Submissions -->
   <div class="dash-page v2-dashboard-wrapper" id="page-mine">
     <div class="v2-header">
-      <h1>My Submissions</h1>
-      <p>Documents you personally submitted</p>
+      <div>
+        <h1>My Submissions</h1>
+        <p>Documents you personally submitted</p>
+      </div>
     </div>
 
     <div class="card">
@@ -799,12 +851,15 @@
       </div>
     </div>
   </div>
+  </div>
 
   <!-- Page: Compliance -->
   <div class="dash-page v2-dashboard-wrapper" id="page-compliance">
     <div class="v2-header">
-      <h1>Compliance Checklist</h1>
-      <p>Required documents for the selected school year</p>
+      <div>
+        <h1>Compliance Checklist</h1>
+        <p>Required documents for the selected school year</p>
+      </div>
     </div>
     <div id="complianceGrid" class="grid-2">
       <!-- Compliance items loaded dynamically -->
@@ -814,8 +869,10 @@
   <!-- Page: Deadlines -->
   <div class="dash-page v2-dashboard-wrapper" id="page-deadlines">
     <div class="v2-header">
-      <h1>Submission Deadlines</h1>
-      <p>Track upcoming deadlines and manage submissions</p>
+      <div>
+        <h1>Submission Deadlines</h1>
+        <p>Track upcoming deadlines and manage submissions</p>
+      </div>
     </div>
     <div class="card">
       <div class="card-body">
@@ -840,8 +897,10 @@
   <!-- Page: Track Status -->
   <div class="dash-page v2-dashboard-wrapper" id="page-track">
     <div class="v2-header">
-      <h1>Track Submission</h1>
-      <p>Check the status of any submitted document</p>
+      <div>
+        <h1>Track Submission</h1>
+        <p>Check the status of any submitted document</p>
+      </div>
     </div>
     <div class="grid-2">
       <div class="card">
@@ -900,8 +959,10 @@
   <!-- Page: Profile -->
   <div class="dash-page v2-dashboard-wrapper" id="page-profile">
     <div class="v2-header">
-      <h1>My Profile</h1>
-      <p>Manage your personal staff account</p>
+      <div>
+        <h1>My Profile</h1>
+        <p>Manage your personal staff account</p>
+      </div>
     </div>
     <div class="grid-2">
       <div class="card" style="text-align: center; padding: var(--space-8);">
