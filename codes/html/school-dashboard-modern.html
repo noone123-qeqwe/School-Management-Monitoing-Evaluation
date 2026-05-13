@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/user.css?v=1.0.0" />
   <link rel="stylesheet" href="../css/modern-dashboard.css?v=2.0.0" />
   <link rel="stylesheet" href="../css/premium-design.css?v=1.0.0" />
+  <link rel="stylesheet" href="../css/dashboard-v2.css?v=1.0.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -126,60 +127,128 @@
 
     <!-- Dashboard Content -->
     <main class="main-content">
+      <!-- Profile Badge (Top Right) -->
+      <div class="v2-user-badge">
+        <div class="v2-user-icon">
+          <i class="fas fa-school"></i>
+        </div>
+        <span class="v2-user-name" id="headerSchoolNameBadge">School Staff</span>
+        <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: #cbd5e1;"></i>
+      </div>
+
       <!-- Page: Dashboard -->
-      <div class="dash-page active" id="page-dashboard">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title" id="welcomeMsg">Welcome back!</h1>
-            <p class="page-subtitle" id="welcomeSub">Manage your school submissions</p>
-          </div>
-          <button class="btn btn-primary" onclick="switchPage('submit')">
-            <i class="fas fa-plus"></i> New Submission
-          </button>
+      <div class="dash-page active v2-dashboard-wrapper" id="page-dashboard">
+        <div class="v2-header">
+          <h1 id="welcomeMsg">Welcome, School Administrator</h1>
+          <p id="welcomeSub">Manage your school submissions for Pesly</p>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid-4" id="statsContainer">
-          <div class="stat-card skeleton-stat">
-            <div class="stat-icon stat-icon-blue">
+        <div class="v2-stats-grid">
+          <!-- Total School Submissions -->
+          <div class="v2-stat-card card-blue">
+            <div class="v2-stat-icon bg-blue">
               <i class="fas fa-paper-plane"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statTotal">0</div>
-              <div class="stat-label">School Submissions</div>
-              <div class="stat-change stat-change-positive">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statTotal">0</div>
+              <div class="v2-stat-label">School Submissions</div>
+              <div class="v2-trend trend-up">
                 <i class="fas fa-arrow-up"></i> 12% this month
               </div>
             </div>
           </div>
-          <div class="stat-card skeleton-stat">
-            <div class="stat-icon stat-icon-amber">
+
+          <!-- Under Review -->
+          <div class="v2-stat-card card-amber">
+            <div class="v2-stat-icon bg-amber">
               <i class="fas fa-hourglass-half"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statReview">0</div>
-              <div class="stat-label">Under Review</div>
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statReview">0</div>
+              <div class="v2-stat-label">Under Review</div>
             </div>
           </div>
-          <div class="stat-card skeleton-stat">
-            <div class="stat-icon stat-icon-green">
+
+          <!-- Approved -->
+          <div class="v2-stat-card card-green">
+            <div class="v2-stat-icon bg-green">
               <i class="fas fa-check-circle"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statApproved">0</div>
-              <div class="stat-label">Approved</div>
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statApproved">0</div>
+              <div class="v2-stat-label">Approved</div>
             </div>
           </div>
-          <div class="stat-card skeleton-stat">
-            <div class="stat-icon stat-icon-purple">
+
+          <!-- Submitted by Me -->
+          <div class="v2-stat-card card-purple">
+            <div class="v2-stat-icon bg-purple">
               <i class="fas fa-user-clock"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statMine">0</div>
-              <div class="stat-label">Submitted by Me</div>
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statMine">0</div>
+              <div class="v2-stat-label">Submitted by Me</div>
             </div>
           </div>
         </div>
+
+        <!-- Analytics Card (Simplified for School) -->
+        <div class="v2-analytics-card">
+          <div class="v2-main-analytics">
+            <div class="v2-card-title">
+              <h3>
+                <i class="fas fa-chart-line" style="color: #64748b;"></i>
+                Submission Analytics
+              </h3>
+              <div class="v2-time-filters">
+                <button class="v2-filter-btn active">7 Days</button>
+                <button class="v2-filter-btn">30 Days</button>
+                <button class="v2-filter-btn">Year</button>
+              </div>
+            </div>
+
+            <div class="v2-chart-placeholder">
+                <i class="fas fa-chart-area"></i>
+                <p>No data to display, charts will appear when data is loaded</p>
+            </div>
+          </div>
+
+          <div class="v2-status-section">
+            <h4>By Status</h4>
+            
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Approved</span>
+                    <span id="progressApproved">0%</span>
+                </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-success" style="width: 0%;" id="barApproved"></div>
+                </div>
+            </div>
+
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Under Review</span>
+                    <span id="progressReview">0%</span>
+                </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-warning" style="width: 0%;" id="barReview"></div>
+                </div>
+            </div>
+
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Returned</span>
+                    <span id="progressReturned">0%</span>
+                </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-danger" style="width: 0%;" id="barReturned"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
         <!-- Deadlines Alert -->
         <div id="deadlineAlerts"></div>

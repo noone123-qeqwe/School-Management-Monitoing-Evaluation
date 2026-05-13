@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/user.css?v=1.0.0" />
   <link rel="stylesheet" href="../css/modern-dashboard.css?v=2.0.0" />
   <link rel="stylesheet" href="../css/premium-design.css?v=1.0.0" />
+  <link rel="stylesheet" href="../css/dashboard-v2.css?v=1.0.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -133,125 +134,133 @@
           </div>
         </div>
       </div>
-    </header>
-
-    <!-- Dashboard Content -->
+    </header>    <!-- Dashboard Content -->
     <main class="main-content">
+      <!-- Profile Badge (Top Right) -->
+      <div class="v2-user-badge">
+        <div class="v2-user-icon">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <span class="v2-user-name">Division Admin</span>
+        <i class="fas fa-chevron-right" style="font-size: 0.7rem; color: #cbd5e1;"></i>
+      </div>
+
       <!-- Page: Dashboard -->
-      <div class="dash-page active" id="page-dashboard">
-        <div class="page-header">
-          <div>
-            <h1 class="page-title" id="adminWelcome">Admin Dashboard</h1>
-            <p class="page-subtitle" id="adminDivisionLabel">Division of Masbate</p>
-          </div>
+      <div class="dash-page active v2-dashboard-wrapper" id="page-dashboard">
+        <div class="v2-header">
+          <h1 id="adminWelcome">Welcome, Division Administrator</h1>
+          <p id="adminDivisionLabel">School-managed-monitoring-evaluation of Pesly</p>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid-4">
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-blue">
+        <div class="v2-stats-grid">
+          <!-- Total Submissions -->
+          <div class="v2-stat-card card-blue">
+            <div class="v2-stat-icon bg-blue">
               <i class="fas fa-inbox"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statTotalSubs">156</div>
-              <div class="stat-label">Total Submissions</div>
-              <div class="stat-change stat-change-positive">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statTotalSubs">156</div>
+              <div class="v2-stat-label">Total Submissions</div>
+              <div class="v2-trend trend-up">
                 <i class="fas fa-arrow-up"></i> 23% this month
               </div>
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-amber">
+
+          <!-- Pending Review -->
+          <div class="v2-stat-card card-amber">
+            <div class="v2-stat-icon bg-amber">
               <i class="fas fa-hourglass-half"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statPending">23</div>
-              <div class="stat-label">Pending Review</div>
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statPending">23</div>
+              <div class="v2-stat-label">Pending Review</div>
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-green">
+
+          <!-- Approved -->
+          <div class="v2-stat-card card-green">
+            <div class="v2-stat-icon bg-green">
               <i class="fas fa-check-circle"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statApproved">118</div>
-              <div class="stat-label">Approved</div>
-              <div class="stat-change stat-change-positive">
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statApproved">118</div>
+              <div class="v2-stat-label">Approved</div>
+              <div class="v2-trend trend-up">
                 <i class="fas fa-arrow-up"></i> 89% rate
               </div>
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-purple">
+
+          <!-- Registered Schools -->
+          <div class="v2-stat-card card-purple">
+            <div class="v2-stat-icon bg-purple">
               <i class="fas fa-school"></i>
             </div>
-            <div class="stat-content">
-              <div class="stat-value" id="statSchools">38</div>
-              <div class="stat-label">Registered Schools</div>
+            <div class="v2-stat-info">
+              <div class="v2-stat-value" id="statSchools">38</div>
+              <div class="v2-stat-label">Registered Schools</div>
             </div>
           </div>
         </div>
 
-        <!-- Charts Section -->
-        <div class="card" style="margin-top: var(--space-6);">
-          <div class="card-header">
-            <div class="card-title">
-              <i class="fas fa-chart-line" style="color: var(--primary-500);"></i>
-              Submission Analytics
+        <!-- Analytics Card -->
+        <div class="v2-analytics-card">
+          <div class="v2-main-analytics">
+            <div class="v2-card-title">
+              <h3>
+                <i class="fas fa-chart-line" style="color: #64748b;"></i>
+                Submission Analytics
+              </h3>
+              <div class="v2-time-filters">
+                <button class="v2-filter-btn active">7 Days</button>
+                <button class="v2-filter-btn">30 Days</button>
+                <button class="v2-filter-btn">Year</button>
+              </div>
             </div>
-            <div style="display: flex; gap: var(--space-2);">
-              <button class="btn btn-sm btn-secondary active">7 Days</button>
-              <button class="btn btn-sm btn-ghost">30 Days</button>
-              <button class="btn btn-sm btn-ghost">Year</button>
+
+            <div class="v2-chart-placeholder">
+                <i class="fas fa-chart-area"></i>
+                <p>No data to display, charts will appear when data is loaded</p>
             </div>
           </div>
-          <div class="card-body">
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
-              <div style="min-height: 300px; background: var(--gray-50); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
-                <div class="empty-state empty-state-compact">
-                  <div class="empty-state-icon">
-                    <i class="fas fa-chart-bar"></i>
-                  </div>
-                  <p class="empty-state-description">Charts will appear here when data is loaded.</p>
+
+          <div class="v2-status-section">
+            <h4>By Status</h4>
+            
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Approved</span>
+                    <span>76%</span>
                 </div>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: var(--space-4);">
-                <div style="background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-4); flex: 1;">
-                  <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: var(--space-3);">By Status</div>
-                  <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-                    <div>
-                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
-                        <span style="color: var(--text-secondary);">Approved</span>
-                        <span style="font-weight: 600;">76%</span>
-                      </div>
-                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                        <div style="width: 76%; height: 100%; background: var(--success-500); border-radius: var(--radius-full);"></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
-                        <span style="color: var(--text-secondary);">Under Review</span>
-                        <span style="font-weight: 600;">15%</span>
-                      </div>
-                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                        <div style="width: 15%; height: 100%; background: var(--warning-500); border-radius: var(--radius-full);"></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: var(--space-1);">
-                        <span style="color: var(--text-secondary);">Returned</span>
-                        <span style="font-weight: 600;">9%</span>
-                      </div>
-                      <div style="height: 6px; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden;">
-                        <div style="width: 9%; height: 100%; background: var(--danger-500); border-radius: var(--radius-full);"></div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-success" style="width: 76%;"></div>
                 </div>
-              </div>
+            </div>
+
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Under Review</span>
+                    <span>15%</span>
+                </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-warning" style="width: 15%;"></div>
+                </div>
+            </div>
+
+            <div class="v2-status-item">
+                <div class="v2-status-label">
+                    <span>Returned</span>
+                    <span>9%</span>
+                </div>
+                <div class="v2-progress-bar">
+                    <div class="v2-progress-fill bg-danger" style="width: 9%;"></div>
+                </div>
             </div>
           </div>
         </div>
+      </div>
 
         <!-- Two Column: Pending & Schools -->
         <div class="grid-2" style="margin-top: var(--space-6);">
