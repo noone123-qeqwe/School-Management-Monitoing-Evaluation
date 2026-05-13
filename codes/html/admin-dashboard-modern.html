@@ -376,14 +376,20 @@
               </div>
             </div>
 
-            <div class="v2-chart-placeholder">
-              <i class="fas fa-chart-area"></i>
-              <p>No data to display, charts will appear when data is loaded</p>
+            <div style="height: 300px; margin-bottom: 20px;">
+              <canvas id="chartVolumeLine"></canvas>
+            </div>
+            <div style="height: 250px;">
+              <canvas id="chartBySchool"></canvas>
             </div>
           </div>
 
           <div class="v2-status-section">
             <h4>By Status</h4>
+
+            <div style="height: 200px; margin-bottom: 20px;">
+              <canvas id="chartStatusPie"></canvas>
+            </div>
 
             <div class="v2-status-item">
               <div class="v2-status-label">
@@ -921,7 +927,7 @@
               <i class="fas fa-users"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-value">38</div>
+              <div class="stat-value" id="noticeAudience">0</div>
               <div class="stat-label">Audience Size</div>
             </div>
           </div>
@@ -930,7 +936,7 @@
               <i class="fas fa-eye"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-value">32</div>
+              <div class="stat-value" id="noticeViewedSchools">0</div>
               <div class="stat-label">Viewed Schools</div>
             </div>
           </div>
@@ -939,7 +945,7 @@
               <i class="fas fa-chart-line"></i>
             </div>
             <div class="stat-content">
-              <div class="stat-value">84%</div>
+              <div class="stat-value" id="noticeViewRate">0%</div>
               <div class="stat-label">View Rate</div>
             </div>
           </div>
@@ -1257,6 +1263,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../js/api.js?v=2.0.0"></script>
   <script src="../js/modern-ui.js?v=2.0.0"></script>
   <script src="../js/admin-dashboard.js?v=2.0.0"></script>

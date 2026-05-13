@@ -439,6 +439,22 @@
             </div>
           </div>
         </div>
+
+        <!-- Division Notices -->
+        <div class="card" style="margin-top: 32px; border-radius: 24px; border: none; box-shadow: var(--v2-shadow);">
+          <div class="card-header"
+            style="background: transparent; border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+            <div class="card-title" style="font-weight: 700; color: var(--v2-text-main);">
+              <i class="fas fa-bell" style="color: var(--v2-warning); margin-right: 10px;"></i>
+              Division Notices
+            </div>
+          </div>
+          <div class="card-body" style="padding: 12px 24px;">
+            <div id="schoolNoticesList" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Notices load here dynamically -->
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -485,7 +501,7 @@
                     <option>Graduation Requirements</option>
                     <option>Other</option>
                   </select>
-                  <div class="form-feedback"></div>
+                  <div class="form-feedback" id="dDocTypeErr"></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label form-label-required">School Year</label>
@@ -496,20 +512,21 @@
                     <option>2024-2025</option>
                     <option>2023-2024</option>
                   </select>
-                  <div class="form-feedback"></div>
+                  <div class="form-feedback" id="dSchoolYearErr"></div>
                 </div>
               </div>
               <div class="form-group" style="margin-top: var(--space-4);">
                 <label class="form-label form-label-required">Subject / Purpose</label>
                 <input type="text" class="form-input" id="dSubject"
                   placeholder="Brief description of the submission purpose" required />
-                <div class="form-feedback"></div>
+                <div class="form-feedback" id="dSubjectErr"></div>
               </div>
               <div class="form-group" style="margin-top: var(--space-4);">
                 <label class="form-label">Remarks / Notes</label>
                 <textarea class="form-textarea" id="dRemarks" rows="3"
                   placeholder="Additional information for the Division Office..."></textarea>
               </div>
+              <div id="smartFormHints" style="margin-top: 10px; font-size: 0.85rem;"></div>
             </div>
 
             <!-- File Upload -->
@@ -699,10 +716,10 @@
         <div style="display: flex; gap: var(--space-3);">
           <div class="search-bar" style="width: 280px;">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" id="mySubmissionSearch" placeholder="Search my submissions..." />
+            <input type="text" class="search-input" id="mineSearch" placeholder="Search my submissions..." />
             <button class="search-clear"><i class="fas fa-times"></i></button>
           </div>
-          <select class="form-select" id="mySubmissionFilter" style="width: 160px;">
+          <select class="form-select" id="mineFilter" style="width: 160px;">
             <option value="">All Status</option>
             <option value="pending">Pending</option>
             <option value="review">Under Review</option>
@@ -1107,6 +1124,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
   <script src="../js/api.js?v=2.0.0"></script>
   <script src="../js/modern-ui.js?v=2.0.0"></script>
   <script src="../js/school-dashboard.js?v=2.0.0"></script>
