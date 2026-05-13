@@ -196,6 +196,16 @@ async function loadDashboard() {
     setProg('Review', review);
     setProg('Returned', returned);
 
+    const badge = document.getElementById('submissionsBadge');
+    if (badge) {
+      if (returned > 0) {
+        badge.removeAttribute('hidden');
+        badge.textContent = returned;
+      } else {
+        badge.setAttribute('hidden', '');
+      }
+    }
+
     document.getElementById('statTotal').textContent = subs.length;
     document.getElementById('statReview').textContent = subs.filter(s => s.status === 'review' || s.status === 'received').length;
     document.getElementById('statApproved').textContent = subs.filter(s => s.status === 'approved').length;
@@ -814,6 +824,19 @@ document.getElementById('dTrackBtn')?.addEventListener('click', async () => {
       fbBox.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Division Office Feedback:</strong> ' + API.escapeHtml(s.feedback);
     } else { fbBox.setAttribute('hidden', ''); }
 
+    let fileLinks = '';
+    if (s.files && s.files.length) {
+      fileLinks = `<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-default);">
+        <strong style="display:block; margin-bottom:8px; font-size:0.85rem; color:var(--text-secondary);">Attached Files:</strong>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        ` + s.files.map(f => `
+          <button class="btn btn-sm btn-outline" onclick="downloadSchoolFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}')">
+            <i class="fas fa-download"></i> ${API.escapeHtml(f.original_name)}
+          </button>
+        `).join(' ') + `</div></div>`;
+    }
+    document.getElementById('dTrackDetails').innerHTML += fileLinks;
+
     const steps = [
       { label: 'Submitted', done: true },
       { label: 'Received by Division Office', done: true },
@@ -867,6 +890,14 @@ document.getElementById('dTrackPostCommentBtn')?.addEventListener('click', async
     API.showToast(e.message || 'Failed to post.', 'error');
   }
 });
+
+window.downloadSchoolFile = async function (ref, fileId, filename) {
+  try {
+    await API.submissions.downloadFile(ref, fileId, filename);
+  } catch (err) {
+    API.showToast(`Download failed: ${err.message}`, 'error');
+  }
+};
 
 /* ===== RESUBMIT MODAL ===== */
 let resubRef = null;

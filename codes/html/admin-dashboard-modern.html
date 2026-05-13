@@ -165,6 +165,11 @@
     ::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(180deg, #8b5cf6 0%, #2A1758 100%) !important;
     }
+
+    /* Ensure hidden elements stay hidden against flexbox overrides */
+    [hidden] {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -205,7 +210,7 @@
       <a href="#" class="sidebar-link" data-page="submissions">
         <span class="sidebar-link-icon"><i class="fas fa-inbox"></i></span>
         <span class="sidebar-link-text">All Submissions</span>
-        <span class="sidebar-badge" id="pendingBadge">5</span>
+        <span class="sidebar-badge" id="pendingBadge" hidden>0</span>
       </a>
 
       <div class="sidebar-section">Management</div>
@@ -216,7 +221,7 @@
       <a href="#" class="sidebar-link" data-page="staff">
         <span class="sidebar-link-icon"><i class="fas fa-users"></i></span>
         <span class="sidebar-link-text">Staff Accounts</span>
-        <span class="sidebar-badge" id="staffPendingBadge">2</span>
+        <span class="sidebar-badge" id="staffPendingBadge" hidden>0</span>
       </a>
       <a href="#" class="sidebar-link" data-page="deadlines">
         <span class="sidebar-link-icon"><i class="fas fa-calendar-alt"></i></span>
@@ -442,26 +447,6 @@
               <div class="table-wrapper" style="overflow-x: auto;">
                 <table class="data-table" style="width: 100%; border-collapse: collapse;">
                   <tbody id="pendingTableBody">
-                    <tr style="border-bottom: 1px solid #f8fafc;">
-                      <td style="padding: 16px 24px;">
-                        <div style="font-weight: 600; font-size: 0.9rem;">SMME-2026-00156</div>
-                        <div style="font-size: 0.75rem; color: var(--v2-text-sub);">Adventist Elementary</div>
-                      </td>
-                      <td style="padding: 16px 24px; text-align: right;">
-                        <span
-                          style="padding: 4px 12px; border-radius: 20px; background: #fff7ed; color: #9a3412; font-size: 0.7rem; font-weight: 700;">PENDING</span>
-                      </td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #f8fafc;">
-                      <td style="padding: 16px 24px;">
-                        <div style="font-weight: 600; font-size: 0.9rem;">SMME-2026-00155</div>
-                        <div style="font-size: 0.75rem; color: var(--v2-text-sub);">Burias College, Inc.</div>
-                      </td>
-                      <td style="padding: 16px 24px; text-align: right;">
-                        <span
-                          style="padding: 4px 12px; border-radius: 20px; background: #fff7ed; color: #9a3412; font-size: 0.7rem; font-weight: 700;">PENDING</span>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -513,18 +498,6 @@
           </div>
           <div class="card-body" style="padding: 12px 24px;">
             <div id="activityList" style="display: flex; flex-direction: column;">
-              <div
-                style="display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f8fafc;">
-                <div
-                  style="width: 40px; height: 40px; border-radius: 12px; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="fas fa-check"></i>
-                </div>
-                <div style="flex: 1;">
-                  <div style="font-size: 0.9rem; color: var(--v2-text-main);"><strong>Submission approved</strong> —
-                    Enrollment Report from AES</div>
-                  <div style="font-size: 0.75rem; color: var(--v2-text-sub);">2 minutes ago</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -639,6 +612,12 @@
                           <i class="fas fa-sort table-sort-icon"></i>
                         </div>
                       </th>
+                      <th class="sortable-column" data-sort="files">
+                        <div class="table-header-cell">
+                          <span>Files</span>
+                          <i class="fas fa-sort table-sort-icon"></i>
+                        </div>
+                      </th>
                       <th class="sortable-column" data-sort="status">
                         <div class="table-header-cell">
                           <span>Status</span>
@@ -649,95 +628,6 @@
                     </tr>
                   </thead>
                   <tbody id="adminSubmissionsBody">
-                    <tr class="table-row">
-                      <td>
-                        <div class="table-cell-content">
-                          <input type="checkbox" class="table-checkbox">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="reference-badge">SMME-2026-00156</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="school-info">
-                            <span class="school-name">Adventist Elementary School</span>
-                            <span class="school-id">School ID: 001</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="level-badge level-elementary">Elementary</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="document-info">
-                            <i class="fas fa-file-alt document-icon"></i>
-                            <span class="document-name">Enrollment Report</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="year-badge">2026-2027</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <div class="submitter-info">
-                            <div class="submitter-avatar" style="background: var(--accent-500);">
-                              <i class="fas fa-user"></i>
-                            </div>
-                            <span class="submitter-name">Maria Santos</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="date-badge recent">Today</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-content">
-                          <span class="status-pill status-review">Under Review</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="table-cell-actions">
-                          <button class="btn btn-sm btn-primary table-action-btn" title="Review Submission">
-                            <i class="fas fa-eye"></i>
-                            <span>Review</span>
-                          </button>
-                          <div class="dropdown table-dropdown">
-                            <button class="dropdown-toggle" title="More Options">
-                              <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-download"></i>
-                                Download
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-share"></i>
-                                Share
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="fas fa-comment"></i>
-                                Add Comment
-                              </a>
-                              <a href="#" class="dropdown-item text-danger">
-                                <i class="fas fa-trash"></i>
-                                Delete
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>

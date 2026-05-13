@@ -244,7 +244,16 @@ async function loadAdminDashboard() {
     document.getElementById('statPending').textContent = stats.pending;
     document.getElementById('statApproved').textContent = stats.approved;
     document.getElementById('statSchools').textContent = stats.schools;
-    document.getElementById('pendingBadge').textContent = stats.pending;
+
+    const pendingBadge = document.getElementById('pendingBadge');
+    if (pendingBadge) {
+      if (stats.pending > 0) {
+        pendingBadge.removeAttribute('hidden');
+        pendingBadge.textContent = stats.pending;
+      } else {
+        pendingBadge.setAttribute('hidden', '');
+      }
+    }
 
     if (stats.staffPending > 0) {
       document.getElementById('staffPendingBadge').removeAttribute('hidden');
@@ -583,6 +592,16 @@ async function loadStaffPage() {
   try {
     const allStaff = await API.staff.list();
     const pending = allStaff.filter(a => !a.status || a.status === 'pending');
+
+    const badge = document.getElementById('staffPendingBadge');
+    if (badge) {
+      if (pending.length > 0) {
+        badge.removeAttribute('hidden');
+        badge.textContent = pending.length;
+      } else {
+        badge.setAttribute('hidden', '');
+      }
+    }
 
     // Pending approvals
     const pendingContainer = document.getElementById('pendingStaffList');
