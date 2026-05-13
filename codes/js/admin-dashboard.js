@@ -249,22 +249,25 @@ async function loadAdminDashboard() {
     document.getElementById('statApproved').textContent = stats.approved;
     document.getElementById('statSchools').textContent = stats.schools;
 
-    const pendingBadge = document.getElementById('pendingBadge');
-    if (pendingBadge) {
+    document.querySelectorAll('#pendingBadge, .pending-badge').forEach(badge => {
       if (stats.pending > 0) {
-        pendingBadge.removeAttribute('hidden');
-        pendingBadge.textContent = stats.pending;
+        badge.removeAttribute('hidden');
+        badge.textContent = stats.pending;
       } else {
-        pendingBadge.setAttribute('hidden', '');
+        badge.setAttribute('hidden', '');
+        badge.textContent = '0';
       }
-    }
+    });
 
-    if (stats.staffPending > 0) {
-      document.getElementById('staffPendingBadge').removeAttribute('hidden');
-      document.getElementById('staffPendingBadge').textContent = stats.staffPending;
-    } else {
-      document.getElementById('staffPendingBadge').setAttribute('hidden', '');
-    }
+    document.querySelectorAll('#staffPendingBadge, .staff-pending-badge').forEach(badge => {
+      if (stats.staffPending > 0) {
+        badge.removeAttribute('hidden');
+        badge.textContent = stats.staffPending;
+      } else {
+        badge.setAttribute('hidden', '');
+        badge.textContent = '0';
+      }
+    });
 
     // Pending table
     const pending = subs.filter(s => s.status === 'review' || s.status === 'received').slice(0, 6);
@@ -637,15 +640,15 @@ async function loadStaffPage() {
     const allStaff = await API.staff.list();
     const pending = allStaff.filter(a => !a.status || a.status === 'pending');
 
-    const badge = document.getElementById('staffPendingBadge');
-    if (badge) {
+    document.querySelectorAll('#staffPendingBadge, .staff-pending-badge').forEach(badge => {
       if (pending.length > 0) {
         badge.removeAttribute('hidden');
         badge.textContent = pending.length;
       } else {
         badge.setAttribute('hidden', '');
+        badge.textContent = '0';
       }
-    }
+    });
 
     // Pending approvals
     const pendingContainer = document.getElementById('pendingStaffList');
