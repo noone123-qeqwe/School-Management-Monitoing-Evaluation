@@ -174,6 +174,6 @@ window.addEventListener('load', () => {
         intro.style.visibility = 'hidden';
         intro.style.display = 'none';
       }, 600);
-    }, 2000); // 2 seconds delay
+    }, 3500); // 3.5 seconds delay to show geometric animation
   }
 });

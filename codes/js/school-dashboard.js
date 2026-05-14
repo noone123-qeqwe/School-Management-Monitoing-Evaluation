@@ -631,469 +631,466 @@ function checkDraft() {
   } catch { }
 }
 
-document.getElementById('saveDraftBtn').addEventListener('click', saveDraftLocal);
 document.getElementById('saveDraftBtn')?.addEventListener('click', saveDraftLocal);
 
-document.getElementById('loadDraftBtn').addEventListener('click', () => {
-  document.getElementById('loadDraftBtn')?.addEventListener('click', () => {
-    try {
-      const draft = JSON.parse(localStorage.getItem(draftKey()) || 'null');
-      if (!draft) return;
-      document.getElementById('dDocType').value = draft.docType || '';
-      document.getElementById('dSchoolYear').value = draft.schoolYear || '';
-      document.getElementById('dSubject').value = draft.subject || '';
-      document.getElementById('dRemarks').value = draft.remarks || '';
-      document.getElementById('draftBanner').setAttribute('hidden', '');
-      API.showToast('Draft loaded.', 'success');
-    } catch { }
-  });
-
-  document.getElementById('discardDraftBtn')?.addEventListener('click', () => {
-    localStorage.removeItem(draftKey());
+document.getElementById('loadDraftBtn')?.addEventListener('click', () => {
+  try {
+    const draft = JSON.parse(localStorage.getItem(draftKey()) || 'null');
+    if (!draft) return;
+    document.getElementById('dDocType').value = draft.docType || '';
+    document.getElementById('dSchoolYear').value = draft.schoolYear || '';
+    document.getElementById('dSubject').value = draft.subject || '';
+    document.getElementById('dRemarks').value = draft.remarks || '';
     document.getElementById('draftBanner').setAttribute('hidden', '');
-    API.showToast('Draft discarded.');
-  });
+    API.showToast('Draft loaded.', 'success');
+  } catch { }
+});
 
-  /* ===== TEMPLATES (localStorage) ===== */
-  function getTemplates() {
-    try { return JSON.parse(localStorage.getItem(tmplKey()) || '[]'); } catch { return []; }
-  }
+document.getElementById('discardDraftBtn')?.addEventListener('click', () => {
+  localStorage.removeItem(draftKey());
+  document.getElementById('draftBanner').setAttribute('hidden', '');
+  API.showToast('Draft discarded.');
+});
 
-  document.getElementById('saveTemplateBtn')?.addEventListener('click', () => {
-    const docType = document.getElementById('dDocType').value;
-    const schoolYear = document.getElementById('dSchoolYear').value;
-    const subject = document.getElementById('dSubject').value;
-    if (!docType) { API.showToast('Select a document type before saving a template.', 'error'); return; }
-    const tmpls = getTemplates();
-    tmpls.push({ id: Date.now(), name: docType + (schoolYear ? ' \u2013 ' + schoolYear : ''), docType, schoolYear, subject });
-    localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
-    API.showToast('Template saved.', 'success');
-  });
+/* ===== TEMPLATES (localStorage) ===== */
+function getTemplates() {
+  try { return JSON.parse(localStorage.getItem(tmplKey()) || '[]'); } catch { return []; }
+}
 
-  document.getElementById('loadTemplateBtn')?.addEventListener('click', () => {
-    const modal = document.getElementById('templateModal');
-    const list = document.getElementById('templateList');
-    const empty = document.getElementById('templateEmpty');
-    const tmpls = getTemplates();
-    if (!tmpls.length) { list.innerHTML = ''; empty.style.display = 'block'; }
-    else {
-      empty.style.display = 'none';
-      list.innerHTML = tmpls.map((t, i) =>
-        '<div class="template-item">' +
-        '<div class="template-info"><strong>' + API.escapeHtml(t.name) + '</strong><span>' + API.escapeHtml(t.subject || '') + '</span></div>' +
-        '<button class="action-btn view" onclick="applyTemplate(' + i + ')"><i class="fas fa-check"></i> Use</button>' +
-        '<button class="action-btn return" onclick="removeTemplate(' + i + ')"><i class="fas fa-trash"></i></button>' +
-        '</div>'
-      ).join('');
-    }
-    modal.removeAttribute('hidden');
-  });
+document.getElementById('saveTemplateBtn')?.addEventListener('click', () => {
+  const docType = document.getElementById('dDocType').value;
+  const schoolYear = document.getElementById('dSchoolYear').value;
+  const subject = document.getElementById('dSubject').value;
+  if (!docType) { API.showToast('Select a document type before saving a template.', 'error'); return; }
+  const tmpls = getTemplates();
+  tmpls.push({ id: Date.now(), name: docType + (schoolYear ? ' \u2013 ' + schoolYear : ''), docType, schoolYear, subject });
+  localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
+  API.showToast('Template saved.', 'success');
+});
 
-  function applyTemplate(i) {
-    const t = getTemplates()[i];
-    if (!t) return;
-    document.getElementById('dDocType').value = t.docType || '';
-    document.getElementById('dSchoolYear').value = t.schoolYear || '';
-    document.getElementById('dSubject').value = t.subject || '';
-    document.getElementById('templateModal').setAttribute('hidden', '');
-    API.showToast('Template applied.', 'success');
-  }
-
-  function removeTemplate(i) {
-    const tmpls = getTemplates();
-    tmpls.splice(i, 1);
-    localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
-    document.getElementById('loadTemplateBtn').click();
-  }
-
-  document.getElementById('templateModalClose')?.addEventListener('click', () => {
-    document.getElementById('templateModal').setAttribute('hidden', '');
-  });
-
-  /* ===== SUBMIT FORM ===== */
-  document.getElementById('dashSubmitForm')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    let valid = true;
-
-    [['dDocType', 'dDocTypeErr', 'Please select a document type.'],
-    ['dSchoolYear', 'dSchoolYearErr', 'Please select a school year.'],
-    ['dSubject', 'dSubjectErr', 'Subject is required.']].forEach(([id, errId, msg]) => {
-      const el = document.getElementById(id), err = document.getElementById(errId);
-      if (!el.value.trim()) { el.classList.add('invalid'); err.textContent = msg; valid = false; }
-      else { el.classList.remove('invalid'); err.textContent = ''; }
-    });
-
-    const fileErr = document.getElementById('dFileErr');
-    if (dFiles.length === 0) { fileErr.textContent = 'Please attach at least one file.'; valid = false; }
-    else fileErr.textContent = '';
-    if (!valid) return;
-
-    const btn = document.getElementById('dSubmitBtn');
-    if (btn) {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-    }
-
-    try {
-      const form = new FormData();
-      form.append('docType', document.getElementById('dDocType').value);
-      form.append('schoolYear', document.getElementById('dSchoolYear').value);
-      form.append('subject', document.getElementById('dSubject').value);
-      form.append('remarks', document.getElementById('dRemarks').value);
-      dFiles.forEach(f => form.append('files', f));
-
-      const { ref } = await API.submissions.submit(form);
-
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
-      }
-
-      // Clear draft
-      localStorage.removeItem(draftKey());
-      document.getElementById('draftBanner').setAttribute('hidden', '');
-
-      document.getElementById('dashRefNumber').textContent = ref;
-      document.getElementById('dashModalOverlay').removeAttribute('hidden');
-      document.getElementById('dashSubmitForm').reset();
-      dFiles = []; renderDFileList();
-    } catch (err) {
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
-      }
-      API.showToast('Submission failed: ' + err.message, 'error');
-    }
-  });
-
-  let validateTimer = null;
-  async function runSmartValidationHints() {
-    const hint = document.getElementById('smartFormHints');
-    if (!hint) return;
-    const docType = document.getElementById('dDocType').value;
-    const schoolYear = document.getElementById('dSchoolYear').value;
-    const subject = document.getElementById('dSubject').value;
-    if (!docType || !schoolYear || !subject.trim()) {
-      hint.textContent = '';
-      return;
-    }
-    try {
-      const { issues } = await API.submissions.validate({ docType, schoolYear, subject, fileCount: dFiles.length });
-      if (!issues.length) {
-        hint.innerHTML = '<span style="color:var(--success)"><i class="fas fa-check-circle"></i> Looks good. No validation issues found.</span>';
-        return;
-      }
-      hint.innerHTML = issues.map((i) =>
-        `<div style="margin:2px 0;color:${i.severity === 'error' ? 'var(--danger)' : 'var(--warning)'}">
-        <i class="fas ${i.severity === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-        ${API.escapeHtml(i.message)}
-      </div>`
-      ).join('');
-    } catch { }
-  }
-
-  ['dDocType', 'dSchoolYear', 'dSubject'].forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener('input', () => {
-      clearTimeout(validateTimer);
-      validateTimer = setTimeout(runSmartValidationHints, 350);
-    });
-    el.addEventListener('change', () => {
-      clearTimeout(validateTimer);
-      validateTimer = setTimeout(runSmartValidationHints, 350);
-    });
-  });
-
-  document.getElementById('dashModalClose')?.addEventListener('click', () => {
-    document.getElementById('dashModalOverlay').setAttribute('hidden', '');
-    switchPage('mine');
-  });
-
-  /* ===== TRACK SUBMISSION ===== */
-  function prefillTrack(ref) {
-    switchPage('track');
-    document.getElementById('dTrackInput').value = ref;
-    requestAnimationFrame(() => setTimeout(() => document.getElementById('dTrackBtn').click(), 150));
-  }
-
-  document.getElementById('dTrackBtn')?.addEventListener('click', async () => {
-    const ref = document.getElementById('dTrackInput').value.trim().toUpperCase();
-    const btn = document.getElementById('dTrackBtn');
-    const result = document.getElementById('dTrackResult');
-    if (!ref) { API.showToast('Please enter a reference number.', 'error'); return; }
-
-    if (btn) {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
-    }
-
-    try {
-      const s = await API.submissions.get(ref);
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-search"></i> Track';
-      }
-
-      const statusLabels = { review: 'Under Review', approved: 'Approved', returned: 'Returned', received: 'Received' };
-      document.getElementById('dTrackRef').textContent = s.ref;
-      document.getElementById('dTrackStatus').textContent = statusLabels[s.status] || s.status;
-      document.getElementById('dTrackStatus').className = 'track-status status-' + s.status;
-      document.getElementById('dTrackDetails').innerHTML =
-        '<strong>' + API.escapeHtml(s.school_name || '') + '</strong><br/>' +
-        'Document: ' + API.escapeHtml(s.doc_type) + ' &nbsp;|&nbsp; Year: ' + API.escapeHtml(s.school_year) + '<br/>' +
-        'Submitted by: <strong>' + API.escapeHtml((s.first_name || '') + ' ' + (s.last_name || '')) + '</strong>' +
-        ' (' + API.escapeHtml(s.staff_position || '') + ') &nbsp;|&nbsp; ' +
-        new Date(s.submitted_at).toLocaleDateString('en-PH');
-
-      const fbBox = document.getElementById('dTrackFeedback');
-      if (s.feedback) {
-        fbBox.removeAttribute('hidden');
-        fbBox.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Division Office Feedback:</strong> ' + API.escapeHtml(s.feedback);
-      } else { fbBox.setAttribute('hidden', ''); }
-
-      let fileLinks = '';
-      if (s.files && s.files.length) {
-        fileLinks = `<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-default);">
-        <strong style="display:block; margin-bottom:8px; font-size:0.85rem; color:var(--text-secondary);">Attached Files:</strong>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-        `;
-        if (s.files.length > 1) {
-          fileLinks += `<button class="btn btn-sm btn-secondary" onclick="downloadAllSchoolFiles('${API.escapeHtml(s.ref)}')"><i class="fas fa-file-archive"></i> Download All (ZIP)</button>`;
-        }
-        fileLinks += s.files.map(f => `
-        <div style="display:inline-flex; border:1px solid var(--border-default); border-radius:6px; overflow:hidden; background: #fff;">
-          <button class="btn btn-sm btn-ghost" style="border-radius:0; border-right:1px solid var(--border-default);" onclick="previewSchoolFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}', '${API.escapeHtml(f.mime_type)}')"><i class="fas fa-eye"></i> Preview</button>
-          <button class="btn btn-sm btn-ghost" style="border-radius:0; border-right:1px solid var(--border-default);" title="Download" onclick="downloadSchoolFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}')"><i class="fas fa-download"></i></button>
-          <span style="padding:4px 8px; font-size:0.8rem; display:flex; align-items:center;">${API.escapeHtml(f.original_name)}</span>
-        </div>
-      `).join(' ');
-        fileLinks += `</div></div>`;
-      }
-      document.getElementById('dTrackDetails').innerHTML += fileLinks;
-
-      const steps = [
-        { label: 'Submitted', done: true },
-        { label: 'Received by Division Office', done: true },
-        { label: 'Under Review', done: ['approved', 'returned'].includes(s.status), active: s.status === 'review' },
-        {
-          label: s.status === 'returned' ? 'Returned for Revision' : 'Approved / Processed',
-          done: s.status === 'approved' || s.status === 'returned', pending: s.status === 'review'
-        },
-      ];
-      document.getElementById('dTrackTimeline').innerHTML = steps.map(step => {
-        const dc = step.done ? 'dot-done' : step.active ? 'dot-active' : 'dot-pending';
-        const ic = step.done ? 'fa-check' : 'fa-circle';
-        return '<div class="timeline-step"><div class="timeline-dot ' + dc + '"><i class="fas ' + ic + '"></i></div>' +
-          '<div class="timeline-content"><strong>' + API.escapeHtml(step.label) + '</strong>' +
-          '<span>' + (step.done ? new Date(s.submitted_at).toLocaleDateString('en-PH') : step.active ? 'In progress' : 'Pending') + '</span></div></div>';
-      }).join('');
-      result.removeAttribute('hidden');
-      currentTrackRef = s.ref;
-      const threadEl = document.getElementById('dTrackThread');
-      if (threadEl) {
-        threadEl.style.display = 'block';
-        const ta = document.getElementById('dTrackNewComment');
-        if (ta) ta.value = '';
-        loadTrackComments(s.ref);
-      }
-    } catch (err) {
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-search"></i> Track';
-      }
-      API.showToast(err.message === 'Submission not found.' ? 'Reference number not found.' : err.message, 'error');
-      result.setAttribute('hidden', '');
-      currentTrackRef = null;
-      const threadEl = document.getElementById('dTrackThread');
-      if (threadEl) threadEl.style.display = 'none';
-    }
-  });
-  document.getElementById('dTrackInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('dTrackBtn').click(); });
-
-  document.getElementById('dTrackPostCommentBtn')?.addEventListener('click', async () => {
-    if (!currentTrackRef) return;
-    const ta = document.getElementById('dTrackNewComment');
-    const body = (ta && ta.value || '').trim();
-    if (!body) { API.showToast('Write a reply first.', 'error'); return; }
-    try {
-      await API.submissions.postComment(currentTrackRef, body);
-      if (ta) ta.value = '';
-      await loadTrackComments(currentTrackRef);
-      API.showToast('Reply posted.', 'success');
-    } catch (e) {
-      API.showToast(e.message || 'Failed to post.', 'error');
-    }
-  });
-
-  window.downloadAllSchoolFiles = async function (ref) {
-    try {
-      await API.submissions.downloadAll(ref);
-    } catch (err) { API.showToast(`Download failed: ${err.message}`, 'error'); }
-  }
-
-  window.previewSchoolFile = async function (ref, fileId, filename, mimeType) {
-    const modal = document.getElementById('previewModal');
-    const title = document.getElementById('previewModalTitle');
-    const iframe = document.getElementById('previewIframe');
-    const unsupported = document.getElementById('previewUnsupported');
-
-    title.textContent = filename;
-    modal.removeAttribute('hidden');
-    iframe.src = '';
-
-    if (mimeType === 'application/pdf') {
-      iframe.removeAttribute('hidden'); unsupported.setAttribute('hidden', '');
-      try {
-        iframe.src = await API.submissions.getFileBlob(ref, fileId);
-      } catch (err) { API.showToast(`Preview failed: ${err.message}`, 'error'); modal.setAttribute('hidden', ''); }
-    } else {
-      iframe.setAttribute('hidden', ''); unsupported.removeAttribute('hidden');
-      document.getElementById('previewDownloadBtn').onclick = () => window.downloadSchoolFile(ref, fileId, filename);
-    }
-  }
-
-  window.downloadSchoolFile = async function (ref, fileId, filename) {
-    try {
-      await API.submissions.downloadFile(ref, fileId, filename);
-    } catch (err) {
-      API.showToast(`Download failed: ${err.message}`, 'error');
-    }
-  };
-
-  /* ===== RESUBMIT MODAL ===== */
-  let resubRef = null;
-  let resubFiles = [];
-
-  function openResubmit(ref) {
-    resubRef = ref; resubFiles = [];
-    document.getElementById('resubOrigRef').textContent = ref;
-    document.getElementById('resubRemarks').value = '';
-    document.getElementById('resubFileErr').textContent = '';
-    renderResubFileList();
-    // Load feedback
-    API.submissions.get(ref).then(s => {
-      const fb = document.getElementById('resubFeedback');
-      if (s.feedback) { fb.removeAttribute('hidden'); fb.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Admin Feedback:</strong> ' + API.escapeHtml(s.feedback); }
-      else fb.setAttribute('hidden', '');
-    }).catch(() => { });
-    document.getElementById('resubmitModal').removeAttribute('hidden');
-  }
-
-  document.getElementById('resubBrowseBtn')?.addEventListener('click', () => document.getElementById('resubFileInput').click());
-  document.getElementById('resubFileInput')?.addEventListener('change', e => {
-    addResubFiles(Array.from(e.target.files));
-    renderResubFileList(); e.target.value = '';
-  });
-  document.getElementById('resubUploadArea')?.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('resubUploadArea').classList.add('drag-over'); });
-  document.getElementById('resubUploadArea')?.addEventListener('dragleave', () => document.getElementById('resubUploadArea').classList.remove('drag-over'));
-  document.getElementById('resubUploadArea')?.addEventListener('drop', e => {
-    e.preventDefault(); document.getElementById('resubUploadArea').classList.remove('drag-over');
-    addResubFiles(Array.from(e.dataTransfer.files)); renderResubFileList();
-  });
-
-  function addResubFiles(files) {
-    files.forEach(f => {
-      if (!isAllowedFile(f)) { API.showToast('"' + f.name + '" is not a supported file type.', 'error'); return; }
-      if (f.size > MAX_FILE_SIZE) { API.showToast('"' + f.name + '" exceeds 100MB.', 'error'); return; }
-      if (resubFiles.find(x => x.name === f.name && x.size === f.size)) { API.showToast('"' + f.name + '" already added.', 'error'); return; }
-      resubFiles.push(f);
-    });
-  }
-
-  function renderResubFileList() {
-    document.getElementById('resubFileList').innerHTML = resubFiles.map((f, i) =>
-      '<li class="file-item"><i class="fas fa-file file-icon"></i>' +
-      '<span class="file-name">' + API.escapeHtml(f.name) + '</span>' +
-      '<span class="file-size">' + formatSize(f.size) + '</span>' +
-      '<button class="file-remove" onclick="resubFiles.splice(' + i + ',1);renderResubFileList()"><i class="fas fa-times"></i></button></li>'
+document.getElementById('loadTemplateBtn')?.addEventListener('click', () => {
+  const modal = document.getElementById('templateModal');
+  const list = document.getElementById('templateList');
+  const empty = document.getElementById('templateEmpty');
+  const tmpls = getTemplates();
+  if (!tmpls.length) { list.innerHTML = ''; empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    list.innerHTML = tmpls.map((t, i) =>
+      '<div class="template-item">' +
+      '<div class="template-info"><strong>' + API.escapeHtml(t.name) + '</strong><span>' + API.escapeHtml(t.subject || '') + '</span></div>' +
+      '<button class="action-btn view" onclick="applyTemplate(' + i + ')"><i class="fas fa-check"></i> Use</button>' +
+      '<button class="action-btn return" onclick="removeTemplate(' + i + ')"><i class="fas fa-trash"></i></button>' +
+      '</div>'
     ).join('');
   }
+  modal.removeAttribute('hidden');
+});
 
-  document.getElementById('resubSubmitBtn')?.addEventListener('click', async () => {
-    const fileErr = document.getElementById('resubFileErr');
-    if (resubFiles.length === 0) { fileErr.textContent = 'Please attach at least one revised file.'; return; }
-    fileErr.textContent = '';
+function applyTemplate(i) {
+  const t = getTemplates()[i];
+  if (!t) return;
+  document.getElementById('dDocType').value = t.docType || '';
+  document.getElementById('dSchoolYear').value = t.schoolYear || '';
+  document.getElementById('dSubject').value = t.subject || '';
+  document.getElementById('templateModal').setAttribute('hidden', '');
+  API.showToast('Template applied.', 'success');
+}
 
-    const btn = document.getElementById('resubSubmitBtn');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...'; }
+function removeTemplate(i) {
+  const tmpls = getTemplates();
+  tmpls.splice(i, 1);
+  localStorage.setItem(tmplKey(), JSON.stringify(tmpls));
+  document.getElementById('loadTemplateBtn').click();
+}
 
+document.getElementById('templateModalClose')?.addEventListener('click', () => {
+  document.getElementById('templateModal').setAttribute('hidden', '');
+});
+
+/* ===== SUBMIT FORM ===== */
+document.getElementById('dashSubmitForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  let valid = true;
+
+  [['dDocType', 'dDocTypeErr', 'Please select a document type.'],
+  ['dSchoolYear', 'dSchoolYearErr', 'Please select a school year.'],
+  ['dSubject', 'dSubjectErr', 'Subject is required.']].forEach(([id, errId, msg]) => {
+    const el = document.getElementById(id), err = document.getElementById(errId);
+    if (!el.value.trim()) { el.classList.add('invalid'); err.textContent = msg; valid = false; }
+    else { el.classList.remove('invalid'); err.textContent = ''; }
+  });
+
+  const fileErr = document.getElementById('dFileErr');
+  if (dFiles.length === 0) { fileErr.textContent = 'Please attach at least one file.'; valid = false; }
+  else fileErr.textContent = '';
+  if (!valid) return;
+
+  const btn = document.getElementById('dSubmitBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  }
+
+  try {
+    const form = new FormData();
+    form.append('docType', document.getElementById('dDocType').value);
+    form.append('schoolYear', document.getElementById('dSchoolYear').value);
+    form.append('subject', document.getElementById('dSubject').value);
+    form.append('remarks', document.getElementById('dRemarks').value);
+    dFiles.forEach(f => form.append('files', f));
+
+    const { ref } = await API.submissions.submit(form);
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    }
+
+    // Clear draft
+    localStorage.removeItem(draftKey());
+    document.getElementById('draftBanner').setAttribute('hidden', '');
+
+    document.getElementById('dashRefNumber').textContent = ref;
+    document.getElementById('dashModalOverlay').removeAttribute('hidden');
+    document.getElementById('dashSubmitForm').reset();
+    dFiles = []; renderDFileList();
+  } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
+    }
+    API.showToast('Submission failed: ' + err.message, 'error');
+  }
+});
+
+let validateTimer = null;
+async function runSmartValidationHints() {
+  const hint = document.getElementById('smartFormHints');
+  if (!hint) return;
+  const docType = document.getElementById('dDocType').value;
+  const schoolYear = document.getElementById('dSchoolYear').value;
+  const subject = document.getElementById('dSubject').value;
+  if (!docType || !schoolYear || !subject.trim()) {
+    hint.textContent = '';
+    return;
+  }
+  try {
+    const { issues } = await API.submissions.validate({ docType, schoolYear, subject, fileCount: dFiles.length });
+    if (!issues.length) {
+      hint.innerHTML = '<span style="color:var(--success)"><i class="fas fa-check-circle"></i> Looks good. No validation issues found.</span>';
+      return;
+    }
+    hint.innerHTML = issues.map((i) =>
+      `<div style="margin:2px 0;color:${i.severity === 'error' ? 'var(--danger)' : 'var(--warning)'}">
+      <i class="fas ${i.severity === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+      ${API.escapeHtml(i.message)}
+    </div>`
+    ).join('');
+  } catch { }
+}
+
+['dDocType', 'dSchoolYear', 'dSubject'].forEach((id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    clearTimeout(validateTimer);
+    validateTimer = setTimeout(runSmartValidationHints, 350);
+  });
+  el.addEventListener('change', () => {
+    clearTimeout(validateTimer);
+    validateTimer = setTimeout(runSmartValidationHints, 350);
+  });
+});
+
+document.getElementById('dashModalClose')?.addEventListener('click', () => {
+  document.getElementById('dashModalOverlay').setAttribute('hidden', '');
+  switchPage('mine');
+});
+
+/* ===== TRACK SUBMISSION ===== */
+function prefillTrack(ref) {
+  switchPage('track');
+  document.getElementById('dTrackInput').value = ref;
+  requestAnimationFrame(() => setTimeout(() => document.getElementById('dTrackBtn').click(), 150));
+}
+
+document.getElementById('dTrackBtn')?.addEventListener('click', async () => {
+  const ref = document.getElementById('dTrackInput').value.trim().toUpperCase();
+  const btn = document.getElementById('dTrackBtn');
+  const result = document.getElementById('dTrackResult');
+  if (!ref) { API.showToast('Please enter a reference number.', 'error'); return; }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+  }
+
+  try {
+    const s = await API.submissions.get(ref);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    }
+
+    const statusLabels = { review: 'Under Review', approved: 'Approved', returned: 'Returned', received: 'Received' };
+    document.getElementById('dTrackRef').textContent = s.ref;
+    document.getElementById('dTrackStatus').textContent = statusLabels[s.status] || s.status;
+    document.getElementById('dTrackStatus').className = 'track-status status-' + s.status;
+    document.getElementById('dTrackDetails').innerHTML =
+      '<strong>' + API.escapeHtml(s.school_name || '') + '</strong><br/>' +
+      'Document: ' + API.escapeHtml(s.doc_type) + ' &nbsp;|&nbsp; Year: ' + API.escapeHtml(s.school_year) + '<br/>' +
+      'Submitted by: <strong>' + API.escapeHtml((s.first_name || '') + ' ' + (s.last_name || '')) + '</strong>' +
+      ' (' + API.escapeHtml(s.staff_position || '') + ') &nbsp;|&nbsp; ' +
+      new Date(s.submitted_at).toLocaleDateString('en-PH');
+
+    const fbBox = document.getElementById('dTrackFeedback');
+    if (s.feedback) {
+      fbBox.removeAttribute('hidden');
+      fbBox.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Division Office Feedback:</strong> ' + API.escapeHtml(s.feedback);
+    } else { fbBox.setAttribute('hidden', ''); }
+
+    let fileLinks = '';
+    if (s.files && s.files.length) {
+      fileLinks = `<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-default);">
+      <strong style="display:block; margin-bottom:8px; font-size:0.85rem; color:var(--text-secondary);">Attached Files:</strong>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      `;
+      if (s.files.length > 1) {
+        fileLinks += `<button class="btn btn-sm btn-secondary" onclick="downloadAllSchoolFiles('${API.escapeHtml(s.ref)}')"><i class="fas fa-file-archive"></i> Download All (ZIP)</button>`;
+      }
+      fileLinks += s.files.map(f => `
+      <div style="display:inline-flex; border:1px solid var(--border-default); border-radius:6px; overflow:hidden; background: #fff;">
+        <button class="btn btn-sm btn-ghost" style="border-radius:0; border-right:1px solid var(--border-default);" onclick="previewSchoolFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}', '${API.escapeHtml(f.mime_type)}')"><i class="fas fa-eye"></i> Preview</button>
+        <button class="btn btn-sm btn-ghost" style="border-radius:0; border-right:1px solid var(--border-default);" title="Download" onclick="downloadSchoolFile('${API.escapeHtml(s.ref)}', ${f.id}, '${API.escapeHtml(f.original_name)}')"><i class="fas fa-download"></i></button>
+        <span style="padding:4px 8px; font-size:0.8rem; display:flex; align-items:center;">${API.escapeHtml(f.original_name)}</span>
+      </div>
+    `).join(' ');
+      fileLinks += `</div></div>`;
+    }
+    document.getElementById('dTrackDetails').innerHTML += fileLinks;
+
+    const steps = [
+      { label: 'Submitted', done: true },
+      { label: 'Received by Division Office', done: true },
+      { label: 'Under Review', done: ['approved', 'returned'].includes(s.status), active: s.status === 'review' },
+      {
+        label: s.status === 'returned' ? 'Returned for Revision' : 'Approved / Processed',
+        done: s.status === 'approved' || s.status === 'returned', pending: s.status === 'review'
+      },
+    ];
+    document.getElementById('dTrackTimeline').innerHTML = steps.map(step => {
+      const dc = step.done ? 'dot-done' : step.active ? 'dot-active' : 'dot-pending';
+      const ic = step.done ? 'fa-check' : 'fa-circle';
+      return '<div class="timeline-step"><div class="timeline-dot ' + dc + '"><i class="fas ' + ic + '"></i></div>' +
+        '<div class="timeline-content"><strong>' + API.escapeHtml(step.label) + '</strong>' +
+        '<span>' + (step.done ? new Date(s.submitted_at).toLocaleDateString('en-PH') : step.active ? 'In progress' : 'Pending') + '</span></div></div>';
+    }).join('');
+    result.removeAttribute('hidden');
+    currentTrackRef = s.ref;
+    const threadEl = document.getElementById('dTrackThread');
+    if (threadEl) {
+      threadEl.style.display = 'block';
+      const ta = document.getElementById('dTrackNewComment');
+      if (ta) ta.value = '';
+      loadTrackComments(s.ref);
+    }
+  } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-search"></i> Track';
+    }
+    API.showToast(err.message === 'Submission not found.' ? 'Reference number not found.' : err.message, 'error');
+    result.setAttribute('hidden', '');
+    currentTrackRef = null;
+    const threadEl = document.getElementById('dTrackThread');
+    if (threadEl) threadEl.style.display = 'none';
+  }
+});
+document.getElementById('dTrackInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('dTrackBtn').click(); });
+
+document.getElementById('dTrackPostCommentBtn')?.addEventListener('click', async () => {
+  if (!currentTrackRef) return;
+  const ta = document.getElementById('dTrackNewComment');
+  const body = (ta && ta.value || '').trim();
+  if (!body) { API.showToast('Write a reply first.', 'error'); return; }
+  try {
+    await API.submissions.postComment(currentTrackRef, body);
+    if (ta) ta.value = '';
+    await loadTrackComments(currentTrackRef);
+    API.showToast('Reply posted.', 'success');
+  } catch (e) {
+    API.showToast(e.message || 'Failed to post.', 'error');
+  }
+});
+
+window.downloadAllSchoolFiles = async function (ref) {
+  try {
+    await API.submissions.downloadAll(ref);
+  } catch (err) { API.showToast(`Download failed: ${err.message}`, 'error'); }
+}
+
+window.previewSchoolFile = async function (ref, fileId, filename, mimeType) {
+  const modal = document.getElementById('previewModal');
+  const title = document.getElementById('previewModalTitle');
+  const iframe = document.getElementById('previewIframe');
+  const unsupported = document.getElementById('previewUnsupported');
+
+  title.textContent = filename;
+  modal.removeAttribute('hidden');
+  iframe.src = '';
+
+  if (mimeType === 'application/pdf') {
+    iframe.removeAttribute('hidden'); unsupported.setAttribute('hidden', '');
     try {
-      // Get original submission details to copy doc type / year
-      const orig = await API.submissions.get(resubRef);
-      const form = new FormData();
-      form.append('docType', orig.doc_type);
-      form.append('schoolYear', orig.school_year);
-      form.append('subject', orig.subject || '');
-      form.append('remarks', document.getElementById('resubRemarks').value);
-      form.append('originalRef', resubRef);
-      resubFiles.forEach(f => form.append('files', f));
+      iframe.src = await API.submissions.getFileBlob(ref, fileId);
+    } catch (err) { API.showToast(`Preview failed: ${err.message}`, 'error'); modal.setAttribute('hidden', ''); }
+  } else {
+    iframe.setAttribute('hidden', ''); unsupported.removeAttribute('hidden');
+    document.getElementById('previewDownloadBtn').onclick = () => window.downloadSchoolFile(ref, fileId, filename);
+  }
+}
 
-      const { ref: newRef } = await API.submissions.submit(form);
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
-      document.getElementById('resubmitModal').setAttribute('hidden', '');
-      resubRef = null; resubFiles = [];
-      API.showToast('Resubmitted successfully. New ref: ' + newRef, 'success');
-      loadDashboard();
-      loadSubmissions('mine');
-      loadSubmissions('all');
-    } catch (err) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
-      API.showToast('Resubmit failed: ' + err.message, 'error');
+window.downloadSchoolFile = async function (ref, fileId, filename) {
+  try {
+    await API.submissions.downloadFile(ref, fileId, filename);
+  } catch (err) {
+    API.showToast(`Download failed: ${err.message}`, 'error');
+  }
+};
+
+/* ===== RESUBMIT MODAL ===== */
+let resubRef = null;
+let resubFiles = [];
+
+function openResubmit(ref) {
+  resubRef = ref; resubFiles = [];
+  document.getElementById('resubOrigRef').textContent = ref;
+  document.getElementById('resubRemarks').value = '';
+  document.getElementById('resubFileErr').textContent = '';
+  renderResubFileList();
+  // Load feedback
+  API.submissions.get(ref).then(s => {
+    const fb = document.getElementById('resubFeedback');
+    if (s.feedback) { fb.removeAttribute('hidden'); fb.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Admin Feedback:</strong> ' + API.escapeHtml(s.feedback); }
+    else fb.setAttribute('hidden', '');
+  }).catch(() => { });
+  document.getElementById('resubmitModal').removeAttribute('hidden');
+}
+
+document.getElementById('resubBrowseBtn')?.addEventListener('click', () => document.getElementById('resubFileInput').click());
+document.getElementById('resubFileInput')?.addEventListener('change', e => {
+  addResubFiles(Array.from(e.target.files));
+  renderResubFileList(); e.target.value = '';
+});
+document.getElementById('resubUploadArea')?.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('resubUploadArea').classList.add('drag-over'); });
+document.getElementById('resubUploadArea')?.addEventListener('dragleave', () => document.getElementById('resubUploadArea').classList.remove('drag-over'));
+document.getElementById('resubUploadArea')?.addEventListener('drop', e => {
+  e.preventDefault(); document.getElementById('resubUploadArea').classList.remove('drag-over');
+  addResubFiles(Array.from(e.dataTransfer.files)); renderResubFileList();
+});
+
+function addResubFiles(files) {
+  files.forEach(f => {
+    if (!isAllowedFile(f)) { API.showToast('"' + f.name + '" is not a supported file type.', 'error'); return; }
+    if (f.size > MAX_FILE_SIZE) { API.showToast('"' + f.name + '" exceeds 100MB.', 'error'); return; }
+    if (resubFiles.find(x => x.name === f.name && x.size === f.size)) { API.showToast('"' + f.name + '" already added.', 'error'); return; }
+    resubFiles.push(f);
+  });
+}
+
+function renderResubFileList() {
+  document.getElementById('resubFileList').innerHTML = resubFiles.map((f, i) =>
+    '<li class="file-item"><i class="fas fa-file file-icon"></i>' +
+    '<span class="file-name">' + API.escapeHtml(f.name) + '</span>' +
+    '<span class="file-size">' + formatSize(f.size) + '</span>' +
+    '<button class="file-remove" onclick="resubFiles.splice(' + i + ',1);renderResubFileList()"><i class="fas fa-times"></i></button></li>'
+  ).join('');
+}
+
+document.getElementById('resubSubmitBtn')?.addEventListener('click', async () => {
+  const fileErr = document.getElementById('resubFileErr');
+  if (resubFiles.length === 0) { fileErr.textContent = 'Please attach at least one revised file.'; return; }
+  fileErr.textContent = '';
+
+  const btn = document.getElementById('resubSubmitBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...'; }
+
+  try {
+    const orig = await API.submissions.get(resubRef);
+    const form = new FormData();
+    form.append('docType', orig.doc_type);
+    form.append('schoolYear', orig.school_year);
+    form.append('subject', orig.subject || '');
+    form.append('remarks', document.getElementById('resubRemarks').value);
+    form.append('originalRef', resubRef);
+    resubFiles.forEach(f => form.append('files', f));
+
+    const { ref: newRef } = await API.submissions.submit(form);
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
+    document.getElementById('resubmitModal').setAttribute('hidden', '');
+    resubRef = null; resubFiles = [];
+    API.showToast('Resubmitted successfully. New ref: ' + newRef, 'success');
+    loadDashboard();
+    loadSubmissions('mine');
+    loadSubmissions('all');
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Resubmit'; }
+    API.showToast('Resubmit failed: ' + err.message, 'error');
+  }
+});
+
+const closeResubmit = () => { document.getElementById('resubmitModal').setAttribute('hidden', ''); resubRef = null; resubFiles = []; };
+document.getElementById('resubCancelBtn')?.addEventListener('click', closeResubmit);
+document.getElementById('resubmitModalClose')?.addEventListener('click', closeResubmit);
+
+document.getElementById('dashSubmitForm')?.addEventListener('reset', () => {
+  dFiles = [];
+  renderDFileList();
+  const fileErr = document.getElementById('dFileErr');
+  if (fileErr) fileErr.textContent = '';
+});
+
+/* ===== PROFILE FORMS ===== */
+document.getElementById('profileForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    await API.staff.updateProfile({
+      firstName: document.getElementById('pfFirstName').value,
+      lastName: document.getElementById('pfLastName').value,
+      position: document.getElementById('pfPosition').value,
+      phone: document.getElementById('pfPhone').value,
+    });
+    API.showToast('Profile updated successfully.', 'success');
+  } catch (err) { API.showToast('Update failed: ' + err.message, 'error'); }
+});
+
+document.getElementById('changePasswordForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    await API.staff.changePassword({
+      currentPassword: document.getElementById('pfCurrentPw').value,
+      newPassword: document.getElementById('pfNewPw').value,
+    });
+    API.showToast('Password updated successfully.', 'success');
+    document.getElementById('changePasswordForm').reset();
+  } catch (err) { API.showToast('Password update failed: ' + err.message, 'error'); }
+});
+
+/* ===== LOGOUT ===== */
+document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
+
+/* ===== ANALYTICS TIME FILTERS ===== */
+document.querySelectorAll('.v2-filter-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const group = e.target.closest('.v2-time-filters');
+    if (group) {
+      group.querySelectorAll('.v2-filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      API.showToast('Data filtered by: ' + e.target.textContent, 'info');
     }
   });
+});
 
-  const closeResubmit = () => { document.getElementById('resubmitModal').setAttribute('hidden', ''); resubRef = null; resubFiles = []; };
-  document.getElementById('resubCancelBtn')?.addEventListener('click', closeResubmit);
-  document.getElementById('resubmitModalClose')?.addEventListener('click', closeResubmit);
-
-  document.getElementById('dashSubmitForm')?.addEventListener('reset', () => {
-    dFiles = [];
-    renderDFileList();
-    const fileErr = document.getElementById('dFileErr');
-    if (fileErr) fileErr.textContent = '';
-  });
-
-  /* ===== PROFILE FORMS ===== */
-  document.getElementById('profileForm')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    try {
-      await API.staff.updateProfile({
-        firstName: document.getElementById('pfFirstName').value,
-        lastName: document.getElementById('pfLastName').value,
-        position: document.getElementById('pfPosition').value,
-        phone: document.getElementById('pfPhone').value,
-      });
-      API.showToast('Profile updated successfully.', 'success');
-    } catch (err) { API.showToast('Update failed: ' + err.message, 'error'); }
-  });
-
-  document.getElementById('changePasswordForm')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    try {
-      await API.staff.changePassword({
-        currentPassword: document.getElementById('pfCurrentPw').value,
-        newPassword: document.getElementById('pfNewPw').value,
-      });
-      API.showToast('Password updated successfully.', 'success');
-      document.getElementById('changePasswordForm').reset();
-    } catch (err) { API.showToast('Password update failed: ' + err.message, 'error'); }
-  });
-
-  /* ===== LOGOUT ===== */
-  document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
-
-  /* ===== ANALYTICS TIME FILTERS ===== */
-  document.querySelectorAll('.v2-filter-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const group = e.target.closest('.v2-time-filters');
-      if (group) {
-        group.querySelectorAll('.v2-filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        API.showToast('Data filtered by: ' + e.target.textContent, 'info');
-      }
-    });
-  });
-
-  /* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
-  setInterval(refreshNotifBell, 60000);
+/* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
+setInterval(refreshNotifBell, 60000);

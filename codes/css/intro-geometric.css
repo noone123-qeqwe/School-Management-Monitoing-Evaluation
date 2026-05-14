@@ -1,0 +1,178 @@
+/* =============================================================================
+   GEOMETRIC INTRO ANIMATION (v1.0)
+   Inspired by Premium SaaS Design Systems
+   ============================================================================= */
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #030303;
+  transition: opacity 1.2s ease, visibility 1.2s;
+}
+
+.intro-screen[hidden] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ── Geometric Background Effects ── */
+.geometric-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(244, 63, 94, 0.05) 0%, transparent 50%);
+  filter: blur(80px);
+}
+
+.geometric-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Elegant Shape Component ── */
+.elegant-shape {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-150px);
+  animation: shapeFadeIn 2.4s cubic-bezier(0.23, 0.86, 0.39, 0.96) forwards;
+}
+
+.elegant-shape-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: shapeFloat 12s ease-in-out infinite;
+}
+
+.elegant-shape-blur {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--shape-gradient), transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
+}
+
+.elegant-shape-blur::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent 70%);
+}
+
+@keyframes shapeFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--rotate, 0deg));
+  }
+}
+
+@keyframes shapeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(15px); }
+}
+
+/* ── Content Styles ── */
+.intro-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 24px;
+}
+
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.5s forwards;
+}
+
+.intro-badge i {
+  color: #f43f5e;
+  font-size: 8px;
+}
+
+.intro-badge span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.intro-title-group {
+  margin-bottom: 32px;
+}
+
+.intro-title-line {
+  display: block;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.intro-title-line.white {
+  background: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.7s forwards;
+}
+
+.intro-title-line.gradient {
+  background: linear-gradient(to right, #3b82f6, #ffffff, #d4a017);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.9s forwards;
+}
+
+.intro-desc {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 1.1s forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Final Fade Out Gradient ── */
+.intro-final-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #030303, transparent, #030303);
+  pointer-events: none;
+}
