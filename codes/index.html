@@ -16,49 +16,48 @@
 </head>
 
 <body class="page-fade-in">
-  <!-- PREMIUM BACKGROUND -->
-  <div class="animated-bg">
-    <div class="bg-blob"></div>
-    <div class="bg-blob bg-blob-2"></div>
+  <!-- PERSISTENT GEOMETRIC BACKGROUND -->
+  <div class="geometric-bg-overlay"></div>
+  <div class="geometric-container">
+    <!-- Shapes inspired by the geometric theme -->
+    <div class="elegant-shape"
+      style="--rotate: 12deg; width: 600px; height: 140px; top: 20%; left: -5%; --shape-gradient: #3b82f6;">
+      <div class="elegant-shape-inner">
+        <div class="elegant-shape-blur"></div>
+      </div>
+    </div>
+
+    <div class="elegant-shape"
+      style="--rotate: -15deg; width: 500px; height: 120px; top: 75%; right: 0%; --shape-gradient: #f43f5e; animation-delay: 0.2s;">
+      <div class="elegant-shape-inner" style="animation-delay: -2s;">
+        <div class="elegant-shape-blur"></div>
+      </div>
+    </div>
+
+    <div class="elegant-shape"
+      style="--rotate: -8deg; width: 300px; height: 80px; bottom: 10%; left: 10%; --shape-gradient: #6366f1; animation-delay: 0.1s;">
+      <div class="elegant-shape-inner" style="animation-delay: -4s;">
+        <div class="elegant-shape-blur"></div>
+      </div>
+    </div>
+
+    <div class="elegant-shape"
+      style="--rotate: 20deg; width: 200px; height: 60px; top: 15%; right: 20%; --shape-gradient: #d4a017; animation-delay: 0.3s;">
+      <div class="elegant-shape-inner" style="animation-delay: -6s;">
+        <div class="elegant-shape-blur"></div>
+      </div>
+    </div>
+
+    <div class="elegant-shape"
+      style="--rotate: -25deg; width: 150px; height: 40px; top: 10%; left: 25%; --shape-gradient: #06b6d4; animation-delay: 0.4s;">
+      <div class="elegant-shape-inner" style="animation-delay: -8s;">
+        <div class="elegant-shape-blur"></div>
+      </div>
+    </div>
   </div>
 
   <!-- GEOMETRIC INTRO SCREEN -->
   <div class="intro-screen" id="introScreen">
-    <div class="geometric-bg-overlay"></div>
-    
-    <div class="geometric-container">
-      <!-- Shapes inspired by the geometric theme -->
-      <div class="elegant-shape" style="--rotate: 12deg; width: 600px; height: 140px; top: 20%; left: -5%; --shape-gradient: #3b82f6;">
-        <div class="elegant-shape-inner">
-          <div class="elegant-shape-blur"></div>
-        </div>
-      </div>
-
-      <div class="elegant-shape" style="--rotate: -15deg; width: 500px; height: 120px; top: 75%; right: 0%; --shape-gradient: #f43f5e; animation-delay: 0.2s;">
-        <div class="elegant-shape-inner" style="animation-delay: -2s;">
-          <div class="elegant-shape-blur"></div>
-        </div>
-      </div>
-
-      <div class="elegant-shape" style="--rotate: -8deg; width: 300px; height: 80px; bottom: 10%; left: 10%; --shape-gradient: #6366f1; animation-delay: 0.1s;">
-        <div class="elegant-shape-inner" style="animation-delay: -4s;">
-          <div class="elegant-shape-blur"></div>
-        </div>
-      </div>
-
-      <div class="elegant-shape" style="--rotate: 20deg; width: 200px; height: 60px; top: 15%; right: 20%; --shape-gradient: #d4a017; animation-delay: 0.3s;">
-        <div class="elegant-shape-inner" style="animation-delay: -6s;">
-          <div class="elegant-shape-blur"></div>
-        </div>
-      </div>
-
-      <div class="elegant-shape" style="--rotate: -25deg; width: 150px; height: 40px; top: 10%; left: 25%; --shape-gradient: #06b6d4; animation-delay: 0.4s;">
-        <div class="elegant-shape-inner" style="animation-delay: -8s;">
-          <div class="elegant-shape-blur"></div>
-        </div>
-      </div>
-    </div>
-
     <div class="intro-content">
       <div class="intro-badge">
         <i class="fas fa-circle"></i>
@@ -70,12 +69,8 @@
         <h1 class="intro-title-line gradient">Monitoring & Evaluation</h1>
       </div>
 
-      <p class="intro-desc">
-        Crafting exceptional digital experiences through innovative monitoring and cutting-edge technology.
-      </p>
+      <div class="intro-final-fade"></div>
     </div>
-
-    <div class="intro-final-fade"></div>
   </div>
 
   <!-- HEADER / NAV -->
@@ -84,8 +79,9 @@
       <div class="logo">
         <img src="/assets/logo.jpg" alt="SMME Logo" class="logo-img" />
         <div class="logo-text-group">
-          <span class="logo-title" style="font-size: 1.4rem; font-weight: 800; color: #0f172a;">SMME Portal</span>
-          <span class="logo-sub" style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Monitoring & Evaluation</span>
+          <span class="logo-title" style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">SMME Portal</span>
+          <span class="logo-sub" style="font-size: 0.85rem; font-weight: 600; color: rgba(255, 255, 255, 0.7);">Monitoring &
+            Evaluation</span>
         </div>
       </div>
       <nav class="nav" id="mainNav">
@@ -94,7 +90,8 @@
         <a href="#contact" class="nav-link">Contact</a>
       </nav>
       <div class="header-actions">
-        <a href="html/login.html" class="btn btn-primary" style="border-radius: 100px; padding: 10px 24px; font-size: 0.9rem;">Sign In</a>
+        <a href="html/login.html" class="btn btn-primary"
+          style="border-radius: 100px; padding: 10px 24px; font-size: 0.9rem;">Sign In</a>
       </div>
       <button class="hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false"
         aria-controls="mainNav">
@@ -108,7 +105,8 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1>School Management<br /><span>Monitoring &amp; Evaluation</span></h1>
-      <p>A secure digital portal for private schools to submit documents, files, and applications directly to the Division Office with real-time tracking.</p>
+      <p>A secure digital portal for private schools to submit documents, files, and applications directly to the
+        Division Office with real-time tracking.</p>
       <div class="hero-btns">
         <a href="html/login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In to Portal</a>
         <a href="#about" class="btn btn-outline">Learn More</a>
@@ -210,7 +208,8 @@
         <div class="card holographic-panel modern-widget">
           <div class="card-icon"><i class="fas fa-shield-alt secure-lock"></i></div>
           <h3>Secure Submission</h3>
-          <p>All documents are encrypted and transmitted securely to the Division Office. Only authorized personnel can
+          <p>All documents are encrypted and transmitted securely to the Division Office. Only authorized personnel
+            can
             access submitted files.</p>
         </div>
         <div class="card holographic-panel modern-widget" style="animation-delay: 0.1s">
@@ -228,7 +227,8 @@
         <div class="card holographic-panel modern-widget" style="animation-delay: 0.3s">
           <div class="card-icon"><i class="fas fa-history" style="animation: pulse 2s infinite"></i></div>
           <h3>Submission History</h3>
-          <p>Access a complete history of all your past submissions with timestamps, document types, and current status.
+          <p>Access a complete history of all your past submissions with timestamps, document types, and current
+            status.
           </p>
         </div>
       </div>
@@ -348,6 +348,6 @@
   </footer>
 
   <script src="/js/app.js?v=1.6.0"></script>
-</body>
+/body>
 
 </html>

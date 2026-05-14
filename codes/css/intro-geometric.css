@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #030303;
+  background-color: transparent; /* Changed to transparent to show persistent background */
   transition: opacity 1.2s ease, visibility 1.2s;
 }
 
@@ -23,18 +23,22 @@
 
 /* ── Geometric Background Effects ── */
 .geometric-bg-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 100% 100%, rgba(244, 63, 94, 0.05) 0%, transparent 50%);
+  background: #030303; /* Solid dark base */
+  background-image: 
+    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(212, 160, 23, 0.08) 0%, transparent 50%);
   filter: blur(80px);
+  z-index: -2;
 }
 
 .geometric-container {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index: -1;
 }
 
 /* ── Elegant Shape Component ── */
@@ -175,4 +179,59 @@
   inset: 0;
   background: linear-gradient(to top, #030303, transparent, #030303);
   pointer-events: none;
+}
+
+/* ── Landing Page Integration Overrides ── */
+/* Ensure the geometric background is visible through all sections */
+
+body {
+  background-color: transparent !important;
+}
+
+.hero,
+.section,
+.section-alt {
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep the hero effects but make them semi-transparent */
+.hero::before {
+  opacity: 0.3 !important;
+  z-index: -1 !important;
+}
+
+.hero-overlay {
+  opacity: 0.1 !important;
+  z-index: -1 !important;
+}
+
+/* Ensure footer and header don't block the background too harshly */
+.footer {
+  background: rgba(3, 3, 3, 0.5) !important;
+  backdrop-filter: blur(10px);
+}
+
+.header {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.nav {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.logo-title {
+  color: #ffffff !important;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.nav-link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
