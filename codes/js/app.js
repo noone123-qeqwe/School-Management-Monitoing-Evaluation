@@ -166,14 +166,33 @@ if (!prefersReducedMotion && 'IntersectionObserver' in window) {
 /* ── Intro Screen Removal ── */
 window.addEventListener('load', () => {
   const intro = document.getElementById('introScreen');
+  const mainContent = document.getElementById('main-site-content');
+
   if (intro) {
     setTimeout(() => {
+      // Start fading out intro
       intro.style.opacity = '0';
-      intro.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
+      intro.style.transition = 'opacity 0.8s ease, visibility 0.8s ease';
+      
+      // Simultaneously start fading in site content
+      if (mainContent) {
+        mainContent.style.visibility = 'visible';
+        mainContent.style.opacity = '1';
+      }
+
       setTimeout(() => {
         intro.style.visibility = 'hidden';
         intro.style.display = 'none';
-      }, 600);
+        
+        // Reset geometric background z-index to sit behind site content
+        const geoContainer = document.querySelector('.geometric-container');
+        const geoOverlay = document.querySelector('.geometric-bg-overlay');
+        if (geoContainer) geoContainer.style.zIndex = '-1';
+        if (geoOverlay) geoOverlay.style.zIndex = '-2';
+        
+        // Final cleanup for main content overflow
+        document.body.style.overflow = 'auto';
+      }, 800);
     }, 3500); // 3.5 seconds delay to show geometric animation
   }
 });
