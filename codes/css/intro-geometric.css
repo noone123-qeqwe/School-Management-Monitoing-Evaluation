@@ -97,6 +97,28 @@
   padding: 0 24px;
 }
 
+.intro-logo {
+  margin-bottom: 30px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: logoReveal 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+}
+
+.intro-logo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), 0 0 60px rgba(212, 160, 23, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes logoReveal {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .intro-badge {
   display: inline-flex;
   align-items: center;
