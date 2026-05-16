@@ -96,29 +96,6 @@ if (contactForm) {
   });
 }
 
-const geoShapes = document.querySelectorAll('.elegant-shape');
-if (!prefersReducedMotion && geoShapes.length > 0) {
-  let ticking = false;
-  const intro = document.getElementById('introScreen');
-
-  document.addEventListener('mousemove', (e) => {
-    if (!ticking && (!intro || !intro.classList.contains('exit-active'))) {
-      window.requestAnimationFrame(() => {
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
-        geoShapes.forEach((shape, index) => {
-          const factor = (index + 1) * 15;
-          const moveX = (x - 0.5) * factor;
-          const moveY = (y - 0.5) * factor;
-          shape.style.transform = `translate(${moveX}px, ${moveY}px) rotate(var(--rotate))`;
-        });
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-}
-
 function showToast(message, type) {
   const existing = document.querySelector(".toast");
   if (existing) existing.remove();
@@ -183,29 +160,6 @@ if (!prefersReducedMotion && 'IntersectionObserver' in window) {
     scrollObserver.observe(el);
   });
 }
-window.addEventListener('load', () => {
-  const intro = document.getElementById('introScreen');
-  const mainContent = document.getElementById('main-site-content');
-
-  if (intro) {
-    setTimeout(() => {
-      document.body.classList.add('intro-exiting');
-      intro.classList.add('exit-active');
-      if (mainContent) {
-        mainContent.classList.add('reveal-active');
-      }
-
-      setTimeout(() => {
-        intro.style.display = 'none';
-        const geoContainer = document.querySelector('.geometric-container');
-        if (geoContainer) {
-          geoContainer.style.zIndex = "-10";
-          geoContainer.style.visibility = "hidden";
-        }
-      }, 1600);
-    }, 800); // Optimized for better perceived speed
-  }
-});
 
 document.addEventListener('click', (e) => {
   if (e.target.classList.contains('v2-view-all')) {
