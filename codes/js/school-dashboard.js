@@ -44,25 +44,32 @@ function tmplKey() {
   return 'smme_templates_' + (user && user.id != null ? String(user.id) : 'guest');
 }
 
-function bootstrapStaffDashboard() {
-  loadDashboard();
-  loadSubmissions('all');
-  loadSubmissions('mine');
-  refreshNotifBell();
+async function bootstrapStaffDashboard() {
+  // Run critical data loads in parallel for faster perceived performance
+  await Promise.all([
+    loadDashboard(),
+    loadSubmissions('all'),
+    loadSubmissions('mine'),
+    refreshNotifBell()
+  ]);
   checkDraft();
 }
 
-populateStaffDashboard();
 (async () => {
-  const verified = await API.auth.verifySession();
+  // Ensure WebId/SessionId is passed if required by the backend
+  const verified = await API.auth.verifySession({
+    WebId: sessionStorage.getItem('smme_web_id') || 'portal_v1'
+  });
+
   if (!verified || verified.role !== 'staff') {
     window.location.href = '/html/login.html';
     return;
   }
+
   user = verified;
   sessionStorage.setItem('smme_user', JSON.stringify(verified));
   populateStaffDashboard();
-  bootstrapStaffDashboard();
+  await bootstrapStaffDashboard();
 })();
 
 /* ===== DEADLINE CALENDAR (FullCalendar) ===== */

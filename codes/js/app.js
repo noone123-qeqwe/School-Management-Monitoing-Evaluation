@@ -33,25 +33,26 @@ if (hamburger && mainNav) {
   });
 }
 
-function setActiveNavByScroll() {
-  const offset = (header?.offsetHeight || 74) + 20;
-  const y = window.scrollY + offset;
-
-  let activeId = "";
-  sections.forEach((section) => {
-    if (y >= section.offsetTop && y < section.offsetTop + section.offsetHeight) {
-      activeId = section.id;
-    }
+/* ── Performance Optimized Scroll Spy ── */
+if ('IntersectionObserver' in window) {
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, {
+    rootMargin: '-20% 0px -70% 0px' // Adjusts based on the viewport focus
   });
 
-  navLinks.forEach((link) => {
-    const isActive = link.getAttribute("href") === `#${activeId}`;
-    link.classList.toggle("active", isActive);
-  });
+  sections.forEach(section => navObserver.observe(section));
 }
 
 window.addEventListener("scroll", () => {
-  setActiveNavByScroll();
+  // Simplified shadow logic
   if (header) {
     header.style.boxShadow = window.scrollY > 6 ? "0 8px 24px rgba(15,23,42,0.08)" : "none";
   }
@@ -94,6 +95,30 @@ if (contactForm) {
       contactForm.reset();
       showToast("Your message has been sent. We'll get back to you shortly.", "success");
     }, 1200);
+  });
+}
+
+/* ── Interactive Geometric Parallax ── */
+if (!prefersReducedMotion && document.querySelector('.elegant-shape')) {
+  let ticking = false;
+
+  document.addEventListener('mousemove', (e) => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const shapes = document.querySelectorAll('.elegant-shape');
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+
+        shapes.forEach((shape, index) => {
+          const factor = (index + 1) * 10;
+          const moveX = (x - 0.5) * factor;
+          const moveY = (y - 0.5) * factor;
+          shape.style.transform = `translate(${moveX}px, ${moveY}px) rotate(var(--rotate))`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
   });
 }
 
@@ -171,29 +196,41 @@ window.addEventListener('load', () => {
   if (intro) {
     setTimeout(() => {
       // Start fading out intro
+      intro.style.transition = 'opacity 1.4s cubic-bezier(0.23, 0.86, 0.39, 0.96), transform 1.4s cubic-bezier(0.23, 0.86, 0.39, 0.96), filter 1.2s ease';
       intro.style.opacity = '0';
-      intro.style.transition = 'opacity 0.8s ease, visibility 0.8s ease';
-      
+      intro.style.transform = 'scale(1.05) translateY(-20px)';
+      intro.style.filter = 'blur(20px)';
+
       // Simultaneously start fading in site content
       if (mainContent) {
         mainContent.style.visibility = 'visible';
+        mainContent.style.transition = 'opacity 1.5s ease-in-out';
         mainContent.style.opacity = '1';
       }
 
       setTimeout(() => {
-        intro.style.visibility = 'hidden';
         intro.style.display = 'none';
-        
+
         // Reset geometric background z-index to sit behind site content
         const geoContainer = document.querySelector('.geometric-container');
         const geoOverlay = document.querySelector('.geometric-bg-overlay');
         if (geoContainer) geoContainer.style.zIndex = '-1';
         if (geoOverlay) geoOverlay.style.zIndex = '-2';
-        
-        // Final cleanup for main content overflow and theme background
-        document.body.style.backgroundColor = '#030303';
-        document.body.style.overflow = 'auto';
-      }, 800);
-    }, 3500); // 3.5 seconds delay to show geometric animation
+      }, 1400);
+    }, 2000); // Give the user 2 seconds to absorb the "Premium" intro
+  }
+});
+
+/* ── Dashboard V2: Toggle Grid View ── */
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('v2-view-all')) {
+    e.preventDefault();
+    // Find the closest grid container relative to the clicked link
+    const section = e.target.closest('section') || document;
+    const grid = section.querySelector('.v2-stats-grid');
+    if (!grid) return;
+
+    const isGridMode = grid.classList.toggle('grid-mode');
+    e.target.textContent = isGridMode ? 'Show Less' : 'View All';
   }
 });
