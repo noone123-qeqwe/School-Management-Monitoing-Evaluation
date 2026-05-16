@@ -6,12 +6,12 @@
 .intro-screen {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 999999; /* Max z-index to block everything */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #030303; /* Solid background to block everything else */
+  background-color: #030303 !important; /* Forces solid background */
   transition: opacity 1.2s ease, visibility 1.2s;
 }
 
@@ -27,10 +27,10 @@
   inset: 0;
   background: #030303;
   background-image:
-    radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(212, 160, 23, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(212, 160, 23, 0.12) 0%, transparent 50%);
   filter: blur(80px);
-  z-index: 10000; /* Higher than intro-screen background */
+  z-index: 1000000; /* Above intro-screen background */
   pointer-events: none;
 }
 
@@ -39,7 +39,7 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 10001; /* Above overlay */
+  z-index: 1000001; /* Above overlay */
 }
 
 /* ── Elegant Shape Component ── */
@@ -99,28 +99,40 @@
 /* ── Content Styles ── */
 .intro-content {
   position: relative;
-  z-index: 10010;
+  z-index: 1000010;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   max-width: 800px;
   padding: 0 24px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .intro-logo {
+  width: 140px;
+  height: 140px;
   margin-bottom: 30px;
-  opacity: 0;
-  transform: scale(0.8);
-  animation: logoReveal 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+  position: relative;
+  background: transparent !important;
 }
 
 .intro-logo img {
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), 0 0 60px rgba(212, 160, 23, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 28px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: logoReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 0.5s;
+  box-shadow: 
+    0 0 50px rgba(59, 130, 246, 0.5),
+    0 0 100px rgba(212, 160, 23, 0.3);
+  background: white; /* Ensures logo visibility if image has transparency */
+  padding: 5px;
 }
 
 @keyframes logoReveal {
@@ -133,57 +145,65 @@
 .intro-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9999px;
-  margin-bottom: 40px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 24px;
   opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.5s forwards;
+  transform: translateY(20px);
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 0.8s;
 }
 
 .intro-badge i {
-  color: #f43f5e;
+  color: #3b82f6;
   font-size: 8px;
+  animation: pulse 2s infinite;
 }
 
 .intro-badge span {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.05em;
-  font-weight: 500;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 .intro-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 32px;
 }
 
 .intro-title-line {
-  display: block;
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  margin: 0;
   opacity: 0;
   transform: translateY(30px);
+  text-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
 .intro-title-line.white {
-  background: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0.8));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.7s forwards;
+  color: #ffffff;
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 1.2s;
 }
 
 .intro-title-line.gradient {
-  background: linear-gradient(to right, #3b82f6, #ffffff, #d4a017);
+  color: #ffffff; /* Fallback */
+  background: linear-gradient(135deg, #ffffff 20%, #d4a017 100%);
   -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.9s forwards;
+  -webkit-text-fill-color: transparent;
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 1.4s;
+  filter: drop-shadow(0 0 15px rgba(212, 160, 23, 0.5));
 }
 
 .intro-desc {
