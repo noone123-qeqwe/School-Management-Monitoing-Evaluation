@@ -189,26 +189,17 @@ window.addEventListener('load', () => {
 
   if (intro) {
     setTimeout(() => {
-      intro.style.transition = 'opacity 1.4s cubic-bezier(0.23, 0.86, 0.39, 0.96), transform 1.4s cubic-bezier(0.23, 0.86, 0.39, 0.96), filter 1.2s ease';
-      intro.style.opacity = '0';
-      intro.style.transform = 'scale(1.05) translateY(-20px)';
-      intro.style.filter = 'blur(20px)';
+      // Use CSS classes for state management
+      intro.classList.add('exit-active');
 
       if (mainContent) {
-        mainContent.style.visibility = 'visible';
-        mainContent.style.transition = 'opacity 1.5s ease-in-out';
-        mainContent.style.opacity = '1';
+        mainContent.classList.add('reveal-active');
       }
 
       setTimeout(() => {
         intro.style.display = 'none';
-
-        const geoContainer = document.querySelector('.geometric-container');
-        const geoOverlay = document.querySelector('.geometric-bg-overlay');
-        if (geoContainer) geoContainer.style.zIndex = '-1';
-        if (geoOverlay) geoOverlay.style.zIndex = '-2';
-      }, 1400);
-    }, 2000);
+      }, 1500); // Cleanup after CSS transition finishes
+    }, 1800); // Professional delay: long enough to be absorbed, short enough not to frustrate
   }
 });
 
