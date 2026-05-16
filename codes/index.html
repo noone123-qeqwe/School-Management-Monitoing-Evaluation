@@ -11,56 +11,20 @@
   <link rel="stylesheet" href="/css/styles.css?v=4.0.0" />
   <link rel="stylesheet" href="/css/user.css?v=1.0.0" />
   <link rel="stylesheet" href="/css/premium-design.css?v=1.0.0" />
+  <link rel="stylesheet" href="/css/aurora.css?v=1.0.0" />
   <link rel="stylesheet" href="/css/intro-geometric.css?v=1.0.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body class="page-fade-in">
-  <!-- PERSISTENT GEOMETRIC BACKGROUND -->
-  <div class="geometric-bg-overlay"></div>
-  <div class="geometric-container">
-    <!-- Shape 1: Left Top (Navy/Blue) - mapped from indigo-500 -->
-    <div class="elegant-shape"
-      style="--rotate: 12deg; width: 600px; height: 140px; top: 20%; left: -5%; --shape-gradient: rgba(30, 58, 95, 0.2); animation-delay: 0.3s;">
-      <div class="elegant-shape-inner">
-        <div class="elegant-shape-blur"></div>
-      </div>
-    </div>
-
-    <!-- Shape 2: Right Bottom (Gold) - mapped from rose-500 -->
-    <div class="elegant-shape"
-      style="--rotate: -15deg; width: 500px; height: 120px; top: 75%; right: 0%; --shape-gradient: rgba(212, 160, 23, 0.15); animation-delay: 0.5s;">
-      <div class="elegant-shape-inner" style="animation-delay: -2s;">
-        <div class="elegant-shape-blur"></div>
-      </div>
-    </div>
-
-    <!-- Shape 3: Left Bottom (Violet/Blue) -->
-    <div class="elegant-shape"
-      style="--rotate: -8deg; width: 300px; height: 80px; bottom: 10%; left: 10%; --shape-gradient: rgba(99, 102, 241, 0.15); animation-delay: 0.4s;">
-      <div class="elegant-shape-inner" style="animation-delay: -4s;">
-        <div class="elegant-shape-blur"></div>
-      </div>
-    </div>
-
-    <!-- Shape 4: Right Top (Amber/Gold) -->
-    <div class="elegant-shape"
-      style="--rotate: 20deg; width: 200px; height: 60px; top: 15%; right: 20%; --shape-gradient: rgba(245, 158, 11, 0.15); animation-delay: 0.6s;">
-      <div class="elegant-shape-inner" style="animation-delay: -6s;">
-        <div class="elegant-shape-blur"></div>
-      </div>
-    </div>
-
-    <!-- Shape 5: Center Top (Cyan/Blue) -->
-    <div class="elegant-shape"
-      style="--rotate: -25deg; width: 150px; height: 40px; top: 10%; left: 25%; --shape-gradient: rgba(6, 182, 212, 0.15); animation-delay: 0.7s;">
-      <div class="elegant-shape-inner" style="animation-delay: -8s;">
-        <div class="elegant-shape-blur"></div>
-      </div>
+  <!-- PERSISTENT AURORA BACKGROUND -->
+  <div class="aurora-background">
+    <div class="aurora-container">
+      <div class="aurora-layer"></div>
     </div>
   </div>
 
-  <!-- GEOMETRIC INTRO SCREEN -->
+  <!-- GEOMETRIC INTRO SCREEN (Content remains the same, background is now Aurora) -->
   <div class="intro-screen" id="introScreen">
     <div class="intro-content">
       <div class="intro-logo">
@@ -83,6 +47,7 @@
     </div>
   </div>
 
+  <div id="main-site-content" style="opacity: 0; visibility: hidden; transition: opacity 1.5s ease;">
   <!-- HEADER / NAV -->
   <header class="header">
     <div class="header-inner">
@@ -358,7 +323,9 @@
     </div>
   </footer>
 
+  </div>
+
   <script src="/js/app.js?v=1.6.0"></script>
-  /body>
+</body>
 
 </html>

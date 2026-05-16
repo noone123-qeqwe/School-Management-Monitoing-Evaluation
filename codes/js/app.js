@@ -184,11 +184,9 @@ window.addEventListener('load', () => {
         intro.style.visibility = 'hidden';
         intro.style.display = 'none';
         
-        // Reset geometric background z-index to sit behind site content
-        const geoContainer = document.querySelector('.geometric-container');
-        const geoOverlay = document.querySelector('.geometric-bg-overlay');
-        if (geoContainer) geoContainer.style.zIndex = '-1';
-        if (geoOverlay) geoOverlay.style.zIndex = '-2';
+        // Reset aurora background z-index to sit behind site content
+        const auroraBg = document.querySelector('.aurora-background');
+        if (auroraBg) auroraBg.style.zIndex = '-1';
         
         // Final cleanup for main content overflow and theme background
         document.body.style.backgroundColor = '#030303';
