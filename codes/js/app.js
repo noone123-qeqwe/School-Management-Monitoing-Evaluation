@@ -194,6 +194,6 @@ window.addEventListener('load', () => {
         document.body.style.backgroundColor = '#030303';
         document.body.style.overflow = 'auto';
       }, 800);
-    }, 3500); // 3.5 seconds delay to show geometric animation
+    }, 2800); 
   }
 });
