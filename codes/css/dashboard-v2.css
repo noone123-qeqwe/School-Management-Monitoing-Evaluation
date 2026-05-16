@@ -13,11 +13,18 @@
     --v2-warning: #f59e0b;
     --v2-danger: #ef4444;
     --v2-purple: #8b5cf6;
+    --v2-rose: #f43f5e;
+    --v2-amber: #fbbf24;
+    --v2-cyan: #06b6d4;
+    --v2-bg-dark: #030303;
 
     --v2-radius: 24px;
     --v2-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
     --v2-shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+    --v2-ease-premium: cubic-bezier(0.23, 0.86, 0.39, 0.96);
     --v2-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --v2-transition-long: 1.2s var(--v2-ease-premium);
 }
 
 /* Smooth Page Entrances */

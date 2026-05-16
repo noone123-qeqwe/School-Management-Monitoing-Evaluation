@@ -96,18 +96,18 @@ if (contactForm) {
   });
 }
 
-if (!prefersReducedMotion && document.querySelector('.elegant-shape')) {
+const geoShapes = document.querySelectorAll('.elegant-shape');
+if (!prefersReducedMotion && geoShapes.length > 0) {
   let ticking = false;
+  const intro = document.getElementById('introScreen');
 
   document.addEventListener('mousemove', (e) => {
-    if (!ticking) {
+    if (!ticking && (!intro || !intro.classList.contains('exit-active'))) {
       window.requestAnimationFrame(() => {
-        const shapes = document.querySelectorAll('.elegant-shape');
         const x = e.clientX / window.innerWidth;
         const y = e.clientY / window.innerHeight;
-
-        shapes.forEach((shape, index) => {
-          const factor = (index + 1) * 10;
+        geoShapes.forEach((shape, index) => {
+          const factor = (index + 1) * 15;
           const moveX = (x - 0.5) * factor;
           const moveY = (y - 0.5) * factor;
           shape.style.transform = `translate(${moveX}px, ${moveY}px) rotate(var(--rotate))`;
@@ -189,17 +189,21 @@ window.addEventListener('load', () => {
 
   if (intro) {
     setTimeout(() => {
-      // Use CSS classes for state management
+      document.body.classList.add('intro-exiting');
       intro.classList.add('exit-active');
-
       if (mainContent) {
         mainContent.classList.add('reveal-active');
       }
 
       setTimeout(() => {
         intro.style.display = 'none';
-      }, 1500); // Cleanup after CSS transition finishes
-    }, 1800); // Professional delay: long enough to be absorbed, short enough not to frustrate
+        const geoContainer = document.querySelector('.geometric-container');
+        if (geoContainer) {
+          geoContainer.style.zIndex = "-10";
+          geoContainer.style.visibility = "hidden";
+        }
+      }, 1600);
+    }, 800); // Optimized for better perceived speed
   }
 });
 

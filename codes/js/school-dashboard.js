@@ -55,10 +55,11 @@ async function bootstrapStaffDashboard() {
 
 (async () => {
   const verified = await API.auth.verifySession({
-    WebId: sessionStorage.getItem('smme_web_id') || 'portal_v1'
+    WebId: sessionStorage.getItem('smme_web_id') || 'SMME_PORTAL_V1'
   });
 
   if (!verified || verified.role !== 'staff') {
+    sessionStorage.clear();
     window.location.href = '/html/login.html';
     return;
   }

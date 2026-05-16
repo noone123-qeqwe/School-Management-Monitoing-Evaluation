@@ -202,9 +202,16 @@
   --z-popover: 1060;
   --z-tooltip: 1070;
   --z-toast: 1080;
+
+  --v2-primary: var(--primary-400);
+  --v2-rose: var(--danger-500);
+  --v2-success: var(--success-500);
+  --v2-warning: var(--warning-500);
+  --v2-bg-dark: var(--gray-950);
+  --v2-ease-premium: cubic-bezier(0.23, 0.86, 0.39, 0.96);
+  --v2-transition-long: 1.4s var(--v2-ease-premium);
 }
 
-/* ── Enterprise Base Styles ── */
 *,
 *::before,
 *::after {
