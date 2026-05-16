@@ -190,7 +190,8 @@ window.addEventListener('load', () => {
         if (geoContainer) geoContainer.style.zIndex = '-1';
         if (geoOverlay) geoOverlay.style.zIndex = '-2';
         
-        // Final cleanup for main content overflow
+        // Final cleanup for main content overflow and theme background
+        document.body.style.backgroundColor = '#030303';
         document.body.style.overflow = 'auto';
       }, 800);
     }, 3500); // 3.5 seconds delay to show geometric animation
