@@ -11,7 +11,11 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+<<<<<<< HEAD
+  background-color: transparent; /* Changed to transparent to reveal shapes */
+=======
   background-color: transparent; /* Changed to transparent to show persistent background */
+>>>>>>> 3639173 (Update: Sat 05/16/2026 23:13:11.29)
   transition: opacity 1.2s ease, visibility 1.2s;
 }
 
@@ -40,7 +44,11 @@
     radial-gradient(circle at 100% 100%, rgba(212, 160, 23, 0.12) 0%, transparent 50%),
     linear-gradient(to bottom right, rgba(99, 102, 241, 0.05), transparent, rgba(244, 63, 94, 0.05));
   filter: blur(80px);
+<<<<<<< HEAD
+  z-index: 9990; /* Below intro-screen */
+=======
   z-index: 9990; /* Lower than intro content */
+>>>>>>> 3639173 (Update: Sat 05/16/2026 23:13:11.29)
   pointer-events: none;
 }
 
@@ -49,7 +57,11 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+<<<<<<< HEAD
+  z-index: 9991; /* Below intro-screen */
+=======
   z-index: 9991; /* Below intro content but above overlay */
+>>>>>>> 3639173 (Update: Sat 05/16/2026 23:13:11.29)
 }
 
 /* ── Elegant Shape Component ── */
