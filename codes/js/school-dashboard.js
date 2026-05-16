@@ -1,4 +1,3 @@
-/* ===== AUTH GUARD ===== */
 let user = API.auth.getUser();
 if (!user || user.role !== 'staff') { window.location.href = '/html/login.html'; }
 
@@ -45,7 +44,6 @@ function tmplKey() {
 }
 
 async function bootstrapStaffDashboard() {
-  // Run critical data loads in parallel for faster perceived performance
   await Promise.all([
     loadDashboard(),
     loadSubmissions('all'),
@@ -56,7 +54,6 @@ async function bootstrapStaffDashboard() {
 }
 
 (async () => {
-  // Ensure WebId/SessionId is passed if required by the backend
   const verified = await API.auth.verifySession({
     WebId: sessionStorage.getItem('smme_web_id') || 'portal_v1'
   });
@@ -72,7 +69,6 @@ async function bootstrapStaffDashboard() {
   await bootstrapStaffDashboard();
 })();
 
-/* ===== DEADLINE CALENDAR (FullCalendar) ===== */
 let deadlineCalendar = null;
 let currentTrackRef = null;
 
@@ -124,7 +120,6 @@ async function loadTrackComments(ref) {
   }
 }
 
-/* ===== SIDEBAR TOGGLE ===== */
 const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay') || document.querySelector('.sidebar-overlay');
 
@@ -147,7 +142,6 @@ sidebarOverlay?.addEventListener('click', () => {
   sidebarOverlay?.classList.remove('active');
 });
 
-/* ===== PAGE NAVIGATION ===== */
 function switchPage(pageId) {
   document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
@@ -177,7 +171,6 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); switchPage(link.dataset.page); });
 });
 
-/* ===== GLOBAL SEARCH & CLEAR ===== */
 document.getElementById('globalSearch')?.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const v = e.target.value;
@@ -194,13 +187,11 @@ document.querySelectorAll('.search-clear').forEach(btn => {
   });
 });
 
-/* ===== FEEDBACK CELL ===== */
 function feedbackCell(s) {
   if (!s.feedback) return '<span style="color:var(--text-muted);font-size:.75rem">\u2014</span>';
   return '<span class="pill pill-returned" title="' + API.escapeHtml(s.feedback) + '" style="cursor:help"><i class="fas fa-comment-alt"></i> View</span>';
 }
 
-/* ===== LOAD DASHBOARD ===== */
 async function loadDashboard() {
   API.ui.showSkeleton('recentSubmissionsBody', 'table', 4);
   try {
@@ -334,7 +325,6 @@ function renderRecentTable(subs) {
   }).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:32px">No submissions yet.</td></tr>';
 }
 
-/* ===== LOAD SUBMISSIONS ===== */
 async function loadSubmissions(mode) {
   const search = document.getElementById(mode === 'mine' ? 'mineSearch' : 'submissionSearch').value.toLowerCase();
   const status = document.getElementById(mode === 'mine' ? 'mineFilter' : 'submissionFilter').value;
@@ -384,7 +374,6 @@ document.getElementById('submissionFilter')?.addEventListener('change', () => lo
 document.getElementById('mineSearch')?.addEventListener('input', API.debounce(() => loadSubmissions('mine'), 400));
 document.getElementById('mineFilter')?.addEventListener('change', () => loadSubmissions('mine'));
 
-/* ===== EXPORT CSV ===== */
 document.getElementById('exportSubsBtn')?.addEventListener('click', async () => {
   try {
     const subs = await API.submissions.list({ limit: 1000 });
@@ -408,7 +397,6 @@ document.getElementById('exportMySubsBtn')?.addEventListener('click', async () =
   } catch (err) { API.showToast('Export failed: ' + err.message, 'error'); }
 });
 
-/* ===== NOTIFICATIONS ===== */
 async function refreshNotifBell() {
   try {
     const { count } = await API.notifications.unreadCount();
@@ -476,7 +464,6 @@ document.addEventListener('click', e => {
     panel.setAttribute('hidden', '');
 });
 
-/* ===== COMPLIANCE CHECKLIST ===== */
 async function loadCompliance() {
   const year = document.getElementById('complianceYear').value;
   const grid = document.getElementById('complianceGrid');
@@ -509,7 +496,6 @@ async function loadCompliance() {
 }
 document.getElementById('complianceYear')?.addEventListener('change', loadCompliance);
 
-/* ===== DEADLINES ===== */
 async function loadDeadlines() {
   const list = document.getElementById('deadlinesList');
   if (!list) return;
@@ -546,7 +532,6 @@ async function renderDeadlineAlerts() {
     }).join('');
   } catch { }
 }
-/* ===== FILE UPLOAD ===== */
 let dFiles = [];
 const dUploadArea = document.getElementById('dUploadArea');
 const dFileInput = document.getElementById('dFileInput');
@@ -613,7 +598,6 @@ function formatSize(bytes) {
   return (bytes / 1048576).toFixed(1) + ' MB';
 }
 
-/* ===== DRAFT (localStorage only — lightweight) ===== */
 function saveDraftLocal() {
   const data = {
     docType: document.getElementById('dDocType').value,
@@ -659,7 +643,6 @@ document.getElementById('discardDraftBtn')?.addEventListener('click', () => {
   API.showToast('Draft discarded.');
 });
 
-/* ===== TEMPLATES (localStorage) ===== */
 function getTemplates() {
   try { return JSON.parse(localStorage.getItem(tmplKey()) || '[]'); } catch { return []; }
 }
@@ -715,7 +698,6 @@ document.getElementById('templateModalClose')?.addEventListener('click', () => {
   document.getElementById('templateModal').setAttribute('hidden', '');
 });
 
-/* ===== SUBMIT FORM ===== */
 document.getElementById('dashSubmitForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   let valid = true;
@@ -754,7 +736,6 @@ document.getElementById('dashSubmitForm')?.addEventListener('submit', async e =>
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit to Division Office';
     }
 
-    // Clear draft
     localStorage.removeItem(draftKey());
     document.getElementById('draftBanner').setAttribute('hidden', '');
 
@@ -815,7 +796,6 @@ document.getElementById('dashModalClose')?.addEventListener('click', () => {
   switchPage('mine');
 });
 
-/* ===== TRACK SUBMISSION ===== */
 function prefillTrack(ref) {
   switchPage('track');
   document.getElementById('dTrackInput').value = ref;
@@ -966,7 +946,6 @@ window.downloadSchoolFile = async function (ref, fileId, filename) {
   }
 };
 
-/* ===== RESUBMIT MODAL ===== */
 let resubRef = null;
 let resubFiles = [];
 
@@ -976,7 +955,6 @@ function openResubmit(ref) {
   document.getElementById('resubRemarks').value = '';
   document.getElementById('resubFileErr').textContent = '';
   renderResubFileList();
-  // Load feedback
   API.submissions.get(ref).then(s => {
     const fb = document.getElementById('resubFeedback');
     if (s.feedback) { fb.removeAttribute('hidden'); fb.innerHTML = '<strong><i class="fas fa-comment-alt"></i> Admin Feedback:</strong> ' + API.escapeHtml(s.feedback); }
@@ -1058,7 +1036,6 @@ document.getElementById('dashSubmitForm')?.addEventListener('reset', () => {
   if (fileErr) fileErr.textContent = '';
 });
 
-/* ===== PROFILE FORMS ===== */
 document.getElementById('profileForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   try {
@@ -1084,10 +1061,8 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
   } catch (err) { API.showToast('Password update failed: ' + err.message, 'error'); }
 });
 
-/* ===== LOGOUT ===== */
 document.getElementById('logoutBtn')?.addEventListener('click', () => API.auth.logout());
 
-/* ===== ANALYTICS TIME FILTERS ===== */
 document.querySelectorAll('.v2-filter-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     const group = e.target.closest('.v2-time-filters');
@@ -1099,5 +1074,4 @@ document.querySelectorAll('.v2-filter-btn').forEach(btn => {
   });
 });
 
-/* ===== INIT: data loads run after verifySession (see bootstrapStaffDashboard) ===== */
 setInterval(refreshNotifBell, 60000);

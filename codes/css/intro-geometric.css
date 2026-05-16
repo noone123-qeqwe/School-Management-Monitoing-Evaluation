@@ -1,10 +1,3 @@
-/* 
-  INTRO GEOMETRIC STYLES
-  Inspired by Framer Motion HeroGeometric Component
-  Implementation for SMME Portal Intro Screen
-*/
-
-/* ── PERSISTENT BACKGROUND ── */
 .geometric-bg-overlay {
   position: fixed;
   inset: 0;
@@ -21,7 +14,6 @@
   pointer-events: none;
 }
 
-/* Atmosphere glow matching React's blur-3xl atmosphere */
 .geometric-atmosphere {
   position: absolute;
   inset: 0;
@@ -30,10 +22,8 @@
   pointer-events: none;
 }
 
-/* ── ELEGANT SHAPES ── */
 .elegant-shape {
   position: absolute;
-  /* Size and position provided via inline styles in index.html */
   opacity: 0;
   animation: shapeEntry 2.4s var(--v2-ease-premium) forwards;
   will-change: transform, opacity;
@@ -43,7 +33,6 @@
   width: 100%;
   height: 100%;
   position: relative;
-  /* Floating animation - delay provided via inline style to stagger */
   animation: float 12s ease-in-out infinite;
 }
 
@@ -51,14 +40,12 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  /* Apply 15% opacity to the hex color provided via --shape-gradient */
   background: linear-gradient(to right, color-mix(in srgb, var(--shape-gradient), transparent 85%), transparent);
   backdrop-filter: blur(2px);
   border: 2px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Fallback for older browsers not supporting color-mix */
 @supports not (background: color-mix(in srgb, red, blue)) {
   .elegant-shape-blur {
     background: linear-gradient(to right, var(--shape-gradient), transparent);
@@ -74,7 +61,6 @@
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent 70%);
 }
 
-/* ── INTRO SCREEN CONTENT ── */
 .intro-screen {
   position: fixed;
   inset: 0;
@@ -142,7 +128,6 @@
   animation: fadeUp 1s var(--v2-ease-smooth) 0.9s both;
 }
 
-/* ── KEYFRAMES ── */
 @keyframes shapeEntry {
   from {
     opacity: 0;
