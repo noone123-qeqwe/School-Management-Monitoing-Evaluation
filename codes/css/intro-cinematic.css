@@ -154,9 +154,7 @@
     width: 130px;
     height: 130px;
     border-radius: 28px;
-    box-shadow: 0 0 60px rgba(59, 130, 246, 0.3), 0 0 120px rgba(59, 130, 246, 0.1);
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .cinematic-intro.logo-revealed .intro-logo-wrap {
