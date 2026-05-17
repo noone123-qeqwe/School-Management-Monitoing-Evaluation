@@ -119,7 +119,7 @@
         setTimeout(() => {
           splash.style.display = 'none';
         }, 1500); // Allows time for a CSS fade-out transition
-      }, 6500); // 6.5 seconds delay to let the intro animation play
+      }, 3500); // 3.5 seconds delay to let the intro animation play
     }
 
     // ── Step navigation buttons ──
