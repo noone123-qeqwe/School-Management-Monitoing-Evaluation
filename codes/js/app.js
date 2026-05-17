@@ -172,3 +172,56 @@ document.addEventListener('click', (e) => {
     e.target.textContent = isGridMode ? 'Show Less' : 'View All';
   }
 });
+
+/* ── Cinematic Intro Controller ── */
+(function runCinematicIntro() {
+  const intro = document.getElementById('cinematicIntro');
+  const mainContent = document.getElementById('main-site-content');
+  const progressBar = document.querySelector('.intro-loader-progress');
+  const skipBtn = document.querySelector('.intro-skip-btn');
+  const particleContainer = document.querySelector('.intro-particles');
+
+  if (!intro) return;
+  document.body.style.overflow = 'hidden';
+
+  // Generate ambient particles
+  if (particleContainer) {
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('span');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 8 + 's';
+      p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      particleContainer.appendChild(p);
+    }
+  }
+
+  // Sequence Timing
+  setTimeout(() => intro.classList.add('logo-revealed'), 400);
+  setTimeout(() => intro.classList.add('text-revealed'), 1600);
+
+  setTimeout(() => {
+    intro.classList.add('loading-started');
+    intro.classList.add('lines-revealed');
+    intro.classList.add('skip-visible');
+    if (progressBar) progressBar.style.width = '100%';
+  }, 2800);
+
+  const finishIntro = () => {
+    if (intro.dataset.finished === 'true') return;
+    intro.dataset.finished = 'true';
+
+    intro.classList.add('exit-active');
+
+    if (mainContent) {
+      mainContent.classList.add('revealed');
+    }
+
+    setTimeout(() => {
+      intro.remove();
+      document.body.style.overflow = '';
+    }, 1500);
+  };
+
+  if (skipBtn) skipBtn.addEventListener('click', finishIntro);
+  setTimeout(finishIntro, 6000);
+})();
