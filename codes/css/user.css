@@ -193,6 +193,7 @@ textarea:focus-visible {
   display: block;
   font-weight: 800;
   letter-spacing: 0.2px;
+  color: var(--primary);
 }
 
 .logo-sub {
