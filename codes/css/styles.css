@@ -849,6 +849,42 @@ a:focus-visible {
   background-clip: text;
 }
 
+/* Geometric Theme Overrides for Hero */
+.hero.geometric-theme {
+  background: #030303;
+  animation: none;
+}
+.hero.geometric-theme::before {
+  display: none;
+}
+.hero.geometric-theme .hero-overlay {
+  background: transparent;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+.hero.geometric-theme h1 {
+  font-size: clamp(2.25rem, 5vw + 1rem, 5rem);
+}
+.hero.geometric-theme h1 span {
+  background: linear-gradient(to right, rgba(165, 180, 252, 1), rgba(255, 255, 255, 0.9), rgba(253, 164, 175, 1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero.geometric-theme p {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+.hero.geometric-theme .btn-primary {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-shadow: none;
+}
+.hero.geometric-theme .btn-primary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
 .hero p {
   max-width: 520px;
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
