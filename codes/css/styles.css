@@ -516,13 +516,19 @@ a:focus-visible {
   transform: translateX(-50%);
   width: min(1200px, calc(100% - var(--space-4)));
   z-index: var(--z-fixed);
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(3, 3, 3, 0.3);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 0, 0, 0.2);
-  transition: all var(--transition-slow);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.header.header-scrolled {
+  background: rgba(3, 3, 3, 0.65);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .header-inner {
