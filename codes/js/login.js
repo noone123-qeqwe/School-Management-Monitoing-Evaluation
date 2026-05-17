@@ -118,8 +118,8 @@
         splash.classList.add('hidden');
         setTimeout(() => {
           splash.style.display = 'none';
-        }, 500); // Allows time for a CSS fade-out transition
-      }, 1500); // 1.5 seconds delay to let the intro animation play
+        }, 1500); // Allows time for a CSS fade-out transition
+      }, 6500); // 6.5 seconds delay to let the intro animation play
     }
 
     // ── Step navigation buttons ──
