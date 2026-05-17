@@ -146,6 +146,13 @@
     bindPasswordEyes();
     $('regPassword')?.addEventListener('input', updatePwStrength);
 
+    // ── Auto-navigate based on URL hash ──
+    if (window.location.hash === '#register') {
+      clearErrors();
+      showStep('stepRegister');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
     // ══════════════════════════════════════
     //  STAFF LOGIN (email + password only)
     // ══════════════════════════════════════
