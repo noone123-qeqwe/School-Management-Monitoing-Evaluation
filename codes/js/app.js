@@ -33,7 +33,7 @@ if (hamburger && mainNav) {
   });
 }
 
-if ('IntersectionObserver' in window) {
+if ('IntersectionObserver' in window && navLinks.length > 0) {
   const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -50,11 +50,11 @@ if ('IntersectionObserver' in window) {
   sections.forEach(section => navObserver.observe(section));
 }
 
-window.addEventListener("scroll", () => {
-  if (header) {
+if (header) {
+  window.addEventListener("scroll", () => {
     header.style.boxShadow = window.scrollY > 6 ? "0 8px 24px rgba(15,23,42,0.08)" : "none";
-  }
-}, { passive: true });
+  }, { passive: true });
+}
 
 navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {

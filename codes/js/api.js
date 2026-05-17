@@ -1,29 +1,7 @@
-/**
- * SMME Portal – API Client
- * Token is stored in sessionStorage — cleared on tab close AND on page refresh.
- * Refresh detection: a 'smme_active' flag is written to sessionStorage on login
- * and checked via performance.navigation / PerformanceNavigationTiming on load.
- * If a reload is detected, the session is wiped before anything else runs.
+/* ── Session management ──
+ * Token is stored in sessionStorage — cleared on tab close.
+ * JWT expiry (8h) + inactivity timer (15min) handle security.
  */
-
-/* ── Refresh / reload detection (runs immediately, before API is used) ── */
-(function clearSessionOnReload() {
-  // performance.getEntriesByType is the modern standard
-  let isReload = false;
-  if (window.performance) {
-    const nav = performance.getEntriesByType('navigation')[0];
-    if (nav) {
-      isReload = nav.type === 'reload';
-    } else {
-      // Fallback for older browsers
-      isReload = performance.navigation && performance.navigation.type === 1;
-    }
-  }
-  if (isReload) {
-    sessionStorage.removeItem('smme_token');
-    sessionStorage.removeItem('smme_user');
-  }
-})();
 
 /* ── Inactivity Auto-Logout (15 minutes) ── */
 let inactivityTimer;
@@ -202,7 +180,8 @@ const API = (() => {
     },
 
     /**
-     * Fetch a file securely and return a Blob URL for in-app previewing (iframes)
+     * Fetch a file securely and return a Blob URL for in-app previewing (iframes).
+     * IMPORTANT: Caller must call URL.revokeObjectURL(url) when done to prevent memory leaks.
      */
     async getFileBlob(ref, fileId) {
       const token = getToken();
@@ -232,7 +211,8 @@ const API = (() => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = `${ref}_files.zip`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      document.body.appendChild(a);
+      try { a.click(); } finally { document.body.removeChild(a); }
       setTimeout(() => URL.revokeObjectURL(url), 100);
     }
   };
@@ -368,7 +348,7 @@ const API = (() => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = filename; a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   }
 
   function timeAgo(iso) {

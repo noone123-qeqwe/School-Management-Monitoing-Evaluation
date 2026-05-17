@@ -39,7 +39,7 @@ app.use(helmet({
       connectSrc: ["'self'"],
       frameSrc: ["'self'", "blob:"], // Changed from 'none' to allow PDF previews
       objectSrc: ["'self'"],
-      upgradeInsecureRequests: isProd ? [] : null,
+      upgradeInsecureRequests: isProd ? [] : undefined,
     },
   },
   crossOriginEmbedderPolicy: false, // allow CDN fonts/icons
@@ -62,7 +62,7 @@ app.use(cors({
 ══════════════════════════════════════════════════════ */
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many requests. Please try again later.' },
