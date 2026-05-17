@@ -151,10 +151,12 @@
 }
 
 .intro-logo-img {
-    width: 130px;
-    height: 130px;
-    border-radius: 28px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
     object-fit: cover;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.2));
 }
 
 .cinematic-intro.logo-revealed .intro-logo-wrap {
@@ -201,11 +203,12 @@
 }
 
 .intro-subtitle {
-    font-size: 1.1rem;
-    color: #64748b;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.75);
     opacity: 0;
     transform: translateY(20px);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     font-weight: 500;
     filter: blur(5px);
     transition: all 1.4s cubic-bezier(0.23, 1, 0.32, 1) 0.8s;
