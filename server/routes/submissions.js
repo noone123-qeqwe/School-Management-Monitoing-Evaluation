@@ -206,11 +206,17 @@ router.post('/', requireStaff, upload.array('files', 10), async (req, res) => {
     // Ensure unique ref
     let ref;
     let attempts = 0;
+    let refIsUnique = false;
     do {
       ref = genRef();
       const exists = await client.query('SELECT id FROM submissions WHERE ref=$1', [ref]);
-      if (!exists.rows.length) break;
+      if (!exists.rows.length) { refIsUnique = true; break; }
     } while (++attempts < 10);
+    if (!refIsUnique) {
+      await client.query('ROLLBACK');
+      cleanupUploadedFiles(req.files);
+      return res.status(503).json({ error: 'Could not generate a unique reference. Please try again.' });
+    }
 
     const isRevision = !!originalRef;
 
@@ -575,7 +581,11 @@ router.get('/:ref/download-all', requireAuth, async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${req.params.ref}_files.zip"`);
 
     const archive = archiver('zip', { zlib: { level: 9 } });
-    archive.on('error', err => { throw err; });
+    archive.on('error', err => {
+      console.error('[download-all] Archive error:', err.message);
+      if (!res.headersSent) res.status(500).json({ error: 'Failed to create archive.' });
+      else res.destroy();
+    });
     archive.pipe(res);
 
     filesResult.rows.forEach(file => {

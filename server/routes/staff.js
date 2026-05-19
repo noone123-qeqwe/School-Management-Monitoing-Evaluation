@@ -25,7 +25,7 @@ router.get('/', requireAuth, async (req, res) => {
         `SELECT s.id, s.first_name, s.last_name, s.position, s.email,
                 s.status, s.phone, s.created_at,
                 sc.name AS school_name, sc.school_code, sc.level
-         FROM staff s JOIN schools sc ON sc.id=s.school_id
+         FROM staff s LEFT JOIN schools sc ON sc.id=s.school_id
          ${wc} ORDER BY s.created_at DESC`,
         params
       );
@@ -91,7 +91,7 @@ router.patch('/me/password', requireStaff, async (req, res) => {
     if (!result.rows.length) return res.status(404).json({ error: 'User not found.' });
     const match = await bcrypt.compare(currentPassword, result.rows[0].password || '');
     if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
-    const hash = await bcrypt.hash(newPassword, 10);
+    const hash = await bcrypt.hash(newPassword, 12);
     await pool.query('UPDATE staff SET password=$1 WHERE id=$2', [hash, req.user.id]);
     res.json({ message: 'Password updated.' });
   } catch (err) {

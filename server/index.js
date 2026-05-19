@@ -120,7 +120,10 @@ app.use('/api/auth/staff/login', authLimiter);
 app.use('/api/auth/admin/login', authLimiter);
 app.use('/api/auth/staff/register', registerLimiter);
 app.use('/api/submissions', (req, res, next) => {
-  if (req.method === 'POST') return uploadLimiter(req, res, next);
+  // Only apply the strict 20/hr upload limiter to the actual file submission endpoint
+  if (req.method === 'POST' && (req.path === '/' || req.path === '')) {
+    return uploadLimiter(req, res, next);
+  }
   return next();
 });
 
@@ -309,7 +312,7 @@ function gracefulShutdown() {
   pool.end().then(() => {
     console.log('✅ PostgreSQL pool closed.');
     process.exit(0);
-  });
+  }).catch(() => process.exit(1));
 }
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
