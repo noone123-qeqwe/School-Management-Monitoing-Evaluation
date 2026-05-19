@@ -39,7 +39,7 @@ app.use(helmet({
       connectSrc: ["'self'"],
       frameSrc: ["'self'", "blob:"], // Changed from 'none' to allow PDF previews
       objectSrc: ["'self'"],
-      upgradeInsecureRequests: isProd ? [] : undefined,
+      ...(isProd ? { upgradeInsecureRequests: [] } : {}),
     },
   },
   crossOriginEmbedderPolicy: false, // allow CDN fonts/icons

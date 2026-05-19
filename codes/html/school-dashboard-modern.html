@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../css/user.css?v=1.0.0" />
   <link rel="stylesheet" href="../css/modern-dashboard.css?v=2.0.0" />
   <link rel="stylesheet" href="../css/premium-design.css?v=1.0.0" />
-  <link rel="stylesheet" href="../css/dashboard-v2.css?v=1.0.0" />
+  <link rel="stylesheet" href="../css/dashboard-v2.css?v=2.0.1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,19 +17,18 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
   <style>
-    /* Inject Vibrant Sidebar Colors for School Dashboard */
+    /* ── School Dashboard Dark Cinematic Theme ── */
     .sidebar {
-      background: linear-gradient(180deg, #0B1120 0%, #13294B 40%, #1A4073 100%) !important;
-      box-shadow: 4px 0 24px rgba(26, 64, 115, 0.3) !important;
-      border-right: none !important;
+      background: linear-gradient(180deg, #0a0a12 0%, #0d1525 40%, #111d35 100%) !important;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
     }
 
-    /* Fix scroll wheel and window scrolling */
-    html,
-    body {
+    html, body {
       overflow-y: auto !important;
       overflow-x: hidden !important;
       height: auto !important;
+      background: #030303 !important;
     }
 
     .main-wrapper {
@@ -38,9 +37,7 @@
       min-height: 100vh !important;
     }
 
-    .main-content {
-      overflow: visible !important;
-    }
+    .main-content { overflow: visible !important; }
 
     .sidebar-header {
       display: flex !important;
@@ -49,127 +46,125 @@
     }
 
     .sidebar-logo {
-      width: auto !important;
-      height: auto !important;
+      width: auto !important; height: auto !important;
       background: transparent !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 12px !important;
-    }
-
-    .sidebar-logo img {
-      width: 56px !important;
-      height: 56px !important;
-      border-radius: 10px !important;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+      display: flex !important; align-items: center !important; gap: 12px !important;
     }
 
     .sidebar-logo span {
-      font-size: 1.2rem !important;
-      font-weight: 800 !important;
-      letter-spacing: -0.5px !important;
-      color: #ffffff !important;
+      font-size: 1.05rem !important; font-weight: 800 !important;
+      letter-spacing: -0.5px !important; color: #ffffff !important;
     }
 
-    .sidebar-user-name {
-      color: #ffffff !important;
-    }
+    .sidebar-user-name { color: #ffffff !important; }
+    .sidebar-section { color: rgba(255, 255, 255, 0.3) !important; }
+    .sidebar-user-role { color: rgba(165, 180, 252, 0.8) !important; }
 
-    .sidebar-section {
-      color: rgba(255, 255, 255, 0.4) !important;
-    }
-
-    .sidebar-user-role {
-      color: #93c5fd !important;
-    }
-
-    .sidebar-link {
-      color: #bfdbfe !important;
-    }
-
+    .sidebar-link { color: rgba(255, 255, 255, 0.55) !important; }
     .sidebar-link:hover {
-      background: rgba(255, 255, 255, 0.08) !important;
+      background: rgba(255, 255, 255, 0.06) !important;
       color: #ffffff !important;
-      border-left-color: #60a5fa !important;
     }
-
     .sidebar-link.active {
-      background: linear-gradient(90deg, rgba(96, 165, 250, 0.2), transparent) !important;
-      color: #60a5fa !important;
-      border-left-color: #60a5fa !important;
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), transparent) !important;
+      color: rgba(165, 180, 252, 0.9) !important;
     }
-
-    .sidebar-link i {
-      color: #93c5fd !important;
-    }
-
-    .sidebar-link.active i,
-    .sidebar-link:hover i {
-      color: #ffffff !important;
-    }
+    .sidebar-link i { color: rgba(165, 180, 252, 0.6) !important; }
+    .sidebar-link.active i, .sidebar-link:hover i { color: #fff !important; }
 
     .sidebar-toggle {
-      color: #bfdbfe !important;
-      width: 32px !important;
-      height: 32px !important;
-      padding: 0 !important;
-      background: rgba(255, 255, 255, 0.1) !important;
-      border: none !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      width: 32px !important; height: 32px !important; padding: 0 !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 8px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
+      display: flex !important; align-items: center !important; justify-content: center !important;
       cursor: pointer !important;
     }
 
     .sidebar-logout {
-      color: #bfdbfe !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: transparent !important;
     }
-
     .sidebar-logout:hover {
-      background: rgba(239, 68, 68, 0.15) !important;
-      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+      border-color: rgba(239, 68, 68, 0.3) !important;
       color: #fca5a5 !important;
     }
 
-    .sidebar-user,
-    .sidebar-header {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .sidebar-footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
+    .sidebar-user, .sidebar-header { border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; }
+    .sidebar-footer { border-top: 1px solid rgba(255, 255, 255, 0.06) !important; }
 
     .sidebar-avatar {
-      background: rgba(255, 255, 255, 0.1) !important;
-      color: #60a5fa !important;
+      background: rgba(99, 102, 241, 0.12) !important;
+      color: rgba(165, 180, 252, 0.8) !important;
     }
 
-    /* Custom Themed Scrollbar */
-    ::-webkit-scrollbar {
-      width: 5px !important;
-      height: 5px !important;
+    [hidden] { display: none !important; }
+
+    /* Inline style overrides for dark cards */
+    .card-header[style] { background: transparent !important; border-bottom-color: rgba(255,255,255,0.06) !important; }
+    .card-title[style] { color: #fff !important; }
+    [style*="color: var(--v2-text-main)"] { color: #fff !important; }
+    [style*="color: var(--v2-text-sub)"] { color: rgba(255,255,255,0.45) !important; }
+    [style*="background: #f1f5f9"] { background: rgba(255,255,255,0.06) !important; }
+    [style*="background: var(--gray-50)"] { background: rgba(255,255,255,0.04) !important; }
+    [style*="border-bottom: 1px solid #f1f5f9"] { border-bottom-color: rgba(255,255,255,0.06) !important; }
+    [style*="background: #f8fafc"] { background: rgba(255,255,255,0.02) !important; }
+    [style*="color: var(--text-primary)"] { color: #fff !important; }
+    [style*="color: var(--text-secondary)"] { color: rgba(255,255,255,0.45) !important; }
+    [style*="color: var(--text-muted)"] { color: rgba(255,255,255,0.35) !important; }
+
+    /* Upload area dark theme */
+    .upload-area {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      background: rgba(255, 255, 255, 0.02) !important;
+    }
+    .upload-area:hover {
+      border-color: rgba(99, 102, 241, 0.3) !important;
+      background: rgba(99, 102, 241, 0.04) !important;
     }
 
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.02) !important;
+    /* Chart placeholder dark */
+    .v2-chart-placeholder {
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.35);
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #3b82f6 0%, #1A4073 100%) !important;
-      border-radius: 10px !important;
+    /* Notification panel dark */
+    .notif-panel {
+      background: rgba(15, 15, 25, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+      color: rgba(255, 255, 255, 0.8);
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #60a5fa 0%, #13294B 100%) !important;
+    /* Table inline th overrides */
+    th[style*="color: var(--slate-500)"] { color: rgba(255,255,255,0.4) !important; }
+
+    /* Draft banner dark */
+    .draft-banner {
+      background: rgba(99, 102, 241, 0.08) !important;
+      border: 1px solid rgba(99, 102, 241, 0.2) !important;
+      color: rgba(165, 180, 252, 0.9) !important;
     }
 
-    /* Ensure hidden elements stay hidden against flexbox overrides */
-    [hidden] {
-      display: none !important;
-    }
+    /* Empty state */
+    .empty-state-title { color: rgba(255,255,255,0.6) !important; }
+    .empty-state-description { color: rgba(255,255,255,0.35) !important; }
+    .empty-state-icon { color: rgba(255,255,255,0.15) !important; }
+
+    /* Table header/search/filter dark */
+    .table-header { background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
+    .table-title { color: #fff !important; }
+    .table-subtitle { color: rgba(255,255,255,0.4) !important; }
+    .table-search { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.08) !important; }
+    .table-search-input { color: #fff !important; }
+    .table-search-input::placeholder { color: rgba(255,255,255,0.25) !important; }
+    .table-filter-select { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.7) !important; }
+    .table-export-btn { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.6) !important; }
   </style>
 </head>
 
@@ -323,9 +318,6 @@
             <div class="v2-stat-info">
               <div class="v2-stat-value" id="statTotal">0</div>
               <div class="v2-stat-label">School Submissions</div>
-              <div class="v2-trend trend-up">
-                <i class="fas fa-arrow-up"></i> 12% this month
-              </div>
             </div>
           </div>
 
